@@ -60,17 +60,20 @@ app.patch('/users/:id', (req, res) => {
 })
 
 app.delete('/users/:id', (req, res) => {
-    const {
-        id
-    } = req.params
+    const {id} = req.params
     const idx = users.findIndex(val => val.id === parseInt(id))
-    const newArray = []
+    delete(users[idx])
 
-    users.forEach(val => {
-        if (val.id !== parseInt(id)) {
-            delete users[idx]
-        }
+    return res.json({
+        success: true,
+        message: `User with id ${id} is deleted`,
     })
+
+    // users.forEach(val => {
+    //     if (val.id !== parseInt(id)) {
+    //         delete users[idx]
+    //     }
+    // })
 })
 
 app.listen(5000, () => {
