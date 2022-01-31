@@ -7,7 +7,7 @@ const {
     updateVehicle,
     deleteVehicle
 } = require('../controllers/vehicles');
-// const { updateVehicle } = require('../models/vehicles')
+
 
 vehicles.get('/', getVehicles);
 vehicles.get('/:id', getVehicle);
