@@ -13,7 +13,27 @@ exports.getVehicle = (id, cb) => {
         if (err) throw err;
         cb(res);
     });
-};
+},
+
+exports.checkExistVehicle = (data, cb) => {
+    // make custom query depends keys of object
+    let dataInArr = Object.keys(data);
+    dataInArr = dataInArr.map((el) => {
+        return `${el} = ?`;
+    });
+    const customQuery = dataInArr.join(' && ');
+
+    // get values of data
+    const dataValues = Object.values(data);
+    const columns = Object.keys(data);
+
+    db.query(`
+    SELECT ?? FROM ${table} WHERE ${customQuery}
+    `, [columns, ...dataValues], (err, results) => {
+        if (err) throw err;
+        cb(results);
+    });
+},
 
 exports.insertVehicle = (data, cb) => {
     db.query(`INSERT INTO ${table} SET ?`, data, (err, results) => {

@@ -1,3 +1,4 @@
+const {dataValidator} = require('../helpers/validator');
 const vehicleModel = require('../models/vehicles');
 
 const getVehicles = (req, res) => {
@@ -41,11 +42,29 @@ const addNewVehicle = (req, res) => {
         isAvailable: req.body.isAvailable,
     };
 
-    vehicleModel.insertVehicle(data, results => {
-        console.log(results);
-        return res.status(201).json({
-            success: true,
-            message: 'New Vehicle Successfull',
+    // console.log(clientData);
+
+    if (!dataValidator(data)) {
+        return res.status(400).json({
+            success: false,
+            message: 'Your data not validate',
+        });
+    }
+
+    vehicleModel.checkExistVehicle(data, (checkResults) => {
+        if (checkResults.length > 0) {
+            return res.status(202).json({
+                success: false,
+                message: 'Vehicle already exist',
+            });
+        }
+
+        vehicleModel.insertVehicle(data, results => {
+            console.log(results);
+            return res.status(201).json({
+                success: true,
+                message: 'New Vehicle Successfull',
+            });
         });
     });
 };
@@ -61,19 +80,38 @@ const updateVehicle = (req, res) => {
         isAvailable: req.body.isAvailable,
     };
 
-    vehicleModel.updateVehicle(id, data, results => {
-        if (results.affectedRows < 1) {
-            return res.status(404).json({
+    // validator data
+    if (!dataValidator(data)) {
+        return res.status(400).json({
+            success: false,
+            message: 'Your data not validate',
+        });
+    }
+
+    vehicleModel.checkExistVehicle(data, (checkResults) => {
+        // check if the data is changed or not
+        if (checkResults.length > 0) {
+            return res.status(202).json({
                 success: false,
-                message: `Vehicle with id ${id} not found`,
+                message: 'Vehicle with inputed data already exist',
             });
         }
-        return res.status(200).json({
-            success: true,
-            message: `Vehicle update successful ID ${id}`,
+
+        vehicleModel.updateVehicle(id, data, results => {
+            if (results.affectedRows < 1) {
+                return res.status(404).json({
+                    success: false,
+                    message: `Vehicle with id ${id} not found`,
+                });
+            }
+            return res.status(200).json({
+                success: true,
+                message: `Vehicle update successful ID ${id}`,
+            });
         });
     });
 };
+
 
 const deleteVehicle = (req, res) => {
     const {
