@@ -2,7 +2,8 @@ const {dataValidator} = require('../helpers/validator');
 const vehicleModel = require('../models/vehicles');
 
 const getVehicles = (req, res) => {
-    vehicleModel.getVehicles(results => {
+    const { search } = req.query;
+    vehicleModel.getVehicles(search, (results) => {
         return res.json({
             success: true,
             message: 'List Vehicles',

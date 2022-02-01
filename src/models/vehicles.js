@@ -1,9 +1,12 @@
 const db = require('../helpers/db');
 const table = 'vehicle';
 
-exports.getVehicles = (cb) => {
-    db.query('SELECT * FROM vehicle', (err, res) => {
-        if (err) throw err;
+exports.getVehicles = (search = '', cb) => {
+    db.query(`SELECT id, brand, price, isAvailable, FROM ${table} name LIKE '${search}%'`, (err, res) => {
+        if (err) {
+            console.log(err);
+            throw err;
+        }
         cb(res);
     });
 };
