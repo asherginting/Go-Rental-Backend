@@ -1,35 +1,70 @@
-const {dataValidator} = require('../helpers/validator');
 const vehicleModel = require('../models/vehicles');
+const {baseURL} = require ('../helpers/url');
+const {dataValidator} = require ('../helpers/requestHandler');
+const {returningSuccess, returningError, pageCreator} = require ('../helpers/responseHandler');
 
-const getVehicles = (req, res) => {
-    const { search } = req.query;
-    vehicleModel.getVehicles(search, (results) => {
-        return res.json({
-            success: true,
-            message: 'List Vehicles',
-            results: results //menampilkan array of object
-            //results: results[0] untuk memanggil data index ke 0, menampilkan object
+// const getVehicles = (req, res) => {
+//     const { search } = req.query;
+//     vehicleModel.getVehicles(search, (results) => {
+//         return res.json({
+//             success: true,
+//             message: 'List Vehicles',
+//             results: results //menampilkan array of object
+//             //results: results[0] untuk memanggil data index ke 0, menampilkan object
+//         });
+//     });
+// };
+
+const getVehicles = async (req, res) => {
+    try {
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 5;
+        const search = req.query.search || '';
+        const offset = (page - 1) * limit;
+
+        const pageLink = pageCreator(`${baseURL}/vehicles?`, {
+            page,
+            limit,
+            search
         });
-    });
-};
+        const results = await vehicleModel.getVehicles(limit, offset, search);
 
-// module.exports = {getVehicles}
+        const countData = await vehicleModel.countData();
+        const totalData = countData[0].row;
+
+        const lastPage = search ? Math.ceil(results.length / limit) : Math.ceil(totalData / limit);
+        return res.json({
+            success: false,
+            message: 'List of vehicles',
+            results,
+            pageInfo: {
+                totalData: search ? results.length : totalData,
+                currentPage: page,
+                nextPage: page < lastPage ? pageLink.next : null,
+                prevPage: page > 1 ? pageLink.prev : null,
+                lastPage
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 const getVehicle = (req, res) => {
     const {
         id
     } = req.params;
-    vehicleModel.getVehicle(id, results => {
-        if (results.length > 0) {
-            return res.json({
+    vehicleModel.getVehicle(id, (results) => {
+        if (results.length < 1) {
+            return res.status(200).json({
                 success: true,
-                message: 'Detail Vehicle',
+                message: `Success Get Vehicle with id ${id}`,
                 results: results[0]
             });
         } else {
             return res.status(404).json({
                 success: false,
-                message: 'Vehicle Not found'
+                message: `Vehicle with id ${id} Not found`
             });
         }
     });
@@ -38,12 +73,14 @@ const getVehicle = (req, res) => {
 
 const addNewVehicle = (req, res) => {
     const data = {
-        brand: req.body.brand,
-        price: req.body.price,
-        isAvailable: req.body.isAvailable,
+        name: req.body.name,
+        price: Number(req.body.price),
+        type: req.body.type,
+        qty: Number(req.body.qty),
+        location: req.body.location
     };
 
-    // console.log(clientData);
+    console.log(data);
 
     if (!dataValidator(data)) {
         return res.status(400).json({
@@ -54,13 +91,13 @@ const addNewVehicle = (req, res) => {
 
     vehicleModel.checkExistVehicle(data, (checkResults) => {
         if (checkResults.length > 0) {
-            return res.status(202).json({
+            return res.status(400).json({
                 success: false,
                 message: 'Vehicle already exist',
             });
         }
 
-        vehicleModel.insertVehicle(data, results => {
+        vehicleModel.insertVehicle(data, (results) => {
             console.log(results);
             return res.status(201).json({
                 success: true,
@@ -76,9 +113,11 @@ const updateVehicle = (req, res) => {
     } = req.params;
 
     const data = {
-        brand: req.body.brand,
-        price: req.body.price,
-        isAvailable: req.body.isAvailable,
+        name: req.body.name,
+        price: Number(req.body.price),
+        type: req.body.type,
+        qty: Number(req.body.qty),
+        location: req.body.location
     };
 
     // validator data
@@ -92,13 +131,13 @@ const updateVehicle = (req, res) => {
     vehicleModel.checkExistVehicle(data, (checkResults) => {
         // check if the data is changed or not
         if (checkResults.length > 0) {
-            return res.status(202).json({
+            return res.status(400).json({
                 success: false,
                 message: 'Vehicle with inputed data already exist',
             });
         }
 
-        vehicleModel.updateVehicle(id, data, results => {
+        vehicleModel.updateVehicle(id, data, (results) => {
             if (results.affectedRows < 1) {
                 return res.status(404).json({
                     success: false,
@@ -119,7 +158,7 @@ const deleteVehicle = (req, res) => {
         id
     } = req.params;
 
-    vehicleModel.deleteVehicle(id, results => {
+    vehicleModel.deleteVehicle(id, (results) => {
         if (results.affectedRows < 1) {
             return res.status(404).json({
                 success: false,
@@ -133,10 +172,21 @@ const deleteVehicle = (req, res) => {
     });
 };
 
+const getPopularVehicles = async (req, res) => {
+    try {
+        const results = await vehicleModel.getPopularVehicles();
+        return returningSuccess(res, 200, 'List of popular vehicles', results);
+    } catch (error) {
+        console.log(error);
+        return returningError(res, error, 'Failed to get popular vehicles');
+    }
+};
+
 module.exports = {
     getVehicles,
     getVehicle,
     addNewVehicle,
     updateVehicle,
-    deleteVehicle
+    deleteVehicle,
+    getPopularVehicles
 };

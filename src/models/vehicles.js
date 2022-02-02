@@ -1,60 +1,98 @@
 const db = require('../helpers/db');
-const table = 'vehicle';
+const table = 'vehicles';
 
-exports.getVehicles = (search = '', cb) => {
-    db.query(`SELECT id, brand, price, isAvailable, FROM ${table} name LIKE '${search}%'`, (err, res) => {
-        if (err) {
-            console.log(err);
-            throw err;
-        }
-        cb(res);
+exports.getVehicles = (limit, offset, search) => {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT id, name, price, type, qty, location FROM ${table} WHERE name LIKE '${search}%' LIMIT ? OFFSET ?`, [limit, offset], (err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(res);
+            }
+        });
     });
 };
 
 exports.getVehicle = (id, cb) => {
-    db.query('SELECT * FROM vehicle WHERE id=?', [id], (err, res) => {
+    db.query(`SELECT * FROM ${table} WHERE id=?`, [id], (err, res) => {
         if (err) throw err;
         cb(res);
     });
 },
 
 exports.checkExistVehicle = (data, cb) => {
-    // make custom query depends keys of object
     let dataInArr = Object.keys(data);
     dataInArr = dataInArr.map((el) => {
         return `${el} = ?`;
     });
     const customQuery = dataInArr.join(' && ');
 
-    // get values of data
+    //value data
     const dataValues = Object.values(data);
     const columns = Object.keys(data);
 
     db.query(`
     SELECT ?? FROM ${table} WHERE ${customQuery}
-    `, [columns, ...dataValues], (err, results) => {
+    `, [columns, ...dataValues], (err, res) => {
         if (err) throw err;
-        cb(results);
+        cb(res);
     });
 },
 
 exports.insertVehicle = (data, cb) => {
-    db.query(`INSERT INTO ${table} SET ?`, data, (err, results) => {
+    db.query(`INSERT INTO ${table} SET ?`, data, (err, res) => {
         if (err) throw err;
-        cb(results);
+        cb(res);
     });
 },
 
 exports.updateVehicle = (id, data, cb) => {
-    db.query(`UPDATE ${table} SET ? WHERE id = ?`, [data, id], (err, results) => {
+    db.query(`UPDATE ${table} SET ? WHERE id = ?`, [data, id], (err, res) => {
         if (err) throw err;
-        cb(results);
+        cb(res);
     });
 },
 
 exports.deleteVehicle = (id, cb) => {
-    db.query(`DELETE FROM ${table} WHERE id = ?`, [id], (err, results) => {
+    db.query(`DELETE FROM ${table} WHERE id = ?`, [id], (err, res) => {
         if (err) throw err;
-        cb(results);
+        cb(res);
+    });
+};
+
+exports.listLimitVehicle = (page, limit) => {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT id, name, price, type, qty, location FROM ${table} LIMIT = ? OFFSET = ?`, [page, limit], (err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(res);
+            }
+        });
+    });
+};
+
+exports.countData = () => {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT COUNT(*) AS 'row' FROM ${table};`, (err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(res);
+            }
+        });
+    });
+};
+
+exports.getPopularVehicles = () => {
+    return new Promise((resolve, reject) => {
+        db.query(`
+          SELECT id, name, price, type, qty, location FROM ${table} ORDER BY 'rentCount'  DESC`, (err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(res);
+            }
+        });
     });
 };
