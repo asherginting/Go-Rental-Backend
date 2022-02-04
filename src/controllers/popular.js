@@ -1,9 +1,20 @@
-const helperGet = require('../helpers/get');
-const populerModel = require('../models/popular');
-const model = require('../models/vehicles');
+const modelPopular = require('../models/popular');
 
-const popular = (req, res) => {
-    helperGet(req, res, populerModel, model.countVehicle, 'popular');
+const getPopular = (req, res) => {
+    const { id } = req.params;
+    modelPopular(id, (results) => {
+        if (results.length > 0) {
+            return res.json({
+                success: true,
+                message: `Detail profile with id ${id}`,
+                results: results[0],
+            });
+        }
+        return res.status(404).json({
+            success: false,
+            message: `User with id ${id} not found`,
+        });
+    });
 };
 
-module.exports = popular;
+module.exports = getPopular;

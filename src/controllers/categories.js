@@ -1,93 +1,174 @@
-/* eslint-disable radix */
-const categoryModel = require('../models/categories');
-const getHelper = require('../helpers/get');
+const categoriesModel = require('../models/categories');
+const {
+    returningError,
+    returningSuccess,
+    pageInfoCreator
+} = require('../helpers/responseHandler');
 
-const getCategories = (req, res) => {
-    getHelper(req, res, categoryModel.getCategories, categoryModel.countCategory, 'categories');
-};
+const {
+    validateId,
+    requestMapping
+} = require('../helpers/requestHandler');
+const {
+    baseURL
+} = require('../helpers/constant');
 
-const addCategory = (req, res) => {
-    const { name } = req.body;
-    if (name) {
-        return categoryModel.checkCategories(name, (checkResults) => {
-            if (checkResults.length === 0) {
-                return categoryModel.addCategory(name, () => {
-                    categoryModel.newCategory((results) => res.json({
-                        success: true,
-                        message: 'Successfully added new category',
-                        results: results[0],
-                    }));
-                });
-            }
-            return res.status(400).json({
-                success: false,
-                message: 'Failed to add new category. Data already exists',
-            });
-        });
+exports.listCategories = async (req, res) => {
+    try {
+        const data = {
+            page: Number(req.query.page) || 1,
+            limit: Number(req.query.limit) || 5
+        };
+
+        const categories = await categoriesModel.getCategories(data);
+
+        const resultCount = await categoriesModel.countCategories();
+        const totalCategories = resultCount[0].rows;
+        const pageInfo = pageInfoCreator(totalCategories, `${baseURL}/categories?`, data);
+
+        return returningSuccess(res, 200, 'Success getting categories', categories, pageInfo);
+    } catch (err) {
+        console.error(err);
+        return returningError(res, 500, 'Internal server error');
     }
-    return res.status(400).json({
-        success: false,
-        message: 'Data must be filled',
-    });
 };
 
-const editCategory = (req, res) => {
-    const { id } = req.params;
-    const { name } = req.body;
-    if (name) {
-        return categoryModel.checkCategories(name, (checkResults) => {
-            if (checkResults.length === 0) {
-                return categoryModel.editCategory(name, id, (results) => {
-                    if (results.changedRows > 0) {
-                        return res.json({
-                            success: true,
-                            message: 'Edited successfully',
-                            results: {
-                                id_category: parseInt(id),
-                                name,
-                            },
-                        });
-                    }
-                    return res.status(400).json({
-                        success: false,
-                        message: `Failed to edit category with id ${id}. Data hasnt changed or data is empty`,
-                    });
-                });
-            }
-            return res.status(400).json({
-                success: false,
-                message: 'Failed to edit category. Name already exists',
-            });
-        });
+exports.getCategory = async (req, res) => {
+    try {
+        const {
+            id
+        } = req.params;
+
+        if (!validateId(id)) {
+            return returningError(res, 400, 'Id not valid');
+        }
+
+        const category = await categoriesModel.getCategory(id);
+        return returningSuccess(res, 200, 'Success getting category', category[0]);
+    } catch (err) {
+        console.error(err);
+        return returningError(res, 500, 'Internal server error');
     }
-    return res.status(400).json({
-        success: false,
-        message: 'name must be filled',
-    });
 };
 
-const deleteCategory = (req, res) => {
-    const { id } = req.params;
-    categoryModel.getCategory(id, (categoryDeleted) => {
-        categoryModel.deleteCategory(id, (results) => {
-            if (results.affectedRows > 0) {
-                return res.json({
-                    success: true,
-                    message: `Vehicle with id ${id} successfully deleted`,
-                    results: categoryDeleted[0],
-                });
+exports.addCategory = async (req, res) => {
+    try {
+        const name = req.body.name;
+
+        const rules = {
+            name: 'string'
+        };
+
+        const data = requestMapping(name, rules);
+
+        for (const key in data) {
+            if (data[key] === null) {
+                return returningError(res, 400, 'Name not valid');
             }
-            return res.status(400).json({
-                success: false,
-                message: `Failed to delete category with id ${id}`,
-            });
+        }
+
+        // if (!requestMapping(name, rules)) {
+        //   return returningError(res, 400, 'Name not valid');
+        // }
+
+        const existingCategory = await categoriesModel.getCategoryByName(name);
+
+        if (existingCategory.length > 0) {
+            return returningError(res, 400, 'Category already exists');
+        }
+
+        const result = await categoriesModel.addCategory({
+            name
         });
-    });
+        const category = await categoriesModel.getCategory(result.insertId);
+        return returningSuccess(res, 201, 'Success adding category', category[0]);
+    } catch (err) {
+        console.error(err);
+        return returningError(res, 500, 'Internal server error');
+    }
 };
 
-module.exports = {
-    getCategories,
-    addCategory,
-    editCategory,
-    deleteCategory,
+exports.deleteCategory = async (req, res) => {
+    try {
+        const {
+            id
+        } = req.params;
+
+        if (!validateId(id)) {
+            return returningError(res, 400, 'Id not valid');
+        }
+
+        const category = await categoriesModel.getCategory(id);
+
+        if (category.length < 1) {
+            return returningError(res, 404, 'Category not found');
+        }
+
+        const result = await categoriesModel.deleteCategory(id);
+
+        if (result.affectedRows === 0) {
+            return returningError(res, 500, 'Category not deleted');
+        }
+
+        return returningSuccess(res, 200, 'Success deleting category', category[0]);
+    } catch (err) {
+        console.error(err);
+        return returningError(res, 500, 'Internal server error');
+    }
+};
+
+exports.updateCategory = async (req, res) => {
+    try {
+        const {
+            id
+        } = req.params;
+
+        if (!validateId(id)) {
+            return returningError(res, 400, 'Id not valid');
+        }
+
+        const category = await categoriesModel.getCategory(id);
+
+        if (category.length < 1) {
+            return returningError(res, 404, 'Category not found');
+        }
+
+        const name = req.body.name;
+
+        const rules = {
+            name: 'string'
+        };
+
+        const data = requestMapping(name, rules);
+
+        for (const key in data) {
+            if (data[key] === null) {
+                return returningError(res, 400, 'Name not valid');
+            }
+        }
+
+        // if (!requestMapping(name, rules)) {
+        //   return returningError(res, 400, 'Name not valid');
+        // }
+
+        const existingCategory = await categoriesModel.getCategoryByName(name);
+
+        if (existingCategory.length > 0) {
+            return returningError(res, 400, 'Category already exists');
+        }
+
+        const result = await categoriesModel.updateCategory(id, {
+            name
+        });
+
+        if (result.affectedRows === 0) {
+            return returningError(res, 500, 'Category not updated');
+        }
+
+        const categoryUpdated = await categoriesModel.getCategory(id);
+        return returningSuccess(res, 200, 'Success updating category', categoryUpdated[0]);
+    } catch (err) {
+        console.error(err);
+        return returningError(res, 500, 'Internal server error');
+    }
 };

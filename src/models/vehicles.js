@@ -96,3 +96,10 @@ exports.getPopularVehicles = () => {
         });
     });
 };
+
+exports.getVehicleCategory = (data, cb) => {
+    db.query(`SELECT v.* FROM vehicles v LEFT JOIN categories c ON v.id_category = c.id_category WHERE c.name LIKE '${data}%';`, (err, res) => {
+        if (err) throw err;
+        cb(res);
+    });
+};

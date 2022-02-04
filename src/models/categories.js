@@ -1,74 +1,100 @@
-/* eslint-disable max-len */
 const db = require('../helpers/db');
+const table = 'categories';
 
-const countCategory = (data, cb) => {
-    db.query(`SELECT COUNT(*) AS total FROM categories c 
-  LEFT JOIN vehicles v ON c.id_category=v.id_category 
-  WHERE name LIKE '${data.search}%';`, (err, res) => {
-        if (err) throw err;
-        cb(res);
+exports.getCategories = (data) => {
+    const {
+        limit,
+        page
+    } = data;
+
+    const offset = (page - 1) * limit;
+
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT id, name FROM ${table} LIMIT ? OFFSET ?`, [limit, offset], (err, results) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
 };
 
-const getCategories = (data, cb) => {
-    db.query(`SELECT c.id_category, c.name, v.brand, v.capacity, v.location, v.price, v.qty, v.rent_count, c.createdAt, c.updatedAt FROM categories c 
-  LEFT JOIN vehicles v ON c.id_category=v.id_category 
-  WHERE c.name LIKE '${data.search}%'
-  LIMIT ${data.limit} OFFSET ${data.offset}`, (err, res) => {
-        if (err) throw err;
-        cb(res);
+exports.getCategory = (id) => {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT * FROM ${table} WHERE id = ?`, [id], (err, results) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
 };
 
-const checkCategories = (data, cb) => {
-    db.query(`SELECT * FROM categories WHERE name='${data}'`, (err, res) => {
-        if (err) throw err;
-        cb(res);
+exports.addCategory = (data) => {
+    return new Promise((resolve, reject) => {
+        db.query(`INSERT INTO ${table} SET ?`, data, (err, results) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
 };
 
-const newCategory = (cb) => {
-    db.query('SELECT * FROM categories ORDER BY id_category DESC LIMIT 1', (err, res) => {
-        if (err) throw err;
-        cb(res);
+exports.deleteCategory = (id) => {
+    return new Promise((resolve, reject) => {
+        db.query(`DELETE FROM ${table} WHERE id = ?`, [id], (err, results) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
 };
 
-const addCategory = (data, cb) => {
-    db.query(`INSERT INTO categories (name) VALUES ('${data}')`, (err) => {
-        if (err) throw err;
-        cb();
+exports.updateCategory = (id, data) => {
+    return new Promise((resolve, reject) => {
+        db.query(`UPDATE ${table} SET ? WHERE id = ?`, [data, id], (err, results) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
 };
 
-const editCategory = (data, id, cb) => {
-    db.query('UPDATE categories SET name=?  WHERE id_category=?;', [data, id], (err, res) => {
-        if (err) throw err;
-        cb(res);
+exports.getCategoryByName = (name) => {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT name FROM ${table} WHERE name = ?`, [name], (err, results) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
 };
 
-const getCategory = (id, cb) => {
-    db.query('SELECT * from categories WHERE id_category=?', [id], (err, res) => {
-        if (err) throw err;
-        cb(res);
+exports.countCategories = () => {
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT COUNT(*) AS 'rows' FROM ${table}`, (err, results) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
-};
-
-const deleteCategory = (id, cb) => {
-    db.query('DELETE FROM categories WHERE id_category=?', [id], (err, res) => {
-        if (err) throw err;
-        cb(res);
-    });
-};
-
-module.exports = {
-    countCategory,
-    getCategories,
-    checkCategories,
-    newCategory,
-    addCategory,
-    editCategory,
-    getCategory,
-    deleteCategory,
 };

@@ -182,11 +182,29 @@ const getPopularVehicles = async (req, res) => {
     }
 };
 
+const getVehicleCategory = (req, res) => {
+    const { category } = req.query;
+    vehicleModel.getVehicleCategory(category, (results) => {
+        if (results.length > 0) {
+            return res.json({
+                success: true,
+                message: 'Vehicles by category',
+                results,
+            });
+        }
+        return res.status(404).json({
+            success: false,
+            message: `Vehicle with category ${category} not found`,
+        });
+    });
+};
+
 module.exports = {
     getVehicles,
     getVehicle,
     addNewVehicle,
     updateVehicle,
     deleteVehicle,
-    getPopularVehicles
+    getPopularVehicles,
+    getVehicleCategory
 };
