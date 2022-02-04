@@ -1,6 +1,7 @@
 const express = require('express');
 
 const app = express();
+const PORT = 5000;
 
 app.use(express.urlencoded({
     extended: true
@@ -8,6 +9,6 @@ app.use(express.urlencoded({
 
 app.use(require('./src/routes'));
 
-app.listen(5000, () => {
-    console.log('App Listening on port 5000');
+app.listen (PORT, () => {
+    console.log(`App Listening on port ${PORT}`);
 });

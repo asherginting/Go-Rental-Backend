@@ -6,7 +6,7 @@ exports.getUsers = (limit, offset, search) => {
     const email = search.email || '';
 
     return new Promise((resolve, reject) => {
-        db.query(`SELECT id, name, email FROM ${table} WHERE name LIKE '${name}%' AND email LIKE '${email}%' LIMIT ? OFFSET ?`, [limit, offset], (err, res) => {
+        db.query(`SELECT id, name, email, gender, address, birthdate, phone FROM ${table} WHERE name LIKE '${name}%' AND email LIKE '${email}%' LIMIT ? OFFSET ?`, [limit, offset], (err, res) => {
             if (err) {
                 reject(err);
             } else {

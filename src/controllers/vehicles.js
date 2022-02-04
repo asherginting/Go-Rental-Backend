@@ -34,7 +34,7 @@ const getVehicles = async (req, res) => {
 
         const lastPage = search ? Math.ceil(results.length / limit) : Math.ceil(totalData / limit);
         return res.json({
-            success: false,
+            success: true,
             message: 'List of vehicles',
             results,
             pageInfo: {
@@ -56,17 +56,17 @@ const getVehicle = (req, res) => {
     } = req.params;
     vehicleModel.getVehicle(id, (results) => {
         if (results.length < 1) {
-            return res.status(200).json({
-                success: true,
-                message: `Success Get Vehicle with id ${id}`,
-                results: results[0]
-            });
-        } else {
             return res.status(404).json({
                 success: false,
-                message: `Vehicle with id ${id} Not found`
+                message: `Vehicle with id ${id} not found`
             });
-        }
+        } 
+        return res.status(200).json({
+            success: true,
+            message: `Success getting vehicle with id ${id}`,
+            result: results[0]
+        });
+        
     });
 };
 
