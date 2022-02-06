@@ -15,7 +15,7 @@ const getUsers = (req, res)=>{
                 if(results.length>0){
                     return res.json({
                         success : true,
-                        message : 'Users list',
+                        message : 'List Users',
                         result : results
                     });
                 }else{
@@ -28,14 +28,14 @@ const getUsers = (req, res)=>{
         }else{
             return res.status(400).send({
                 success: false,
-                message: 'Gender should be 1 for male or 2 for female'
+                message: 'Gender must be Male:1 and Female:2'
             });
         }
     }else{
         usersProfile.getUsers(data, result=>{
             return res.json({
                 success: true,
-                message: 'User list',
+                message: 'List Users',
                 result: result
             });
         });
@@ -238,7 +238,7 @@ const updateUser = (req, res)=>{
     }else{
         return res.status(400).send({
             success: false,
-            message: 'ID shoulb be a number greater than 0'
+            message: 'ID should be a number greater than 0'
         });
     }
 };
