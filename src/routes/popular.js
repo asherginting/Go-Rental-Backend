@@ -4,7 +4,7 @@ const {
     popularList, 
     popularId, 
     popularByMonth
-} = require('../controller/popular');
+} = require('../controllers/popular');
 
 popular.get('/', popularList);
 popular.get('/month/', popularByMonth);

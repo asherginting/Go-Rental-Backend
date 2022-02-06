@@ -1,11 +1,11 @@
 const categories = require('express').Router();
 
 const {
-  getCategories,
-  getCategory,
-  addCategory,
-  updateCategory,
-  deleteCategory
+    getCategories,
+    getCategory,
+    addCategory,
+    updateCategory,
+    deleteCategory
 }= require('../controllers/categories');
 
 categories.get('/', getCategories);

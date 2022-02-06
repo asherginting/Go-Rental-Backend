@@ -105,4 +105,5 @@ const popularByMonth = (req, res)=>{
         popularRent.popularMonthAndCId(data, cb);
     }
 };
+
 module.exports = {popularList, popularId, popularByMonth};
