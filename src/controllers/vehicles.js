@@ -175,14 +175,14 @@ const addVehicle = (req,res)=>{
                 let i = ress.length-1;
                 return res.json({
                     success: true,
-                    message: 'Vehicle was successfully add.',
+                    message: 'Vehicle added Succesfully.',
                     result: ress[i]
                 });
             });
         }else{
             return res.status(500).send({
                 success: false,
-                message: 'Server error'
+                message: 'Server Error'
             });
         }
     };
@@ -238,7 +238,7 @@ const deleteVehicle = (req, res)=>{
                         return res.send({
                             success: true,
                             message: 'Deleted',
-                            result: `Affected ROows ${result.affectedRows}`
+                            result: `Affected Rows ${result.affectedRows}`
                         });
                     });
                 }else{
