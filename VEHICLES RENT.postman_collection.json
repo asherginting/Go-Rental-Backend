@@ -1,0 +1,718 @@
+{
+	"info": {
+		"_postman_id": "48d0018a-dbf3-4473-991f-ffdc553a7e39",
+		"name": "VEHICLES RENT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "VEHICLES",
+			"item": [
+				{
+					"name": "LIST VEHICLES",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/vehicles",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"vehicles"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Toyota",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET VEHICLE",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/vehicles/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"vehicles",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE VEHICLE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Honda Beat",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "100000",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "Motorbike",
+									"type": "text"
+								},
+								{
+									"key": "qty",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "Batam",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/vehicles",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"vehicles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE VEHICLE",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Xenia",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "250000",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "cars",
+									"type": "text"
+								},
+								{
+									"key": "qty",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "Jakarta",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/vehicles/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"vehicles",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE VEHICLE",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/vehicles/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"vehicles",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VEHICLE POPULAR",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/vehicles/popular",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"vehicles",
+								"popular"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "USERS",
+			"item": [
+				{
+					"name": "LIST USERS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET USER",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE USER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Yola",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "yola@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "gender",
+									"value": "female",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "Jln. merdeka",
+									"type": "text"
+								},
+								{
+									"key": "birthdate",
+									"value": "1992-01-14",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "628152",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE USER",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Ginting",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "ginting@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "gender",
+									"value": "male",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "Jln. Sukamaju",
+									"type": "text"
+								},
+								{
+									"key": "birthdate",
+									"value": "1999-11-14",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "62588",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE USER",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "HISTORIES",
+			"item": [
+				{
+					"name": "LIST USER HISTORIES",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/histories",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"histories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET HISTORY",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/histories/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"histories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE HISTORY",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "vehicle_id",
+									"value": "18",
+									"type": "text"
+								},
+								{
+									"key": "payment_code",
+									"value": "100",
+									"type": "text"
+								},
+								{
+									"key": "payment",
+									"value": "200000",
+									"type": "text"
+								},
+								{
+									"key": "returned",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "prepayment",
+									"value": "100000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/histories",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"histories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE HISTORY",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "vehicle_id",
+									"value": "24",
+									"type": "text"
+								},
+								{
+									"key": "payment_code",
+									"value": "124",
+									"type": "text"
+								},
+								{
+									"key": "payment",
+									"value": "200000",
+									"type": "text"
+								},
+								{
+									"key": "returned",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "prepayment",
+									"value": "80000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/histories/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"histories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE USER HISTORY",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/histories/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"histories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CATEGORIES",
+			"item": [
+				{
+					"name": "LIST CATEGORIES",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/categories",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET CATEGORIES",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/categories/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "26565"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE CATEGORIES",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "brand",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "120000",
+									"type": "text"
+								},
+								{
+									"key": "isAvailable",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/categories",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE CATEGORIES",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "brand",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "100000",
+									"type": "text"
+								},
+								{
+									"key": "isAvailable",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/categories/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE CATEGORIES",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/categories/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
