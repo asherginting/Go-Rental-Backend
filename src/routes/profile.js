@@ -1,7 +1,10 @@
 const profile = require('express').Router();
 
-const profileUser = require('../controllers/profile');
+const {
+    getProfile
+}= require('../controllers/profile');
 
-profile.get('/:id', profileUser);
+profile.get('/', getProfile);
+profile.get('/:id', getProfile);
 
 module.exports = profile;
