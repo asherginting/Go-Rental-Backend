@@ -1,18 +1,19 @@
 const users = require('express').Router();
 
 const {
+    getUsers,
     getUser,
     addUser,
     deleteUser,
     updateUser,
-    listUsers
 } = require('../controllers/users');
 
-users.get('/', listUsers);
-users.get('/profile/:id', getUser);
+users.get('/', getUsers);
 users.get('/:id', getUser);
-users.delete('/:id', deleteUser);
-users.put('/:id', updateUser);
 users.post('/', addUser);
+users.patch('/', updateUser);
+users.patch('/:id', updateUser);
+users.delete('/:id', deleteUser);
+users.delete('/', deleteUser);
 
 module.exports = users;
