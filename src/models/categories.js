@@ -1,100 +1,44 @@
 const db = require('../helpers/db');
 const table = 'categories';
 
-exports.getCategories = (data) => {
-    const {
-        limit,
-        page
-    } = data;
-
-    const offset = (page - 1) * limit;
-
-    return new Promise((resolve, reject) => {
-        db.query(`SELECT id, name FROM ${table} LIMIT ? OFFSET ?`, [limit, offset], (err, results) => {
-            if (err) {
-                console.error(err);
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
+exports.getCategories = (cb)=>{
+    db.query(`SELECT * FROM ${table}`, (err, res)=>{
+        if(err) throw err;
+        cb(res);
     });
 };
 
-exports.getCategory = (id) => {
-    return new Promise((resolve, reject) => {
-        db.query(`SELECT * FROM ${table} WHERE id = ?`, [id], (err, results) => {
-            if (err) {
-                console.error(err);
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
+exports.getCategory = (id, cb)=>{
+    db.query(`SELECT * FROM ${table} WHERE id =?`, [id], (err,res)=>{
+        if(err) throw err;
+        cb(res);
     });
 };
 
-exports.addCategory = (data) => {
-    return new Promise((resolve, reject) => {
-        db.query(`INSERT INTO ${table} SET ?`, data, (err, results) => {
-            if (err) {
-                console.error(err);
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
+exports.checkCategory = (category, cb)=>{
+    db.query(`SELECT * FROM ${table} WHERE category=?`, [category], (err, res)=>{
+        if(err) throw err;
+        cb(res);
     });
 };
 
-exports.deleteCategory = (id) => {
-    return new Promise((resolve, reject) => {
-        db.query(`DELETE FROM ${table} WHERE id = ?`, [id], (err, results) => {
-            if (err) {
-                console.error(err);
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
+exports.addCategory = (category, cb)=>{
+    db.query(`INSERT INTO ${table} (category) VALUES (?)`, [category], (err,res)=>{
+        if(err) throw err;
+        cb(res);
     });
 };
 
-exports.updateCategory = (id, data) => {
-    return new Promise((resolve, reject) => {
-        db.query(`UPDATE ${table} SET ? WHERE id = ?`, [data, id], (err, results) => {
-            if (err) {
-                console.error(err);
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
+exports.updateCategory = (data, cb)=>{
+    db.query(`UPDATE ${table} SET category=? WHERE id=?`, data, (err, res)=>{
+        if(err) throw err;
+        cb(res);
     });
 };
 
-exports.getCategoryByName = (name) => {
-    return new Promise((resolve, reject) => {
-        db.query(`SELECT name FROM ${table} WHERE name = ?`, [name], (err, results) => {
-            if (err) {
-                console.error(err);
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-};
-
-exports.countCategories = () => {
-    return new Promise((resolve, reject) => {
-        db.query(`SELECT COUNT(*) AS 'rows' FROM ${table}`, (err, results) => {
-            if (err) {
-                console.error(err);
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
+exports.deleteCategory = (id, cb)=>{
+    db.query(`DELETE FROM ${table} WHERE id=${id}`, (err, res)=>{
+        if(err) throw err;
+        cb(res);
     });
 };
