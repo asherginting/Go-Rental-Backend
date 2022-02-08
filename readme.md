@@ -6,7 +6,7 @@ Vehicle Rent at Bootcamp Fazztrack
 
 ##
 
-#### Vehicles Endpoint
+#### Vehicles Endpoint :
 |    METHOD    |      API      |       REMARKS        |
 | :----------: | :-----------: | :------------------: |
 |  ```GET```   |   /vehicles   | Get All List Vehicle |
@@ -15,8 +15,8 @@ Vehicle Rent at Bootcamp Fazztrack
 | ```PATCH```  | /vehicles/:id | Update Vehicle By ID |
 | ```DELETE``` | /vehicles/:id | Delete Vehicle By ID |
 
-##
-#### Users Endpoint
+
+#### Users Endpoint :
 |    METHOD    |    API     |      REMARKS       |
 | :----------: | :--------: | :----------------: |
 |  ```GET```   |   /users   | Get All List User  |
@@ -25,8 +25,8 @@ Vehicle Rent at Bootcamp Fazztrack
 | ```PATCH```  | /users/:id | Update User By ID  |
 | ```DELETE``` | /users/:id | Delete User By ID  |
 
-##
-#### Histories Endpoint
+
+#### Histories Endpoint :
 |    METHOD    |      API       |        REMARKS         |
 | :----------: | :------------: | :--------------------: |
 |  ```GET```   |   /histories   | Get All List Histories |
@@ -35,8 +35,8 @@ Vehicle Rent at Bootcamp Fazztrack
 | ```PATCH```  | /histories/:id |  Update History By ID  |
 | ```DELETE``` | /histories/:id |  Delete History By ID  |
 
-##
-#### Categories Endpoint
+
+#### Categories Endpoint :
 |    METHOD    |       API       |         REMARKS         |
 | :----------: | :-------------: | :---------------------: |
 |  ```GET```   |   /categories   | Get All List Categories |
@@ -45,14 +45,19 @@ Vehicle Rent at Bootcamp Fazztrack
 | ```PATCH```  | /categories/:id |  Update Category By ID  |
 | ```DELETE``` | /categories/:id |  Delete Category By ID  |
 
-##
-#### Popular Endpoint
+
+#### Popular Endpoint :
 |  METHOD   |   API    |       REMARKS        |
 | :-------: | :------: | :------------------: |
 | ```GET``` | /popular | Get All List Popular |
 
 
+#### Profile Endpoint :
+|  METHOD   |     API      |      REMARKS      |
+| :-------: | :----------: | :---------------: |
+| ```GET``` | /profile/:id | Get Profile By ID |
 
-## ✍️ Authors
+
+## ✍️ Authors :
 
 - [@asherginting](https://github.com/asherginting)
