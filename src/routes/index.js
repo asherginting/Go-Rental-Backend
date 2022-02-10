@@ -8,4 +8,11 @@ route.use('/profile', require('./profile'));
 route.use('/popular', require('./popular'));
 route.use('/categories', require('./categories'));
 
+route.get('/', (req, res)=> {
+    return res.json({
+        success: true,
+        message: 'Backend is running well!'
+    });
+});
+
 module.exports = route;
