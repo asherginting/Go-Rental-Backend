@@ -23,11 +23,10 @@ exports.getCategory = (data, cb)=>{
 };
 
 exports.addVehicle = (data, cb)=>{
-    db.query(`INSERT INTO ${table} (name, year, cost, available, type, seat, category_id, location) VALUES (?,?,?,?,?,?,?,?)`,
-        data,(err, res)=>{
-            if(err) throw err;
-            cb(res);
-        });
+    db.query(`INSERT INTO ${table} (name, image, year, cost, available, type, seat, category_id, location) VALUES (?,?,?,?,?,?,?,?,?)`, [data.name, data.image, data.year, data.cost, data.available, data.type, data.seat, data.category_id, data.location], (err, res) => {
+        if(err) throw err;
+        cb(res);
+    });  
 };
 
 exports.checkVehicle = (isThere, cb)=>{
@@ -38,7 +37,7 @@ exports.checkVehicle = (isThere, cb)=>{
 };
 
 exports.updateVehicle = (data, cb)=>{
-    db.query(`UPDATE ${table} SET name=?, year=?, cost=?, available=?, type=?, seat=?, category_id=?, location=? WHERE id=?`, data, (err,res)=>{
+    db.query(`UPDATE ${table} SET name=?, image=?, year=?, cost=?, available=?, type=?, seat=?, category_id=?, location=? WHERE id=?`, data, (err,res)=>{
         if(err) throw err;
         cb(res);
     });
