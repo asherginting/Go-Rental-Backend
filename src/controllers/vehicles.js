@@ -1,4 +1,6 @@
 const vehicleModel = require('../models/vehicles');
+const {APP_URL} = process.env;
+const upload = require('../helpers/upload').single('image');
 
 const getVehicles = (req, res)=>{
     let {name, location, cost_min, cost_max, page, limit} = req.query;
@@ -127,24 +129,63 @@ const isMatch = (data)=>{
     return dataError;
 };
 
-const editData = (data, cb, callback, res)=>{
-    let a = isNull(data);
-    let b = isMatch(data);
-    if(a<1){
-        if(b.length<1){
-            vehicleModel.checkVehicle(data[0], result=>{
-                let isThere = 0;
-                if(result.length>0){
-                    result.forEach(element=>{
-                        if(element.id!=data[8]){
-                            if(element.year==data[1] && element.cost==data[2] && element.type==data[4] && element.location==data[7]){
-                                isThere++;
-                            }
+const addVehicle = (req,res)=>{
+    upload(req, res, err=>{
+        if(err){
+            return res.json({
+                success: false,
+                message: err.message
+            });
+        }else{
+            const {name, year, cost, available, type, seat, category_id, location} = req.body;
+            let image = '';
+            if(req.file){
+                image = req.file.path;
+            }else{
+                return res.status(400).send({
+                    success: false,
+                    message: 'Please upload the image!'
+                });
+            }
+            const data = [name, image, year, cost, available, type, seat, category_id, location];
+            let a = isNull(data);
+            let b = isMatch(data);
+            if(a>0){
+                return res.status(400).send({
+                    success: false,
+                    message: 'Please fill in all the fields.'
+                });
+            }
+            if(b.length>0){
+                return res.status(400).send({
+                    success: false,
+                    message: b
+                });
+            }
+            vehicleModel.checkVehicle(name, ress=>{
+                let itsThere = 0;
+                ress.forEach(x=>{
+                    if(x.year==year && x.cost==cost && x.type==type && x.location==location){
+                        itsThere++;
+                    }
+                });
+                if(itsThere<1){
+                    vehicleModel.addVehicle(data, result=>{
+                        if(result.affectedRows>0){
+                            vehicleModel.getVehicle(result.insertId, results=>{
+                                return res.json({
+                                    success: true,
+                                    message: 'Successfully add vehicle to the list',
+                                    result: results[0]
+                                });
+                            });
+                        }else{
+                            return res.status(500).send({
+                                success: false,
+                                message: 'Error: cannot add vehicle'
+                            });
                         }
                     });
-                }
-                if(isThere<1){
-                    callback(data, cb);
                 }else{
                     return res.status(400).send({
                         success: false,
@@ -152,80 +193,48 @@ const editData = (data, cb, callback, res)=>{
                     });
                 }
             });
-        }else{
-            return res.status(400).send({
-                success: false,
-                message: b
-            });
         }
-    }else{
-        return res.status(400).send({
-            success: false,
-            message: 'Please fill in all the fields'
-        });
-    }
-};
-
-const addVehicle = (req,res)=>{
-    const {name, year, cost, available, type, seat, category_id, location} = req.body;
-    const data = [name, year, cost, available, type, seat, category_id, location];
-    let cb = (result)=>{
-        if(result.affectedRows>0){
-            vehicleModel.checkVehicle(name, ress=>{
-                let i = ress.length-1;
-                return res.json({
-                    success: true,
-                    message: 'Vehicle added Succesfully.',
-                    result: ress[i]
-                });
-            });
-        }else{
-            return res.status(500).send({
-                success: false,
-                message: 'Server Error'
-            });
-        }
-    };
-    editData(data, cb, vehicleModel.addVehicle, res);
+    });
 };
 
 const updateVehicle = (req, res)=>{
     const {id} = req.params;
-    const {name, year, cost, available, type, seat, category_id, location} = req.body;
-    const data = [name, year, cost, available, type, seat, category_id, location, id];
-    if(id==null || id==undefined){
-        return res.status(400).send({
-            success: false,
-            message: 'Undefined ID'
-        });
+    const {name, year, cost, qty, type, seat, category_id, location} = req.body;
+    let gb = req.file;
+    let image = '';
+    if(gb!==null && gb!==undefined){
+        image = gb.path;
+        image = `${APP_URL}/${image}`;
     }
-    const cb = (result)=>{
-        vehicleModel.getVehicle(id, ress=>{
-            return res.json({
-                success: false,
-                message: `Vehicle was updated. Rows Affected: ${result.affectedRows}`,
-                result: ress[0]
-            });
-        });
-    };
-
-    if(id>0){
-        vehicleModel.getVehicle(id, result=>{
-            if(result.length>0){
-                editData(data, cb, vehicleModel.updateVehicle, res);
-            }else{
-                return res.status(404).send({
-                    success: false,
-                    message: `Vehicle with ID: ${id} not found`
-                });
+    const data = [name, image, year, cost, qty, type, seat, category_id, location, id];
+    const dataName = ['name', 'image', 'year', 'cost', 'qty', 'type', 'seat', 'category_id', 'location'];
+  
+    vehicleModel.getVehicle(id, result=>{
+        if(result.length>0){
+            for(let i=0; i<dataName.length;i++){
+                if(data[i]==null || data[i]==undefined || data[i]==''){
+                    data[i]=result[0][dataName[i]];
+                }
             }
-        });
-    }else{
-        return res.status(400).send({
-            success: false,
-            message: 'ID should be a number greater than 0'
-        });
-    }
+            console.log(data);
+            vehicleModel.updateVehicle(data, results=>{
+                if(results.affectedRows>0){
+                    vehicleModel.getVehicle(id, ress=>{
+                        return res.json({
+                            success: true,
+                            message: 'Successfully update vehicle',
+                            result: ress[0]
+                        });
+                    });
+                }
+            });
+        }else{
+            return res.status(404).send({
+                success: false,
+                message: `Vehicle with ID: ${id} not found`
+            });
+        }
+    });
 };
 
 const deleteVehicle = (req, res)=>{
