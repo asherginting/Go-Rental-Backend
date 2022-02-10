@@ -1,4 +1,5 @@
 const vehicles = require('express').Router();
+const upload = require('../helpers/upload');
 
 const {
     getVehicles,
@@ -12,10 +13,10 @@ const {
 
 
 vehicles.get('/', getVehicles);
+vehicles.post('/', upload.single('image'),addVehicle);
 vehicles.get('/category/', getCategory);
 vehicles.get('/category/:category_id', getCategory);
 vehicles.get('/:id', getVehicle);
-vehicles.post('/', addVehicle);
 vehicles.patch('/', updateVehicle);
 vehicles.patch('/:id', updateVehicle);
 vehicles.delete('/', deleteVehicle);
