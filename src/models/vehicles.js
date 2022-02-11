@@ -57,3 +57,10 @@ exports.showVehicle = (data, cb)=>{
         cb(res);
     });
 };
+
+exports.countVehicles = (data, cb) => {
+    db.query(`SELECT COUNT(*) as total FROM ${table} WHERE name LIKE '${data.search}%'`, (err, res) => {
+        if (err) throw err;
+        cb(res);
+    });
+};
