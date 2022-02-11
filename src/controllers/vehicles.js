@@ -1,3 +1,4 @@
+const response = require('../helpers/response');
 const vehicleModel = require('../models/vehicles');
 const {APP_URL} = process.env;
 const upload = require('../helpers/upload').single('image');
@@ -12,24 +13,40 @@ const getVehicles = (req, res)=>{
     limit = parseInt(limit) || 5;
     const offset = (page-1)*limit;
     const data = {name, location, cost_min, cost_max, page, limit, offset};
+    const dataName = ['name', 'location', 'cost_min', 'cost_max'];
+
+    let url = `${APP_URL}/vehicles?`;
+    dataName.forEach(x=>{
+        if(data[x]){
+            url = `${url}${x}=${data[x]}&`;
+        }
+    });
+    console.log(url);
     if(cost_min>=cost_max){
-        return res.status(400).send({
-            success: false,
-            message: 'cost_min should be less than cost_max'
-        });
+        return response(res, 'cost_max should be more than cost_min', null, 400);
     }
     vehicleModel.getVehicles(data, results=>{
         if(results.length>0){
-            return res.json({
-                success: true,
-                message: 'List of Vehicles',
-                result : results
+            vehicleModel.getTotal(data, resultTotal=>{
+                if(resultTotal.length>0){
+                    const {total} = resultTotal[0];
+                    console.log(total);
+                    let last = Math.ceil(total/limit);
+                    let result = {results,
+                        pageInfo: {
+                            prev : page > 1 ? `${url}page=${page-1}&limit=${limit}` : null,
+                            next : page < last ? `${url}page=${page+1}&limit=${limit}` : null,
+                            currentPage : page,
+                            lastPage: last
+                        }
+                    };
+                    return response(res, 'List of vehicles', result);
+                }else{
+                    return response(res, 'Data not found', null, 404);
+                }
             });
         }else{
-            return res.status(404).send({
-                success: false,
-                message: 'Vehicle not found'
-            });
+            return response(res, 'Vehicle not found', null, 404);
         }
     });
 };
@@ -37,25 +54,15 @@ const getVehicles = (req, res)=>{
 const getVehicle = (req,res)=>{
     const {id} = req.params;
     if(id>0){
-        vehicleModel.getVehicle(id, results=>{
-            if(results.length>0){
-                return res.json({
-                    success: true,
-                    message: 'Vehicle details',
-                    result: results[0]
-                });
+        vehicleModel.getVehicle(id, result=>{
+            if(result.length>0){
+                return response(res, 'Vehicle detail', result[0]);
             }else{
-                return res.status(404).send({
-                    success: false,
-                    message: `Vehicle with ID: ${id} not found`
-                });
+                return response(res, `Vehicle with ID: ${id} not found`, null, 404);
             }
         });
     }else{
-        return res.status(400).send({
-            success: false,
-            message: 'ID should be a number greater than 0'
-        });
+        return response(res, 'ID should be a number greater than 0', null, 400);
     }
 };
 
@@ -71,42 +78,32 @@ const getCategory = (req, res)=>{
     const offset = (page-1)*limit;
     const data = {name, location, cost_min, cost_max, page, limit, offset, category_id};
     if(cost_min>=cost_max){
-        return res.status(400).send({
-            success: false,
-            message: 'cost_min should be less than cost_max'
-        });
+        return response(res, 'cost_max should be more than cost_min', null, 400);
     }
     if(category_id>0){
         vehicleModel.getCategory(data, result=>{
             if(result.length>0){
-                return res.json({
-                    success: true,
-                    message: 'List of vehicles',
-                    result: result
-                });
+                return response(res, 'List of vehicles', result);
             }else{
-                return res.status(404).send({
-                    success: false,
-                    message: 'Vehicle not found'
-                });
+                return response(res, 'Data not found' , null, 404);
             }
         });
     }else{
-        return res.status(400).send({
-            success: false,
-            message: 'Undefined ID'
-        });
+        return response(res, 'Undefined ID', null, 400);
     }
 };
 
 const isNull = (data)=>{
-    let notNull = 0;
+    let yesNull = 0;
     for(let i = 0; i<data.length;i++){
-        if(data[i]==null || data[i]==undefined || data[i]==''){
-            notNull++;
+        if(i!=1){
+            if(data[i]==null || data[i]==undefined || data[i]==''){
+                yesNull++;
+                console.log(`${data[i]} is null`);
+            }
         }
     }
-    return notNull;
+    return yesNull;
 };
 
 const isMatch = (data)=>{
@@ -115,14 +112,24 @@ const isMatch = (data)=>{
     let newData = [];
     let dataError = [];
     for(let i = 0; i<data.length; i++){
-        newData.push(parseInt(data[i]));
-        if(theType[i]=='isNaN'){
-            if(isNaN(newData[i])===false){
-                dataError.push(`${dataName[i]} must a STRING`);
+        if(i!==1){
+            if(data[i]!==null && data[i]!==undefined){
+                newData.push(parseInt(data[i]));
+            }else{
+                newData.push('');
             }
-        }else{
-            if(isNaN(newData[i])===true){
-                dataError.push(`${dataName[i]} must a NUMBER`);
+        }
+    }
+    for(let j=0; j<newData.length;j++){
+        if(newData!==''){
+            if(theType[j]=='isNaN'){
+                if(isNaN(newData[j])===false){
+                    dataError.push(`${dataName[j]} must a STRING`);
+                }
+            }else{
+                if(isNaN(newData[j])===true){
+                    dataError.push(`${dataName[j]} must a NUMBER`);
+                }
             }
         }
     }
@@ -137,60 +144,43 @@ const addVehicle = (req,res)=>{
                 message: err.message
             });
         }else{
-            const {name, year, cost, available, type, seat, category_id, location} = req.body;
+            const {name, year, cost, qty, type, seat, category_id, location} = req.body;
             let image = '';
             if(req.file){
-                image = req.file.path;
+                image = `${APP_URL}/${req.file.path}`;
             }else{
-                return res.status(400).send({
-                    success: false,
-                    message: 'Please upload the image!'
-                });
+                return response(res, 'Please upload the image', null, 400);
             }
-            const data = [name, image, year, cost, available, type, seat, category_id, location];
+            const data = [name, image, year, cost, qty, type, seat, category_id, location];
             let a = isNull(data);
             let b = isMatch(data);
             if(a>0){
-                return res.status(400).send({
-                    success: false,
-                    message: 'Please fill in all the fields.'
-                });
+                return response(res, 'Please fill in all the fields', null, 400);
             }
             if(b.length>0){
-                return res.status(400).send({
-                    success: false,
-                    message: b
-                });
+                return response(res, b, null, 400);
             }
             vehicleModel.checkVehicle(name, ress=>{
                 let itsThere = 0;
                 ress.forEach(x=>{
-                    if(x.year==year && x.cost==cost && x.type==type && x.location==location){
-                        itsThere++;
+                    if(x.year==year && x.cost==cost){
+                        if(x.type==type && x.location==location){
+                            itsThere++;
+                        }
                     }
                 });
                 if(itsThere<1){
                     vehicleModel.addVehicle(data, result=>{
                         if(result.affectedRows>0){
                             vehicleModel.getVehicle(result.insertId, results=>{
-                                return res.json({
-                                    success: true,
-                                    message: 'Successfully add vehicle to the list',
-                                    result: results[0]
-                                });
+                                return response(res, 'Successfully add vehicle', results[0]);
                             });
                         }else{
-                            return res.status(500).send({
-                                success: false,
-                                message: 'Error: cannot add vehicle'
-                            });
+                            return response(res, 'Error: Can\'t add vehicle', null, 500);
                         }
                     });
                 }else{
-                    return res.status(400).send({
-                        success: false,
-                        message: 'Vehicle already on the list'
-                    });
+                    return response(res, 'Vehicle already on the list', null, 400);
                 }
             });
         }
@@ -198,40 +188,62 @@ const addVehicle = (req,res)=>{
 };
 
 const updateVehicle = (req, res)=>{
-    const {id} = req.params;
-    const {name, year, cost, qty, type, seat, category_id, location} = req.body;
-    let gb = req.file;
-    let image = '';
-    if(gb!==null && gb!==undefined){
-        image = gb.path;
-        image = `${APP_URL}/${image}`;
-    }
-    const data = [name, image, year, cost, qty, type, seat, category_id, location, id];
-    const dataName = ['name', 'image', 'year', 'cost', 'qty', 'type', 'seat', 'category_id', 'location'];
-  
-    vehicleModel.getVehicle(id, result=>{
-        if(result.length>0){
-            for(let i=0; i<dataName.length;i++){
-                if(data[i]==null || data[i]==undefined || data[i]==''){
-                    data[i]=result[0][dataName[i]];
-                }
-            }
-            console.log(data);
-            vehicleModel.updateVehicle(data, results=>{
-                if(results.affectedRows>0){
-                    vehicleModel.getVehicle(id, ress=>{
-                        return res.json({
-                            success: true,
-                            message: 'Successfully update vehicle',
-                            result: ress[0]
-                        });
-                    });
-                }
+    upload(req, res, err=>{
+        if(err){
+            return res.json({
+                success: false,
+                message: err.message
             });
         }else{
-            return res.status(404).send({
-                success: false,
-                message: `Vehicle with ID: ${id} not found`
+            const {id} = req.params;
+            const {name, year, cost, qty, type, seat, category_id, location} = req.body;
+            let image = '';
+            if(req.file){
+                image = `${APP_URL}/${req.file.path}`;
+            }
+            const data = [name, image, year, cost, qty, type, seat, category_id, location, id];
+            const dataName = ['name', 'image', 'year', 'cost', 'qty', 'type', 'seat', 'category_id', 'location'];
+    
+            vehicleModel.getVehicle(id, result=>{
+                console.log(data);
+                console.log(result[0]);
+                if(result.length>0){
+                    for(let i=0; i<dataName.length;i++){
+                        if(data[i]==null || data[i]==undefined || data[i]==''){
+                            data[i]=result[0][dataName[i]];
+                        }
+                    }
+                    console.log(data);
+                    vehicleModel.checkVehicle(name, ress=>{
+                        let itsThere = 0;
+                        ress.forEach(x=>{
+                            if(x.id!=id && x.year==year && x.cost==cost){
+                                if(x.type==type && x.location==location){
+                                    itsThere++;
+                                }
+                            }
+                        });
+                        if(itsThere<1){
+                            vehicleModel.updateVehicle(data, results=>{
+                                if(results.affectedRows>0){
+                                    vehicleModel.getVehicle(id, ress=>{
+                                        if(ress.length>0){
+                                            return response(res, 'Successfully update vehicle', ress[0]);
+                                        }else{
+                                            return response(res, 'Server error: Can\'t get vehicle', null, 500);
+                                        }
+                                    });
+                                }else{
+                                    return response(res, 'Server error: Can\'t update vehicle', null, 500);
+                                }
+                            });
+                        }else{
+                            return response(res, 'Vehicle already on the list', null, 400);
+                        }
+                    });
+                }else{
+                    return response(res, 'Vehicle not found', null, 404);
+                }
             });
         }
     });
@@ -244,29 +256,20 @@ const deleteVehicle = (req, res)=>{
             if(id>0){
                 if(results.length>0){
                     vehicleModel.deleteVehicle(id, result=>{
-                        return res.send({
-                            success: true,
-                            message: 'Deleted',
-                            result: `Affected Rows ${result.affectedRows}`
-                        });
+                        if(result.affectedRows>0){
+                            return response(res, 'Vehicle was deleted', results[0]);
+                        }else{
+                            return response(res, 'Server error: Cannot delete vehicle', null, 500);
+                        }
                     });
                 }else{
-                    return res.status(404).send({
-                        success: false,
-                        message: `Vehicle with ID: ${id} not found`
-                    });
+                    return response(res, `Vehicle with ID: ${id} not found`, null, 404);
                 }
             }else{
-                return res.status(400).send({
-                    success: false,
-                    message: 'ID should be a number greater than 0'
-                });
+                return response(res, 'ID should be a number greater than 0', null, 400);
             }
         }else{
-            return res.status(400).send({
-                success: false,
-                message: 'Undefined ID'
-            });
+            return response(res, 'Undefined ID', null, 400);
         }
     });
 };
