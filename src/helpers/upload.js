@@ -1,4 +1,5 @@
 const multer = require('multer');
+const response = require('./response');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -25,5 +26,16 @@ const fileFilter = (req, file, cb)=>{
 };
 
 const upload = multer({ storage: storage, fileFilter});
+
+exports.uploadFile=(req, res, next)=>{
+    const upload = multer().single('image');
+
+    upload(req, res,(err)=>{
+        if (err) {
+            return response(res, 'err', null, 400);
+        } 
+        next();
+    });
+};
 
 module.exports = upload;
