@@ -1,5 +1,6 @@
 const vehicles = require('express').Router();
 const upload = require('../helpers/upload');
+const {verifyUser} = require('../helpers/auth');
 
 const {
     getVehicles,
@@ -7,20 +8,16 @@ const {
     addVehicle,
     updateVehicle,
     deleteVehicle,
-    getCategory
-
 } = require('../controllers/vehicles');
 
 
 vehicles.get('/', getVehicles);
-vehicles.post('/', upload.single('image'),addVehicle);
-vehicles.get('/category/', getCategory);
-vehicles.get('/category/:category_id', getCategory);
 vehicles.get('/:id', getVehicle);
-vehicles.patch('/', updateVehicle);
-vehicles.patch('/:id', updateVehicle);
-vehicles.delete('/', deleteVehicle);
-vehicles.delete('/:id', deleteVehicle);
+vehicles.post('/', verifyUser, upload.single('image'), addVehicle);
+vehicles.patch('/', verifyUser, updateVehicle);
+vehicles.patch('/:id', verifyUser, upload.single('image'), updateVehicle);
+vehicles.delete('/', verifyUser, deleteVehicle);
+vehicles.delete('/:id', verifyUser, deleteVehicle);
 
 
 
