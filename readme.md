@@ -1,6 +1,12 @@
-## About
-Fullstack Web 5 - Vehicle Rent App
+<p align="center">
+  <a href="" rel="noopener">
+ <a href="https://imgbb.com/"><img src="https://i.ibb.co/8P4m5hB/Icon-Go-Rental.png" alt="Icon-Go-Rental" border="0"></a>
+</p>
 
+---
+
+## 🧐 About
+This is the repository fw5-backend-beginner
 ## Instalation
 
 1. Clone this repo
@@ -13,10 +19,14 @@ git clone https://github.com/asherginting/fw5-backend-beginner.git
 npm install
 ```
 
-3. Import Database
-import vehicle_rent.sql
+3. Import Database <b> vehicle_rent.sql 
 
 4. Done
+
+<br>
+
+Runs the app default in the development mode.\
+Open [http://localhost:5000](http://localhost:5000) to view it in your browser.
 
 #### Vehicles Endpoint
 |    METHOD    |               API               |                     REMARKS                     |
@@ -64,3 +74,24 @@ import vehicle_rent.sql
 | ```PATCH```  |          /categories/:id          |          Edit Data History By idCategory          |
 | ```DELETE``` |          /categories/:id          |           Delete Category By idCategory           |
 
+## ⛏️ Built Using
+
+- [Eslint](https://www.npmjs.com/package/eslint)
+- [Nodemon](https://www.npmjs.com/package/nodemon)
+- [Bcrypt](https://www.npmjs.com/package/bcrypt)
+- [Cors](https://www.npmjs.com/package/cors)
+- [Dotenv](https://www.npmjs.com/package/dotenv)
+- [Express Js](https://www.npmjs.com/package/express)
+- [JWT](https://www.npmjs.com/package/jsonwebtoken)
+- [Multer](https://www.npmjs.com/package/multer)
+- [MySQL](https://www.npmjs.com/package/mysql)
+- [Nodemailer](https://www.npmjs.com/package/nodemailer)
+## 💻 Frontend & Responsive Web
+
+Repo Frontend : https://github.com/asherginting/fw5-react-frontend
+<br>
+Repo Responsive Web : https://github.com/asherginting/fw5-responsive-website
+
+## ✍️ Authors
+
+- [@asherginting](https://github.com/asherginting)
