@@ -2,13 +2,13 @@ const vehicles = require('express').Router();
 const upload = require('../helpers/upload');
 
 const {
-  getVehicles,
-  getVehicleCategory,
-  getVehicle,
-  addVehicle,
-  editAllVehicle,
-  editVehicle,
-  deleteVehicle,
+    getVehicles,
+    getVehicleCategory,
+    getVehicle,
+    addVehicle,
+    editAllVehicle,
+    editVehicle,
+    deleteVehicle,
 } = require('../controllers/vehicles');
 const { verifyUser } = require('../helpers/auth');
 

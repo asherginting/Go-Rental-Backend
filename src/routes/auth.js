@@ -1,7 +1,7 @@
 const user = require('express').Router();
 
 const {
-  login, verify, forgotRequest, confirmRegistration,
+    login, verify, forgotRequest, confirmRegistration,
 } = require('../controllers/auth');
 const { addUser } = require('../controllers/users');
 
