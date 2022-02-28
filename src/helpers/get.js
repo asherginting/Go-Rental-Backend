@@ -1,7 +1,6 @@
-/* eslint-disable radix */
 const camelCase = require('camelcase-keys');
 
-const get = (request, response, model, countModel, table) => {
+const get = (request, response, model, countModel, table, username) => {
     let { search, page, limit } = request.query;
 
     search = search || '';
@@ -34,30 +33,31 @@ const get = (request, response, model, countModel, table) => {
     const offset = (page - 1) * limit;
     const data = { search, limit, offset };
 
-    return model(data, (resultsFin) => {
-        if (resultsFin.length > 0) {
-            return countModel(data, (count) => {
-                const { total } = count[0];
-                const last = Math.ceil(total / limit);
-                const results = camelCase(resultsFin);
-                response.json({
-                    success: true,
-                    message: `List ${table}`,
-                    results,
-                    pageInfo: {
-                        prev: page > 1 ? `http://localhost:5000/${table}?search=${search}&page=${page - 1}&limit=${limit}` : null,
-                        next: page < last ? `http://localhost:5000/${table}?search=${search}&page=${page + 1}&limit=${limit}` : null,
-                        totalData: total,
-                        currentPage: page,
-                        lastPage: last,
-                    },
-                });
-            });
-        }
-        return response.json({
-            success: false,
-            message: `${search} not found`,
+    const res = (count, resultsFin) => {
+        const { total } = count[0];
+        const last = Math.ceil(total / limit);
+        const results = camelCase(resultsFin);
+        response.json({
+            success: true,
+            message: `List ${table}`,
+            results,
+            pageInfo: {
+                prev: page > 1 ? `http://localhost:5000/${table}?search=${search}&page=${page - 1}&limit=${limit}` : null,
+                next: page < last ? `http://localhost:5000/${table}?search=${search}&page=${page + 1}&limit=${limit}` : null,
+                totalData: total,
+                currentPage: page,
+                lastPage: last,
+            },
         });
+    };
+
+    if (username) {
+        return model(username, data, (resultsFin) => {
+            countModel(username, data, (count) => res(count, resultsFin));
+        });
+    }
+    return model(data, (resultsFin) => {
+        countModel(data, (count) => res(count, resultsFin));
     });
 };
 

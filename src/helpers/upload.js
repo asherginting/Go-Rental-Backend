@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 const multer = require('multer');
 
 const storage = multer.diskStorage({
