@@ -1,63 +1,66 @@
+## About
+Fullstack Web 5 - Vehicle Rent App
 
----
+## Instalation
 
-## 🧐 About
-Vehicle Rent at Bootcamp Fazztrack
+1. Clone this repo
+```
+git clone https://github.com/asherginting/fw5-backend-beginner.git
+```
 
-##
+2. Install module
+```
+npm install
+```
 
-#### Vehicles Endpoint :
-|    METHOD    |      API      |       REMARKS        |
-| :----------: | :-----------: | :------------------: |
-|  ```GET```   |   /vehicles   | Get All List Vehicle |
-|  ```GET```   | /vehicles/:id |  Get Vehicle By ID   |
-|  ```POST```  |   /vehicles   |   Add New Vehicle    |
-| ```PATCH```  | /vehicles/:id | Update Vehicle By ID |
-| ```DELETE``` | /vehicles/:id | Delete Vehicle By ID |
+3. Import Database
+import vehicle_rent.sql
 
+4. Done
 
-#### Users Endpoint :
-|    METHOD    |    API     |      REMARKS       |
-| :----------: | :--------: | :----------------: |
-|  ```GET```   |   /users   | Get All List User  |
-|  ```GET```   | /users/:id |   Get User By ID   |
-|  ```POST```  | /users/:id | Add New User By ID |
-| ```PATCH```  | /users/:id | Update User By ID  |
-| ```DELETE``` | /users/:id | Delete User By ID  |
+#### Vehicles Endpoint
+|    METHOD    |               API               |                     REMARKS                     |
+| :----------: | :-----------------------------: | :---------------------------------------------: |
+|  ```GET```   | /vehicles/?search=&page=&limit= | Get Vehicles With Search By Type And Pagination |
+|  ```GET```   |          /vehicles/:id          |              Get Data By idVehicle              |
+|  ```POST```  |            /vehicles            |               Input Data Vehicles               |
+| ```PATCH```  |          /vehicles/:id          |            Edit Vehicle By idVehicle            |
+| ```DELETE``` |          /vehicles/:id          |           Delete Vehicle By idVehicle           |
 
+#### Users Endpoint
+|    METHOD    |             API              |                    REMARKS                    |
+| :----------: | :--------------------------: | :-------------------------------------------: |
+|  ```GET```   | /users/?search=&page=&limit= | Get Users With Search By Name And Pagingation |
+|  ```GET```   |          /users/:id          |            Get Data User By idUser            |
+|  ```POST```  |            /users            |               Input Data Users                |
+| ```PATCH```  |          /users/:id          |           Edit Data User By idUser            |
+| ```DELETE``` |          /users/:id          |             Delete User By idUser             |
 
-#### Histories Endpoint :
-|    METHOD    |      API       |        REMARKS         |
-| :----------: | :------------: | :--------------------: |
-|  ```GET```   |   /histories   | Get All List Histories |
-|  ```GET```   | /histories/:id |   Get History By ID    |
-|  ```POST```  | /histories/:id | Add New History By ID  |
-| ```PATCH```  | /histories/:id |  Update History By ID  |
-| ```DELETE``` | /histories/:id |  Delete History By ID  |
+#### Popular Vehicles Endpoint
+|  METHOD   |              API               |                         REMARKS                         |
+| :-------: | :----------------------------: | :-----------------------------------------------------: |
+| ```GET``` | /popular/?search=&page=&limit= | Get Popular Vehicles With Search By Type And Pagination |
 
+#### Profile  Endpoint
+|  METHOD   |     API      |        REMARKS        |
+| :-------: | :----------: | :-------------------: |
+| ```GET``` | /profile/:id | Get Profile By idUser |
 
-#### Categories Endpoint :
-|    METHOD    |       API       |         REMARKS         |
-| :----------: | :-------------: | :---------------------: |
-|  ```GET```   |   /categories   | Get All List Categories |
-|  ```GET```   | /categories/:id |  Get Categories By ID   |
-|  ```POST```  |   /categories   |    Add New Category     |
-| ```PATCH```  | /categories/:id |  Update Category By ID  |
-| ```DELETE``` | /categories/:id |  Delete Category By ID  |
+#### Histories Endpoint
+|    METHOD    |               API                |                 REMARKS                  |
+| :----------: | :------------------------------: | :--------------------------------------: |
+|  ```GET```   | /histories/?search=&page=&limit= | Get Histories With Search And Pagination |
+|  ```GET```   |          /histories/:id          |         Get History By idHistory         |
+|  ```POST```  |            /histories            |            Input Data History            |
+| ```PATCH```  |          /histories/:id          |      Edit Data history By idHistory      |
+| ```DELETE``` |          /histories/:id          |       Delete History By idHistory        |
 
+#### Categories Endpoint
+|    METHOD    |                API                |                      REMARKS                      |
+| :----------: | :-------------------------------: | :-----------------------------------------------: |
+|  ```GET```   | /categories/?search=&page=&limit= | Get Categories With Search By Type And Pagination |
+|  ```GET```   |          /categories/:id          |            Get Category By idCategory             |
+|  ```POST```  |            /categories            |                Input Data Category                |
+| ```PATCH```  |          /categories/:id          |          Edit Data History By idCategory          |
+| ```DELETE``` |          /categories/:id          |           Delete Category By idCategory           |
 
-#### Popular Endpoint :
-|  METHOD   |   API    |       REMARKS        |
-| :-------: | :------: | :------------------: |
-| ```GET``` | /popular | Get All List Popular |
-
-
-#### Profile Endpoint :
-|  METHOD   |     API      |      REMARKS      |
-| :-------: | :----------: | :---------------: |
-| ```GET``` | /profile/:id | Get Profile By ID |
-
-
-## ✍️ Authors :
-
-- [@asherginting](https://github.com/asherginting)
