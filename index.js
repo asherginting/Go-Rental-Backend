@@ -1,17 +1,12 @@
 const express = require('express');
 require('dotenv').config();
-const multer = require('multer');
+const app = express();
 const cors = require('cors');
 
-const upload = multer();
-const app = express();
-
-app.use(cors());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use(require('./src/routes'));
-
-app.use(upload.array());
 app.use('/uploads', express.static('uploads'));
 
 const { PORT, APP_PORT } = process.env;

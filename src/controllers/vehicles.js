@@ -1,7 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable max-len */
-/* eslint-disable prefer-const */
-/* eslint-disable camelcase */
 const vehicleModel = require('../models/vehicles');
 const helperGet = require('../helpers/get');
 const categoriesModel = require('../models/categories');
@@ -14,13 +10,18 @@ const getVehicles = (req, res) => {
 };
 
 const getVehicleCategory = (req, res) => {
-    let { category, page, limit } = req.query;
-    category = category || '';
+    let {
+        search, filter, page, limit,
+    } = req.query;
+    search = search || '';
+    filter = filter || '';
     page = parseInt(page, 10) || 1;
     limit = parseInt(limit, 10) || 5;
 
     const offset = (page - 1) * limit;
-    const data = { category, limit, offset };
+    const data = {
+        search, filter, limit, offset,
+    };
 
     vehicleModel.getVehicleCategory(data, (resultsFin) => {
         if (resultsFin.length > 0) {
@@ -29,14 +30,14 @@ const getVehicleCategory = (req, res) => {
                 const last = Math.ceil(total / limit);
                 const results = resultsFin;
                 const pageInfo = {
-                    prev: page > 1 ? `http://localhost:5000/vehicles/category/?category=${category}&page=${page - 1}&limit=${limit}` : null,
-                    next: page < last ? `http://localhost:5000/vehicles/category/?category=${category}&page=${page + 1}&limit=${limit}` : null,
+                    prev: page > 1 ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page - 1}&limit=${limit}` : null,
+                    next: page < last ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page + 1}&limit=${limit}` : null,
                     totalData: total,
                     currentPage: page,
                     lastPage: last,
                 };
 
-                return response(req, res, `List vehicles by category ${category}`, results, pageInfo);
+                return response(req, res, `List vehicles by category ${filter}`, results, pageInfo);
             });
         }
         return response(req, res, 'Page not found', null, null, 404);
@@ -75,8 +76,9 @@ const addVehicle = (req, res) => {
                         if (!regex.test(price)) {
                             if (!regex.test(qty) && qty > 0) {
                                 const typeCategory = checkType[0].type;
+                                const resImage = image.replace(/\\/g, '/');
                                 const data = {
-                                    id_category, type: typeCategory, brand, image, capacity, location, price, qty,
+                                    id_category, type: typeCategory, brand, image: resImage, capacity, location, price, qty,
                                 };
                                 return vehicleModel.checkVehicle(data, (checkResult) => {
                                     if (checkResult.length > 0) {
@@ -124,8 +126,9 @@ const editAllVehicle = (req, res) => {
                         if (!notNum.test(price) && !notNum.test(qty) && !notNum.test(rent_count)) {
                             const typeCategory = checkType[0].type;
                             const status = Number(qty) > 0 ? 1 : 2;
+                            const resImage = image.replace(/\\/g, '/');
                             const dataBody = {
-                                id_category, type: typeCategory, brand, image, capacity, location, price, qty, rent_count, status,
+                                id_category, type: typeCategory, brand, image: resImage, capacity, location, price, qty, rent_count, status,
                             };
                             vehicleModel.getVehicle(id, (vehicleData) => deleteImg.rm(vehicleData));
                             return vehicleModel.editAllVehicle(dataBody, id, (results) => {
@@ -162,7 +165,7 @@ const editVehicle = (req, res) => {
                     }
                 });
                 if (req.file) {
-                    data.image = req.file.path;
+                    data.image = req.file.path.replace(/\\/g, '/');
                 }
                 if (data.id_category) {
                     categoriesModel.getCategory(data.id_category, (category) => {
@@ -215,8 +218,9 @@ const deleteVehicle = (req, res) => {
                 return response(req, res, `Failed to delete vehicle with id ${id}`, null, null, 500);
             });
         });
+    } else {
+        return response(req, res, 'Only admin can delte vehicle', null, null, 403);
     }
-    return response(req, res, 'Only admin can delete vehicle', null, null, 403);
 };
 
 module.exports = {

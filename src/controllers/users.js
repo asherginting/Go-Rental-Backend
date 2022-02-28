@@ -1,7 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable max-len */
-/* eslint-disable prefer-const */
-/* eslint-disable camelcase */
 const bcrypt = require('bcrypt');
 const userModel = require('../models/users');
 const helperGet = require('../helpers/get');

@@ -1,4 +1,3 @@
-/* eslint-disable radix */
 const categoryModel = require('../models/categories');
 const getHelper = require('../helpers/get');
 const response = require('../helpers/response');
