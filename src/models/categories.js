@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 const db = require('../helpers/db');
 
 const countCategory = (data, cb) => {

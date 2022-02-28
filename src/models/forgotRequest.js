@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 const db = require('../helpers/db');
 
 const createRequest = (id_user, code) => new Promise((resolve, reject) => {
