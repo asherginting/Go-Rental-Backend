@@ -1,13 +1,27 @@
-const response = (res, message, result, stat=200)=>{
+const fs = require('fs');
+const camelCase = require('camelcase-keys');
+
+const response = (req, res, message, results, pageInfo, stats = 200) => {
     let success = true;
-    if(stat>=400){
+    if (stats >= 400) {
         success = false;
+        if (req.file) {
+            fs.unlink(`${req.file.path}`, (error) => {
+                if (error) throw error;
+            });
+        }
     }
-    const data = {success, message};
-    if(result){
-        data.result = result;
+    const data = {
+        success,
+        message,
+    };
+    if (results) {
+        data.results = camelCase(results);
     }
-    return res.status(stat).json(data);
+    if (pageInfo) {
+        data.pageInfo = pageInfo;
+    }
+    return res.status(stats).json(data);
 };
 
 module.exports = response;
