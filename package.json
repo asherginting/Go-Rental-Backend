@@ -1,29 +1,32 @@
 {
-  "name": "fw5-backend-beginner",
+  "name": "Fw5-Backend Beginner",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
-    "check-lint": "npx eslint **/*.js",
-    "lint": "npx eslint **/*.js --fix"
+    "dev": "nodemon index.js",
+    "lint": "eslint ./**/*.js --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "Asher Azriel Ginting",
+  "author": "Asher Ginting",
   "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.7.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "nodemon": "^2.0.15"
+  },
   "dependencies": {
-    "-": "^0.0.1",
     "bcrypt": "^5.0.1",
-    "D": "^1.0.0",
+    "camelcase": "^6.3.0",
+    "camelcase-keys": "^7.0.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.4",
-    "mysql": "^2.18.1"
-  },
-  "devDependencies": {
-    "eslint": "^8.7.0",
-    "nodemon": "^2.0.15"
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.7.2"
   }
 }
