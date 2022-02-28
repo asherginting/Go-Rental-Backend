@@ -1,58 +1,109 @@
 const db = require('../helpers/db');
-const table = 'users';
 
-exports.getUsers = ()=> new Promise((resolve, reject)=>{
-    db.query(`SELECT * FROM ${table}`, (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
-});
+const { APP_URL } = process.env;
 
-exports.getUser = (id, cb)=>{
-    db.query(`SELECT * FROM ${table} WHERE id =?`, [id], (err, res)=>{
-        if(err) throw err;
-        cb(res);
-    });
+const countUsers = (data, cb) => {
+  db.query(`SELECT COUNT(*) as total FROM users WHERE name LIKE '${data.search}%'`, (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
 };
 
-exports.getUsername = (username)=>new Promise((resolve, reject)=>{
-    db.query(`SELECT * FROM ${table} WHERE username='${username}'`, (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
+const getUsers = (data, cb) => {
+  db.query(`SELECT id_user, name, CONCAT('${APP_URL}/', image) AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt
+  FROM users WHERE name LIKE '${data.search}%' LIMIT ${data.limit} OFFSET ${data.offset}`, (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const getUser = (id, cb) => {
+  db.query(`SELECT id_user, name, CONCAT('${APP_URL}/', image) AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt
+  FROM users WHERE id_user=?`, [id], (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const getUserById = (id) => new Promise((resolve, reject) => {
+  db.query(`SELECT id_user, name, CONCAT('${APP_URL}/', image) AS image, username, gender, email, phone_number, address, birthdate, createdAt, updatedAt
+  FROM users WHERE id_user = ?`, [id], (err, res) => {
+    if (err) reject(err);
+    resolve(res);
+  });
 });
 
-exports.getEmail = (email)=>new Promise((resolve, reject)=>{
-    db.query(`SELECT * FROM ${table} WHERE email='${email}'`, (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
+const checkUser = (data, cb) => {
+  db.query(`SELECT id_user, name, CONCAT('${APP_URL}/', image) AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt
+  FROM users WHERE username='${data.username}' OR email='${data.email}' 
+  OR phone_number='${data.phone_number}'`, (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const checkUserAsync = (data) => new Promise((resolve, reject) => {
+  db.query(`SELECT id_user, name, CONCAT('${APP_URL}/', image) AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt
+  FROM users WHERE username='${data.username}' OR email='${data.email}' 
+  OR phone_number='${data.phone_number}'`, (err, res) => {
+    if (err) reject(err);
+    resolve(res);
+  });
 });
 
-exports.getPhone = (phone_number)=>new Promise((resolve, reject)=>{
-    db.query(`SELECT * FROM ${table} WHERE phone_number=${phone_number}`, (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
+const newUser = (id, cb) => {
+  db.query('SELECT id_user, name, username, email, phone_number FROM users WHERE id_user=?', [id], (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const addUser = (data, cb) => {
+  db.query('INSERT INTO users SET ?', [data], (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const editUser = (data, id, cb) => {
+  db.query('UPDATE users SET ? WHERE id_user=?', [data, id], (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const deleteUser = (id, cb) => {
+  db.query('DELETE FROM users WHERE id_user=?', [id], (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const getUserByUserName = (data) => new Promise((resolve, reject) => {
+  db.query(`SELECT id_user, username, password, confirm FROM users WHERE username='${data}' OR email='${data}'`, (err, res) => {
+    if (err) reject(err);
+    resolve(res);
+  });
 });
 
-exports.addUser = async (data) => new Promise ((resolve, reject) => {
-    db.query(`INSERT INTO ${table} (name, email, username, password, phone_number, gender, birthdate, address) VALUES ('${data.name}', '${data.email}', '${data.username}', '${data.password}', '${data.phone_number}', '${data.gender}', '${data.birthdate}', '${data.address}')`, (err, res) => {
-        if(err) reject(err);
-        resolve(res);
-    });
+const editUserByUserName = (username) => new Promise((resolve, reject) => {
+  db.query('UPDATE users SET confirm=NULL WHERE username = ?', [username], (err, res) => {
+    if (err) reject(err);
+    resolve(res);
+  });
 });
 
-exports.updateUser = (data, id)=>new Promise((resolve, reject)=>{
-    db.query(`UPDATE ${table} SET ? WHERE id=?`, [data, id], (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
-});
-
-exports.deleteUser = (id)=>new Promise((resolve, reject)=>{
-    db.query(`DELETE FROM ${table} WHERE id=?`, [id], (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
-});
+module.exports = {
+  countUsers,
+  getUsers,
+  getUser,
+  getUserById,
+  checkUser,
+  checkUserAsync,
+  newUser,
+  addUser,
+  editUser,
+  deleteUser,
+  getUserByUserName,
+  editUserByUserName,
+};

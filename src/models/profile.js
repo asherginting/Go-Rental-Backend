@@ -1,9 +1,10 @@
 const db = require('../helpers/db');
-const table = 'users';
 
-exports.getProfile = (id, cb)=>{
-    db.query(`SELECT name, email, username, password, phone_number, gender, birthdate, address FROM ${table} WHERE id=?`, [id], (err, res)=>{
-        if(err) throw err;
-        cb(res);
-    });
+const getProfile = (id, cb) => {
+  db.query('SELECT id_user, name, username, gender, email, phone_number, address, birthdate FROM users WHERE id_user=?', [id], (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
 };
+
+module.exports = getProfile;

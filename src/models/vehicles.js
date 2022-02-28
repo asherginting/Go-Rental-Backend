@@ -1,108 +1,119 @@
 const db = require('../helpers/db');
-const table = 'vehicles';
 
-exports.getVehicles = (data, cb)=>{
-    db.query(`SELECT * FROM ${table} WHERE name LIKE '%${data.name}%' AND location LIKE '%${data.location}%' AND cost>=${data.cost_min} AND cost<=${data.cost_max} LIMIT ${data.limit} OFFSET ${data.offset}`, (err,res)=>{
-        if (err) throw err;
-        cb(res);
-    });
+const { APP_URL } = process.env;
+
+const countVehicle = (data, cb) => {
+  db.query(`SELECT COUNT(*) as total FROM vehicles WHERE brand LIKE '${data.search}%'`, (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
 };
 
-exports.getVehicles = (data) => new Promise ((resolve, reject)=>{
-    db.query(`SELECT * FROM ${table} WHERE name LIKE '%${data.name}%' AND location LIKE '%${data.location}%' AND cost>=${data.cost_min} AND cost<=${data.cost_max} LIMIT ${data.limit} OFFSET ${data.offset}`, (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
+const getVehicles = (data, cb) => {
+  db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, rent_count, status, createdAt, updatedAt
+  FROM vehicles WHERE brand LIKE '${data.search}%' 
+  LIMIT ${data.limit} OFFSET ${data.offset}`, (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const countVehicleCategory = (data, cb) => {
+  db.query(`SELECT COUNT(*) as total FROM vehicles v
+  LEFT JOIN categories c ON c.id_category=v.id_category
+  WHERE c.type LIKE '${data.category}%'`, (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const getVehicleCategory = (data, cb) => {
+  db.query(`SELECT v.id_vehicle, v.id_category, v.type, v.brand , CONCAT('${APP_URL}/', v.image) AS image, v.capacity, v.location, v.price, v.qty, v.rent_count, v.status, v.createdAt, v.updatedAt
+  FROM vehicles v 
+  LEFT JOIN categories c ON v.id_category = c.id_category 
+  WHERE c.type LIKE '${data.category}%'
+  LIMIT ${data.limit} OFFSET ${data.offset};
+  `, (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const getVehicle = (id, cb) => {
+  db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, rent_count, status, createdAt, updatedAt
+  FROM vehicles WHERE id_vehicle=?`, [id], (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const getVehicleAsync = (id) => new Promise((resolve, reject) => {
+  db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, rent_count, status, createdAt, updatedAt
+  FROM vehicles WHERE id_vehicle=?`, [id], (err, res) => {
+    if (err) reject(err);
+    resolve(res);
+  });
 });
 
-exports.getVehicle = (id, cb)=>{
-    db.query(`SELECT * FROM ${table} WHERE id=?`,[id], (err,res)=>{
-        if (err) throw err;
-        cb(res);
-    });
+const checkVehicle = (data, cb) => {
+  db.query(`SELECT * FROM vehicles WHERE type='${data.type}' AND brand='${data.brand}' AND capacity='${data.capacity}' 
+  AND location='${data.location}' AND price=${data.price} AND qty=${data.qty}`, (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+//
+const newVehicle = (cb) => {
+  db.query('SELECT * FROM vehicles ORDER BY id_vehicle DESC LIMIT 1', (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
 };
 
-exports.getVehicle = (id) => new Promise ((resolve, reject)=>{
-    db.query(`SELECT * FROM ${table} WHERE id=${id}`, (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
+const addVehicle = (data, cb) => {
+  db.query('INSERT INTO vehicles SET ?', [data], (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const editAllVehicle = (data, id, cb) => {
+  db.query('UPDATE vehicles SET ? WHERE id_vehicle=?;', [data, id], (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
+};
+
+const editVehicle = (data, id) => new Promise((resolve, reject) => {
+  db.query('UPDATE vehicles SET ? WHERE id_vehicle=?', [data, id], (err, res) => {
+    if (err) reject(err);
+    resolve(res);
+  });
 });
 
-exports.addVehicle = (data, cb)=>{
-    db.query(`INSERT INTO ${table} (name, image, year, cost, available, type, seat, category_id, location) VALUES (?,?,?,?,?,?,?,?,?)`, [data.name, data.image, data.year, data.cost, data.available, data.type, data.seat, data.category_id, data.location], (err, res) => {
-        if(err) throw err;
-        cb(res);
-    });  
+const deleteVehicle = (id, cb) => {
+  db.query('DELETE FROM vehicles WHERE id_vehicle=?', [id], (err, res) => {
+    if (err) throw err;
+    cb(res);
+  });
 };
 
-exports.addVehicle = (data)=> new Promise ((resolve, reject)=>{
-    db.query(`INSERT INTO ${table} (name, image, year, cost, available, type, seat, category_id, location) VALUES('${data.name}', ${data.image}, '${data.year}', ${data.cost}, ${data.available}, '${data.type}', ${data.seat}, ${data.category_id}, '${data.location}')`, (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
-});
-
-exports.checkVehicle = (isThere, cb)=>{
-    db.query(`SELECT * FROM ${table} WHERE name=?`,[isThere], (err,res)=>{
-        if (err) throw err;
-        cb(res);
-    });
+const addRentCount = (id) => {
+  db.query(`UPDATE vehicles SET rent_count=rent_count+1 WHERE id_vehicle=${id};`);
 };
 
-exports.updateVehicle = (data, cb)=>{
-    db.query(`UPDATE ${table} SET name=?, image=?, year=?, cost=?, available=?, type=?, seat=?, category_id=?, location=? WHERE id=?`, data, (err,res)=>{
-        if(err) throw err;
-        cb(res);
-    });
+module.exports = {
+  countVehicle,
+  getVehicles,
+  countVehicleCategory,
+  getVehicleCategory,
+  getVehicle,
+  getVehicleAsync,
+  checkVehicle,
+  newVehicle,
+  addVehicle,
+  editAllVehicle,
+  editVehicle,
+  deleteVehicle,
+  addRentCount,
 };
-
-exports.updateVehicle = (data, id)=>new Promise((resolve, reject)=>{
-    db.query(`UPDATE ${table} SET ? WHERE id=?`, [data, id], (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
-});
-
-exports.deleteVehicle = (id, cb)=>{
-    db.query(`DELETE FROM ${table} WHERE id = ?`, [id],
-        (err, res)=>{
-            if (err) throw err;
-            cb(res);
-        });
-};
-
-exports.deleteVehicle = (id)=>new Promise((resolve, reject)=>{
-    db.query(`DELETE FROM ${table} WHERE id=?`, [id], (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
-});
-
-exports.getCategory = (data, cb)=>{
-    db.query(`SELECT * FROM ${table} WHERE name LIKE '%${data.name}%' AND location LIKE '%${data.location}%' AND cost>=${data.cost_min} AND cost<=${data.cost_max} AND category_id=${data.category_id} LIMIT ${data.limit} OFFSET ${data.offset}`, (err,res)=>{
-        if (err) throw err;
-        cb(res);
-    });
-};
-
-exports.showVehicle = (data, cb)=>{
-    db.query(`SELECT * FROM ${table} WHERE name = ? AND year =? AND location=?`, data, (err, res)=>{
-        if(err) throw err;
-        cb(res);
-    });
-};
-
-exports.countData = (data)=>new Promise((resolve, reject)=>{
-    db.query(`SELECT COUNT(*) AS total FROM vehicles WHERE name LIKE '%${data.name}%' AND location LIKE '%${data.location}%' AND cost>=${data.cost_min} AND cost<=${data.cost_max}`, (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
-});
-
-exports.getVehicleName = (data)=>new Promise((resolve, reject)=>{
-    db.query(`SELECT * FROM vehicles WHERE name='${data.name}' && year='${data.year}' && cost=${data.cost} && location='${data.location}'`, (err, res)=>{
-        if(err) reject(err);
-        resolve(res);
-    });
-});
