@@ -1,21 +1,15 @@
 const users = require('express').Router();
-const {verifyUser} = require('../helpers/auth');
-const upload = require('../helpers/upload');
 
 const {
-    getUsers,
-    getUser,
-    addUser,
-    deleteUser,
-    updateUser,
+  getUsers, getUser, addUser, editAllDataUser, editUser, deleteUser,
 } = require('../controllers/users');
+const { verifyUser } = require('../helpers/auth');
 
-users.get('/', verifyUser, getUsers);
-users.get('/:id', verifyUser, getUser);
-users.post('/', addUser);
-users.patch('/', verifyUser, updateUser);
-users.patch('/:id', verifyUser, upload.single('image'), updateUser);
+users.get('/', getUsers);
+users.post('/registry', addUser);
+users.get('/:id', getUser);
+users.put('/:id', verifyUser, editAllDataUser);
+users.patch('/:id', verifyUser, editUser);
 users.delete('/:id', verifyUser, deleteUser);
-users.delete('/', verifyUser, deleteUser);
 
 module.exports = users;

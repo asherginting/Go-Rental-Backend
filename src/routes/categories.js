@@ -1,19 +1,15 @@
 const categories = require('express').Router();
 
 const {
-    getCategories,
-    getCategory,
-    addCategory,
-    updateCategory,
-    deleteCategory
-}= require('../controllers/categories');
+  getCategories, getCategoriesData, getCategory, addCategory, editCategory, deleteCategory,
+} = require('../controllers/categories');
+const { verifyUser } = require('../helpers/auth');
 
 categories.get('/', getCategories);
+categories.get('/data', getCategoriesData);
 categories.get('/:id', getCategory);
-categories.post('/', addCategory);
-categories.patch('/:id', updateCategory);
-categories.patch('/', updateCategory);
-categories.delete('/:id', deleteCategory);
-categories.delete('/', deleteCategory);
+categories.post('/', verifyUser, addCategory);
+categories.patch('/:id', verifyUser, editCategory);
+categories.delete('/:id', verifyUser, deleteCategory);
 
 module.exports = categories;

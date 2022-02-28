@@ -1,11 +1,14 @@
-const users = require('express').Router();
+const user = require('express').Router();
 
-const { login, register, forgotPass, logout, verify } = require('../controllers/auth');
+const {
+  login, verify, forgotRequest, confirmRegistration,
+} = require('../controllers/auth');
+const { addUser } = require('../controllers/users');
 
-users.post('/login', login);
-users.post('/register', register);
-users.post('/forgotPass', forgotPass);
-users.post('/logout', logout);
-users.post('/verify', verify);
+user.post('/login', login);
+user.post('/verify', verify);
+user.post('/forgotPassword', forgotRequest);
+user.post('/register', addUser);
+user.post('/confrimRegistration', confirmRegistration);
 
-module.exports = users;
+module.exports = user;

@@ -1,24 +1,23 @@
 const vehicles = require('express').Router();
 const upload = require('../helpers/upload');
-const {verifyUser} = require('../helpers/auth');
 
 const {
-    getVehicles,
-    getVehicle,
-    addVehicle,
-    updateVehicle,
-    deleteVehicle,
+  getVehicles,
+  getVehicleCategory,
+  getVehicle,
+  addVehicle,
+  editAllVehicle,
+  editVehicle,
+  deleteVehicle,
 } = require('../controllers/vehicles');
-
+const { verifyUser } = require('../helpers/auth');
 
 vehicles.get('/', getVehicles);
-vehicles.get('/:id', getVehicle);
 vehicles.post('/', verifyUser, upload.single('image'), addVehicle);
-vehicles.patch('/', verifyUser, updateVehicle);
-vehicles.patch('/:id', verifyUser, upload.single('image'), updateVehicle);
-vehicles.delete('/', verifyUser, deleteVehicle);
+vehicles.get('/category', getVehicleCategory);
+vehicles.get('/:id', getVehicle);
+vehicles.put('/:id', verifyUser, editAllVehicle);
+vehicles.patch('/:id', verifyUser, editVehicle);
 vehicles.delete('/:id', verifyUser, deleteVehicle);
-
-
 
 module.exports = vehicles;
