@@ -1,225 +1,201 @@
-const rentHistories = require('../models/histories');
-const vehicles = require('../models/vehicles');
-const users = require('../models/users');
+/* eslint-disable consistent-return */
+/* eslint-disable camelcase */
+/* eslint-disable radix */
+const historyModel = require('../models/histories');
+const vehicleModel = require('../models/vehicles');
+const userModel = require('../models/users');
 
-const getHistories = (req, res)=>{
-    let {vehicle_name, page, limit} = req.query;
-    vehicle_name = vehicle_name || '';
-    page = parseInt(page) || 1;
-    limit = parseInt(limit) || 5;
-    const offset = (page-1)*limit;
-    const data = {vehicle_name, page, limit, offset};
-    rentHistories.getHistories(data, results=>{
-        return res.json({
-            success: true,
-            message: 'Histories',
-            result: results
-        });
-    });
+const helperGet = require('../helpers/get');
+const response = require('../helpers/response');
+const check = require('../helpers/check');
+
+const getHistories = (req, res) => {
+  helperGet(req, res, historyModel.getHistories, historyModel.countHistory, 'histories');
 };
 
-const getHistory = (req, res)=>{
-    const {id} = req.params;
-    rentHistories.getHistory(id, results=>{
-        if(results.length>0){
-            return res.json({
-                success: true,
-                message: `Rent history with ID: ${id}`,
-                result: results[0]
-            });
-        }else{
-            return res.status(404).send({
-                success: false,
-                message: `ID: ${id} not found`
-            });
-        }
-    });
-};
-
-const getHistoryId = (req, res)=>{
-    const {vehicle_id} = req.params;
-    let {page, limit} = req.query;
-    page = parseInt(page) || 1;
-    limit = parseInt(limit) || 5;
-    const offset = (page-1)*limit;
-    const data = {page, limit, offset, vehicle_id};
-    if(vehicle_id!==null || vehicle_id!==undefined){
-        if(vehicle_id>0){
-            rentHistories.getHistoryId(data, result=>{
-                if(result.length>0){
-                    return res.json({
-                        success: true,
-                        message: `History rent with vehicle_id=${vehicle_id}`,
-                        result: result
-                    });
-                }else{
-                    return res.status(404).send({
-                        success: false,
-                        message: 'Vehicle not found'
-                    });
-                }
-            });
-        }else{
-            return res.status(400).send({
-                success: false,
-                message: 'vehicle_id should be a number greater than 0.'
-            });
-        }
-    }else{
-        return res.status(400).send({
-            success: false,
-            message: 'Undefined ID'
-        });
+const getHistory = (req, res) => {
+  const { id } = req.params;
+  historyModel.getHistory(id, (results) => {
+    if (results.length > 0) {
+      return response(req, res, `History with id ${id}`, results[0]);
     }
+    return response(req, res, 'History not found', null, null, 404);
+  });
 };
 
-const isNull = (data)=>{
-    let a = 0;
-    for(let i=0; i<data.length;i++){
-        if(data[i]==''){
-            a++;
-        }
-    }
-    return a;
-};
+const addHistory = (req, res) => {
+  const {
+    id_user, id_vehicle, rent_start_date, rent_end_date, prepayment,
+  } = req.body;
 
-const dataType = (data)=>{
-    const dataName = ['vehicle_id', 'user_id', 'prepayment', 'rent_date', 'return_date'];
-    const dataThrow = [];
-    const dataError = [];
-    for(let i=0; i<dataName.length;i++){
-        if(i<3){
-            dataThrow.push(parseInt(data[i]));
-        }else{
-            dataThrow.push(data[i].toString());
-        }
+  if (id_user && id_vehicle && rent_start_date && rent_end_date && prepayment) {
+    if (!check.checkStartEnd(rent_start_date, rent_end_date)) {
+      return response(req, res, 'rent end must be greater than rent start', null, null, 400);
     }
-    for(let j=0; j<dataName.length;j++){
-        if(j<3 && isNaN(dataThrow[j])==true){
-            dataError.push(`${dataName[j]} should be a number`);
-        }else if(j>=3){
-            if(data[j].length<10){
-                dataError.push(`${dataName[j]} is invalid date.`);
+    return userModel.getUser(id_user, (user) => {
+      if (user.length > 0) {
+        return vehicleModel.getVehicle(id_vehicle, (vehicle) => {
+          if (vehicle.length > 0) {
+            if (check.checkDate(rent_start_date) && check.checkDate(rent_end_date)) {
+              const pola = /\D/g;
+              if (!pola.test(prepayment)) {
+                const data = {
+                  id_user, id_vehicle, rent_start_date, rent_end_date, prepayment, status: 2,
+                };
+                return historyModel.addHistory(data, (resAdd) => {
+                  vehicleModel.addRentCount(id_vehicle);
+                  historyModel.getHistory(resAdd.insertId, (results) => response(req, res, 'Successfully added new History', results[0]));
+                });
+              }
+              return response(req, res, 'Prepayment must be number', null, null, 400);
             }
-            else{
-                let a = new Date(data[j]);
-                if(a=='Invalid Date'){
-                    dataError.push(`${dataName[j]} is invalid date.`);
-                }
-            }
-        }
-    }
-    return dataError;
+            return response(req, res, 'Wrong date input for rent_start_date and rent_end_date. Format date YYYY-MM-DD', null, null, 400);
+          }
+          return response(req, res, 'id_vehicle is undifined', null, null, 400);
+        });
+      }
+      return response(req, res, 'id_user is undefined', null, null, 400);
+    });
+  }
+  return response(req, res, 'Failed add new history, data must be filled', null, null, 400);
 };
 
-const addHistories = (req, res)=>{
-    const {vehicle_id, user_id, prepayment, rent_date, return_date} = req.body;
-    const data = [vehicle_id, user_id, prepayment, rent_date, return_date];
-    let b = isNull(data);
-    let c = dataType(data);
-    const cb = (resAdd)=>{
-        rentHistories.getHistVId(vehicle_id, resGetId=>{
-            rentHistories.editHistory(vehicle_id, ress=>{
-                if(resAdd.affectedRows>0 && resGetId.length>0 && ress.affectedRows>0){
-                    return res.json({
-                        success: true,
-                        message: 'Successfully add histories.',
-                        result : resGetId[resGetId.length-1]
+const editAllHistory = (req, res) => {
+  if (req.user.role === 'Admin') {
+    const { id } = req.params;
+    const {
+      id_user, id_vehicle, rent_start_date, rent_end_date, prepayment, status,
+    } = req.body;
+
+    if (id_user && id_vehicle && rent_start_date && rent_end_date && prepayment && status) {
+      if (!check.checkStartEnd(rent_start_date, rent_end_date)) {
+        return response(req, res, 'rent end must be greater than rent start', null, null, 400);
+      }
+      return userModel.getUser(id_user, (user) => {
+        if (user.length > 0) {
+          return vehicleModel.getVehicle(id_vehicle, (vehicle) => {
+            if (vehicle.length > 0) {
+              const pola = /\D/g;
+              if (!pola.test(prepayment)) {
+                if (check.checkDate(rent_start_date) && check.checkDate(rent_end_date)) {
+                  if (Number(status) >= 1 || Number(status) <= 2) {
+                    const data = {
+                      id_user, id_vehicle, rent_start_date, rent_end_date, prepayment, status,
+                    };
+                    return historyModel.editHistory(data, id, (results) => {
+                      if (results.changedRows > 0) {
+                        return historyModel.getHistory(id, (rslt) => response(req, res, 'Edited successfully', rslt));
+                      }
+                      return response(req, res, `Failed to edit history with id ${id}. Data has not changed`, null, null, 400);
                     });
-                }else{
-                    return res.status(500).send({
-                        success: false,
-                        message: 'Server error.'
-                    });
+                  }
+                  return response(req, res, 'Status unknown! 1 for has been returned and 2 for not been returned', null, null, 400);
                 }
-            });
-        });
+                return response(req, res, 'Wrong date input for rent_start_date or rent_end_date. Format date YYYY-MM-DD', null, null, 400);
+              }
+              return response(req, res, 'Prepayment must be number', null, null, 400);
+            }
+            return response(req, res, 'id_vehicle is undifined', null, null, 400);
+          });
+        }
+        return response(req, res, 'id_user is undefined', null, null, 400);
+      });
+    }
+    return response(req, res, `Failed edit history with id ${id}, data must be filled`, null, null, 400);
+  }
+  return response(req, res, 'Only admin can update history', null, null, 403);
+};
+
+const editHistory = async (req, res) => {
+  if (req.user.role === 'Admin') {
+    const { id } = req.params;
+    const history = await historyModel.getHistoryAsync(id);
+    if (history.length === 0) {
+      return response(req, res, 'History not available', null, null, 404);
+    }
+    const {
+      id_user, id_vehicle, rent_start_date, rent_end_date, prepayment, status,
+    } = req.body;
+    const data = {
+      id_user: history[0].id_user,
+      id_vehicle: history[0].id_vehicle,
+      rent_start_date: history[0].rent_start_date,
+      rent_end_date: history[0].rent_end_date,
+      prepayment: history[0].prepayment,
+      status: history[0].status,
     };
-    if(b>0){
-        return res.status(400).send({
-            success: false,
-            message: 'Please fill in all the fields.'
-        });
+
+    if (id_user) {
+      const checkUser = await userModel.getUserById(id_user);
+      if (checkUser.length === 0) {
+        return response(req, res, 'User id not available', null, null, 400);
+      }
+      data.id_user = id_user;
     }
-    if(c.length>0){
-        return res.status(400).send({
-            success: false,
-            message: c
-        });
+    if (id_vehicle) {
+      const checkUser = await vehicleModel.getVehicleAsync(id_vehicle);
+      if (checkUser.length === 0) {
+        return response(req, res, 'Vehicle id not available', null, null, 400);
+      }
+      data.id_vehicle = id_vehicle;
     }
-    vehicles.getVehicle(vehicle_id, result=>{
-        if(result.length>0){
-            if(result[0].available>0){
-                users.getUser(user_id, resUser=>{
-                    if(resUser.length>0){
-                        rentHistories.addHistories(data, cb);
-                    }else{
-                        return res.status(404).send({
-                            success: false,
-                            message: `User with ID: ${user_id} not found`
-                        });
-                    }
-                });
-            }else{
-                return res.status(400).send({
-                    success: false,
-                    message: 'Vehicle not available at the time.'
-                });
-            }
-        }else{
-            return res.status(404).send({
-                success: false,
-                message: `Vehicle with ID: ${vehicle_id} not found.`
-            });
+    if (rent_start_date) {
+      if (!check.checkDate(rent_start_date)) {
+        return response(req, res, 'Wrong date input for rent_start_date. Format date YYYY-MM-DD', null, null, 400);
+      }
+      data.rent_start_date = rent_start_date;
+    }
+    if (rent_end_date) {
+      if (!check.checkDate(rent_end_date)) {
+        return response(req, res, 'Wrong date input for rent_end_date . Format date YYYY-MM-DD', null, null, 400);
+      }
+      data.rent_end_date = rent_end_date;
+    }
+    const notNum = /\D/g;
+    if (prepayment) {
+      if (notNum.test(prepayment)) {
+        return response(req, res, 'Prepayment must be number', null, null, 400);
+      }
+      data.prepayment = prepayment;
+    }
+    if (status) {
+      if (Number(status) !== 1 && Number(status) !== 2) {
+        return response(req, res, 'Status unknown! 1 for has been returned and 2 for not been returned', null, null, 400);
+      }
+      data.status = status;
+    }
+    if (!check.checkStartEnd(data.rent_start_date, data.rent_end_date)) {
+      return response(req, res, 'rent end must be greater than rent start', null, null, 400);
+    }
+    const update = await historyModel.updateHistory(data, id);
+    if (update.affectedRows > 0) {
+      const results = await historyModel.getHistoryAsync(id);
+      return response(req, res, 'Update vehicle successfully', results);
+    }
+    return response(req, res, 'Unexpected error', null, null, 500);
+  }
+};
+
+const deleteHistory = (req, res) => {
+  if (req.user.role === 'Admin') {
+    const { id } = req.params;
+    historyModel.getHistoryDeleted(id, (historyDeleted) => {
+      historyModel.deleteHistory(id, (results) => {
+        if (results.affectedRows > 0) {
+          return response(req, res, `History with id ${id} successfully deleted`, historyDeleted[0]);
         }
+        return response(req, res, `Failed to delete history with id ${id}`, null, null, 400);
+      });
     });
+  }
+  return response(req, res, 'Only admin can delete history', null, null, 403);
 };
 
-const updateHistory = (req, res)=>{
-    const {id} = req.params;
-    const {vehicle_id, user_id, prepayment, rent_date, return_date} = req.body;
-    const data = [vehicle_id, user_id, prepayment, rent_date, return_date, id];
-    let b = isNull(data);
-    let c = dataType(data);
-    if(b>0){
-        return res.status(400).send({
-            success: false,
-            message: 'Please fill in all the fields.'
-        });
-    }
-    if(c.length>0){
-        return res.status(400).send({
-            success: false,
-            message: c
-        });
-    }
+module.exports = {
+  getHistories,
+  getHistory,
+  addHistory,
+  editAllHistory,
+  editHistory,
+  deleteHistory,
 };
-
-const deleteHistory = (req, res)=>{
-    const {id} = req.params;
-    if(id!==null && id!==undefined){
-        rentHistories.getHistory(id, results=>{
-            if(results.length>0){
-                rentHistories.deleteHistory(id, result=>{
-                    return res.json({
-                        success: true,
-                        message: `History with ID: ${id} was deleted`,
-                        result: `Rows affected: ${result.affectedRows}`
-                    });
-                });
-            }else{
-                return res.status(404).send({
-                    success: false,
-                    message: `ID: ${id} not found`
-                });
-            }
-        });
-    }else{
-        return res.status(400).send({
-            success: false,
-            message: 'Undefined ID'
-        });
-    }
-};
-
-module.exports = {getHistories, getHistory, getHistoryId, addHistories, updateHistory, deleteHistory};

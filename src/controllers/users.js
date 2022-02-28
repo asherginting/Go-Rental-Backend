@@ -1,278 +1,215 @@
-const usersProfile = require('../models/users');
+/* eslint-disable consistent-return */
+/* eslint-disable max-len */
+/* eslint-disable prefer-const */
+/* eslint-disable camelcase */
+const bcrypt = require('bcrypt');
+const userModel = require('../models/users');
+const helperGet = require('../helpers/get');
+const response = require('../helpers/response');
+const upload = require('../helpers/upload').single('image');
+const deleteImg = require('../helpers/deleteImg');
+const check = require('../helpers/check');
+const mail = require('../helpers/codeMail');
 
-const getUsers = (req, res)=>{
-    let {name, gender, page, limit} = req.query;
-    name = name || '';
-    gender = parseInt(gender) || 0;
-    page = parseInt(page) || 1;
-    limit = parseInt(limit) || 5;
+const { APP_EMAIL } = process.env;
 
-    let offset = (page-1)*limit;
-    const data = {name, gender, page, limit, offset};
-    if(gender>0){
-        if(gender<3){
-            usersProfile.getGender(data, results=>{
-                if(results.length>0){
-                    return res.json({
-                        success : true,
-                        message : 'List Users',
-                        result : results
-                    });
-                }else{
-                    return res.status(404).send({
-                        success: false,
-                        message: 'Users not found'
-                    });
-                }
-            });
-        }else{
-            return res.status(400).send({
-                success: false,
-                message: 'Gender must be Male:1 and Female:2'
-            });
-        }
-    }else{
-        usersProfile.getUsers(data, result=>{
-            return res.json({
-                success: true,
-                message: 'List Users',
-                result: result
-            });
-        });
-    }
+const getUsers = (req, res) => {
+  helperGet(req, res, userModel.getUsers, userModel.countUsers, 'users');
 };
 
-const getUser = (req, res)=>{
-    let {id} = req.params;
-    id = id || 0;
-    if(id>0){
-        usersProfile.getUser(id, result=>{
-            if(result.length>0){
-                return res.json({
-                    success: true,
-                    message: 'User found',
-                    result : result[0]
-                });
-            }else{
-                return res.status(404).send({
-                    success: false,
-                    message: `User with ID: ${id} not found`
-                });
-            }
-        });
-    }else{
-        return res.send({
-            success: false,
-            message: 'ID must be a number greater than 0'
-        });
+const getUser = (req, res) => {
+  const { id } = req.params;
+  userModel.getUser(id, (results) => {
+    if (results.length > 0) {
+      return response(req, res, `User with id ${id}`, results[0]);
     }
+    return response(req, res, `User with id ${id} not found`, null, null, 404);
+  });
 };
 
-const isNull = (data)=>{
-    let a = 0;
-    for(let i=0; i<data.length;i++){
-        if(data[i]==''){
-            a++;
-        }
+const addUser = (req, res) => {
+  const {
+    name, username, email, password, phone_number,
+  } = req.body;
+  if (name && username && email && password && phone_number) {
+    if (!check.checkEmail(email)) {
+      return response(req, res, 'Wrong email input', null, null, 400);
     }
-    return a;
-};
-
-const isEmail = (email)=>{
-    let a = email.split('');
-    let b = a.filter(x => x=='@').length;
-    let c = a.filter(x => x=='.').length;
-    let d = a.findIndex(x => x=='@');
-    let e = a.findIndex(x => x=='.');
-    if(b==1 && c==1 && e>d+1){
-        return true;
-    }else{
-        return false;
+    if (!check.checkPhone(phone_number)) {
+      return response(req, res, 'Wrong phone number input', null, null, 400);
     }
-};
-
-const isDate = (date) =>{
-    let yesDate = true;
-    if(date.length==10){
-        for(let a=0;a<date.length;a++){
-            if(a==4 || a==7){
-                if(date[a]!=='-'){
-                    yesDate=false;
-                }
-            }else{
-                if(isNaN(parseInt(date[a]))==true){
-                    yesDate = false;
-                }
-            }
-        }
-    }else{
-        yesDate = false;
-    }
-    return yesDate;
-};
-
-const isMatch = (data)=>{
-    const dataName = ['name', 'email', 'password', 'phone_number', 'gender', 'birthdate', 'address'];
-    let theType = ['isNaN', 'email', 'isNaN', 'number', 'number', 'date', 'isNaN'];
-    const newData = [];
-    const dataError = [];
-    for(let i=0; i<dataName.length;i++){
-        newData.push(parseInt(data[i]));
-        if(theType[i]=='isNaN' && i!=2){
-            if(isNaN(newData[i])==false){
-                dataError.push(`${dataName[i]} must be a string`);
-            }
-        }else if(theType[i]=='email'){
-            let a = isEmail(data[1]);
-            if(a==false){
-                dataError.push('Email should be in format : username@email.com');
-            }
-        }else if(theType[i]=='date'){
-            let a = isDate(data[5]);
-            if(a==false){
-                dataError.push('Birthdate must in format yyyy-mm-dd');
-            }
-        }else if(theType[i]=='number'){
-            if(isNaN(newData[i])==true){
-                dataError.push(`${dataName[i]} must be a number`);
-            }
-        }
-    }
-    return dataError;
-};
-
-const editData = (data, cb, callback, res)=>{
-    let a = isNull(data);
-    let b = isMatch(data);
-    if(a<1){
-        if(b.length<1){
-            usersProfile.checkEmail(data[1], result=>{
-                if(result.length<1){
-                    usersProfile.checkPhone(data[3], results=>{
-                        if(results.length<1 || results[0].id==data[7]){
-                            callback(data, cb);
-                        }else{
-                            return res.status(400).send({
-                                success: false,
-                                message: 'Phone number has been used'
-                            });
-                        }
-                    });
-                }else if(result.length<=1 && result[0].id==data[7]){
-                    usersProfile.checkPhone(data[3], results=>{
-                        if(results.length<1 || results[0].id==data[7]){
-                            callback(data, cb);
-                        }else{
-                            console.log(results[0]);
-                            return res.status(400).send({
-                                success: false,
-                                message: 'Phone number has been used'
-                            });
-                        }
-                    });
-                }else{
-                    return res.status(400).send({
-                        success: false,
-                        message: 'Email has been used'
-                    });
-                }
-            });
-        }else{
-            return res.status(400).send({
-                success: false,
-                message: b
-            });
-        }
-    }else{
-        return res.status(400).send({
-            success: false,
-            message: 'Please fill in all the fields'
-        });
-    }
-};
-
-const addUser = (req, res)=>{
-    const {name, email, password, phone_number, gender, birthdate, address} = req.body;
-    const data = [name, email, password, phone_number, gender, birthdate, address];
-    const cb = (result)=>{
-        usersProfile.checkEmail(email, ress=>{
-            return res.json({
-                success: true,
-                message: `Successfully add user. Rows affected: ${result.affectedRows}`,
-                result: ress[0]
-            });
-        });
+    const dataCheck = {
+      username, email, phone_number,
     };
-    editData(data, cb, usersProfile.addUser, res);
+    return userModel.checkUser(dataCheck, async (user) => {
+      if (user.length > 0) {
+        return response(req, res, 'User name or phone or email has been registered', null, null, 400);
+      }
+      const randomCode = Math.round(Math.random() * (9999 - 1000) + 1000);
+      mail.sendMail({
+        from: APP_EMAIL,
+        to: email,
+        subject: 'Registration verification code | Rent Vehicles',
+        text: String(randomCode),
+        html: `<b>${randomCode}<b>`,
+      });
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(password, salt);
+      const data = {
+        name, username, email, password: hash, phone_number, confirm: randomCode,
+      };
+      return userModel.addUser(data, (rslt) => {
+        if (rslt.affectedRows === 0) {
+          return response(req, res, 'Unexpected error', null, null, 500);
+        }
+        userModel.newUser(rslt.insertId, (results) => response(req, res, `Verification code has been sent to ${email}`, results[0]));
+      });
+    });
+  }
+  return response(req, res, 'Failed to create user, data must be filled', null, null, 400);
 };
 
-const updateUser = (req, res)=>{
-    const {id} = req.params;
-    const {name, email, password, phone_number, gender, birthdate, address} = req.body;
-    const data = [name, email, password, phone_number, gender, birthdate, address, id];
-    const cb = (ress)=>{
-        usersProfile.getUser(id, resId=>{
-            return res.json({
-                success: true,
-                message: `Success update user.Rows Affected : ${ress.affectedRows}`,
-                result: resId[0]
+const editAllDataUser = (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return response(req, res, err.message, null, null, 400);
+    }
+    const { id } = req.params;
+    const user = await userModel.getUserById(id);
+    if (user.length !== 1) {
+      return response(req, res, 'User not available', null, null, 404);
+    }
+    const {
+      name, username, email, phone_number, address, birthdate,
+    } = req.body;
+    let image;
+    if (req.file) {
+      image = req.file.path;
+    }
+    if (image === undefined) {
+      return response(req, res, 'Image not selected', null, null, 400);
+    }
+
+    if (name && username && image && email && phone_number && address && birthdate) {
+      if (check.checkPhone(phone_number)) {
+        if (check.checkEmail(email)) {
+          if (check.checkDate(birthdate)) {
+            const data = {
+              name, username, image, email, phone_number, address, birthdate,
+            };
+            const pastUser = await userModel.getUserById(id);
+            return userModel.editUser(data, id, (results) => {
+              if (results.affectedRows > 0) {
+                deleteImg.rm(pastUser);
+                return userModel.getUser(id, (rslt) => response(req, res, 'Successfully updated user', rslt[0]));
+              }
+              return response(req, res, 'Unexpected error', null, null, 500);
             });
-        });
+          }
+          return response(req, res, 'Wrong birthdate input. Format birthdate YYYY-MM-DD', null, null, 400);
+        }
+        return response(req, res, 'Wrong email input', null, null, 400);
+      }
+      return response(req, res, 'Wrong phone number input', null, null, 400);
+    }
+    return response(req, res, `Failed to edit user with id ${id}. Some data is empty.`, null, null, 400);
+  });
+};
+
+const editUser = (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return response(req, res, err.message, null, null, 400);
+    }
+    const { id } = req.params;
+    const user = await userModel.getUserById(id);
+    if (user.length !== 1) {
+      return response(req, res, 'User not available', null, null, 404);
+    }
+
+    const {
+      name, username, email, phone_number, address, birthdate,
+    } = req.body;
+
+    let data = {
+      name: name || user[0].name,
+      username: user[0].username,
+      image: user[0].image,
+      email: user[0].email,
+      phone_number: user[0].phone_number,
+      address: address || user[0].address,
+      birthdate: user[0].birthdate,
     };
-    if(id==null || id==undefined){
-        return res.status(400).send({
-            success: false,
-            message: 'Undefined ID'
-        });
-    }if(id>0){
-        usersProfile.getUser(id, result=>{
-            if(result.length>0){
-                editData(data, cb, usersProfile.updateUser, res);
-            }else{
-                return res.status(404).send({
-                    success: false,
-                    message: `User with ID: ${id} not found`
-                });
-            }
-        });
-    }else{
-        return res.status(400).send({
-            success: false,
-            message: 'ID should be a number greater than 0'
-        });
+    console.log(user);
+
+    if (req.file) {
+      // console.log(req.file)
+      data.image = req.file.path;
     }
+    if (username) {
+      console.log(username);
+      const result = await userModel.checkUserAsync({ username });
+      if (result.length > 0) {
+        return response(req, res, 'User name has been used', null, null, 400);
+      }
+      data.username = username;
+    }
+    if (email) {
+      if (!check.checkEmail(email)) {
+        return response(req, res, 'Wrong email input', null, null, 400);
+      }
+      const result = await userModel.checkUserAsync({ email });
+      if (result.length > 0) {
+        return response(req, res, 'Email has been used', null, null, 400);
+      }
+      data.email = email;
+    }
+    if (phone_number) {
+      if (!check.checkPhone(phone_number)) {
+        return response(req, res, 'Wrong phone number input', null, null, 400);
+      }
+      const result = await userModel.checkUserAsync({ phone_number });
+      if (result.length > 0) {
+        return response(req, res, 'phone number has been used', null, null, 400);
+      }
+      data.phone_number = phone_number;
+    }
+    if (birthdate) {
+      if (!check.checkDate(birthdate)) {
+        return response(req, res, 'Wrong birthdate input. Format birthdate YYYY-MM-DD', null, null, 400);
+      }
+      data.phone_number = phone_number;
+    }
+    return userModel.editUser(data, id, async (edited) => {
+      if (edited.affectedRows > 0) {
+        if (req.file) {
+          deleteImg.rm(user);
+        }
+        const results = await userModel.getUserById(id);
+        return response(req, res, 'Data user', results);
+      }
+      return response(req, res, 'Unexpected error', null, null, 500);
+    });
+  });
 };
 
-const deleteUser = (req,res)=>{
-    const {id} = req.params;
-    if(id==null || id==undefined){
-        return res.status(400).send({
-            success: false,
-            message: 'Undefined ID'
-        });
-    }
-    if(id>0){
-        usersProfile.getUser(id, results=>{
-            if(results.length>0){
-                usersProfile.deleteUser(id, result=>{
-                    return res.json({
-                        success: true,
-                        message: `User with ID: ${id} was deleted`,
-                        result: `Rows affected: ${result.affectedRows}`
-                    });
-                });
-            }else{
-                return res.status(404).send({
-                    success: false,
-                    message: `User with ID: ${id} not found`
-                });
-            }
-        });
-    }else{
-        return res.status(400).send({
-            success: false,
-            message: 'ID should be a number greater than 0'
-        });}
+const deleteUser = (req, res) => {
+  const { id } = req.params;
+  userModel.getUser(id, (rslt) => {
+    userModel.deleteUser(id, (results) => {
+      if (results.affectedRows > 0) {
+        return response(req, res, `User with id ${id} successfully deleted`, rslt[0]);
+      }
+      return response(req, res, `Failed to delete user with id ${id}`, null, null, 400);
+    });
+  });
 };
 
-module.exports = {getUsers, getUser, addUser, updateUser, deleteUser};
+module.exports = {
+  getUsers,
+  getUser,
+  addUser,
+  editAllDataUser,
+  editUser,
+  deleteUser,
+};

@@ -1,113 +1,92 @@
-const vehicleCategories = require('../models/categories');
+/* eslint-disable radix */
+const categoryModel = require('../models/categories');
+const getHelper = require('../helpers/get');
+const response = require('../helpers/response');
 
-const getCategories = (req, res)=>{
-    vehicleCategories.getCategories(results=>{
-        return res.json({
-            success: true,
-            message: 'List of vehicle\'s categories',
-            result: results
-        });
-    });
+const getCategories = (req, res) => {
+  getHelper(req, res, categoryModel.getCategories, categoryModel.countCategory, 'categories');
 };
 
-const getCategory = (req, res)=>{
-    const {id} = req.params;
-    vehicleCategories.getCategory(id, result=>{
-        if(result.length>0){
-            return res.json({
-                success: true,
-                message: `Vehicle category with ID: ${id}`,
-                result: result
-            });
-        }else{
-            return res.status(404).send({
-                success: false,
-                message: `ID:${id} not found`
-            });
-        }
-    });
+const getCategoriesData = (req, res) => {
+  getHelper(req, res, categoryModel.getCategoriesData, categoryModel.countCategoryData, 'categories');
 };
 
-const addCategory = (req, res)=>{
-    const {category} = req.body;
-    vehicleCategories.checkCategory(category, results=>{
-        if(results.length<1){
-            vehicleCategories.addCategory(category, result=>{
-                vehicleCategories.checkCategory(category, ress=>{
-                    return res.json({
-                        success: true,
-                        message: `Successfully add new category. Affected Rows: ${result.affectedRows}`,
-                        result : ress[0]
-                    });    
-                }); 
-            });
-        }else{
-            return res.status(400).send({
-                success: false,
-                message: 'Vehicle\'s category already on the list'
-            });
-        }
-    });
-};
-
-const updateCategory = (req, res)=>{
-    const {id} = req.params;
-    const {category} = req.body;
-    const data = [category, id];
-    vehicleCategories.getCategory(id, results=>{
-        if(results.length>0){
-            vehicleCategories.checkCategory(category, result=>{
-                if(result.length<1){
-                    vehicleCategories.updateCategory(data, ress=>{
-                        vehicleCategories.checkCategory(category, resName=>{
-                            return res.json({
-                                success: true,
-                                message: `Successfully update category with ID:${id}. Affected Rows: ${ress.affectedRows}`,
-                                result: resName[0]
-                            });
-                        });
-                    });
-                }else{
-                    return res.status(400).send({
-                        success: false,
-                        message: 'Vehicle\'s category already on the list'
-                    });
-                }
-            });
-        }else{
-            return res.status(404).send({
-                success: false,
-                message: `Category with ID:${id} was not found`
-            });
-        }
-    });
-};
-
-const deleteCategory = (req, res)=>{
-    const {id} = req.params;
-    if(id!==null && id!==undefined){
-        vehicleCategories.getCategory(id, results=>{
-            if(results.length>0){
-                vehicleCategories.deleteCategory(id, result=>{
-                    return res.json({
-                        success: true,
-                        message: `Category with ID: ${id} was deleted`,
-                        result : `Rows Affected: ${result.affectedRows}`
-                    });
-                });
-            }else{
-                return res.status(400).send({
-                    success: false,
-                    message: `Can't find category with ID: ${id}`
-                });
-            }
-        });
-    }else{
-        return res.status(400).send({
-            sucess: false,
-            message: 'Undefined ID'
-        });
+const getCategory = (req, res) => {
+  const { id } = req.params;
+  categoryModel.getCategory(id, (results) => {
+    if (results.length > 0) {
+      return response(req, res, `Data ategory with id ${id}`, results[0]);
     }
+    return response(req, res, `Category not found with id ${id}`, null, null, 404);
+  });
 };
 
-module.exports = {getCategories, getCategory, addCategory, updateCategory, deleteCategory};
+const addCategory = (req, res) => {
+  if (req.user.role === 'Admin') {
+    const { type } = req.body;
+    if (type) {
+      return categoryModel.checkCategories(type, (checkResults) => {
+        if (checkResults.length === 0) {
+          return categoryModel.addCategory(type, () => {
+            categoryModel.newCategory((results) => response(req, res, 'Successfully added new category', results[0]));
+          });
+        }
+        return response(req, res, 'Failed to add new category. Data already exists', null, null, 400);
+      });
+    }
+    return response(req, res, 'Data must be filled', null, null, 400);
+  }
+  return response(req, res, 'Only admin can add category', null, null, 403);
+};
+
+const editCategory = (req, res) => {
+  if (req.user.role === 'Admin') {
+    const { id } = req.params;
+    const { type } = req.body;
+    if (type) {
+      return categoryModel.getCategory(id, (resId) => {
+        if (resId.length > 0) {
+          return categoryModel.checkCategories(type, (checkResults) => {
+            if (checkResults.length === 0) {
+              return categoryModel.editCategory(type, id, (results) => {
+                if (results.changedRows > 0) {
+                  const result = { id_category: parseInt(id), type };
+                  return response(req, res, 'Edited successfully', result);
+                }
+                return response(req, res, `Failed to edit category with id ${id}. Data hasnt changed`, null, null, 400);
+              });
+            }
+            return response(req, res, `Failed to edit category. Type ${type} already exists`, null, null, 400);
+          });
+        }
+        return response(req, res, `Category with id ${id} not found`, null, null, 400);
+      });
+    }
+    return response(req, res, 'Type must be filled', null, null, 400);
+  }
+  return response(req, res, 'Only admin can edit category', null, null, 403);
+};
+
+const deleteCategory = (req, res) => {
+  if (req.user.role !== 'Admin') {
+    return response(req, res, 'Only admin can delete category', null, null, 403);
+  }
+  const { id } = req.params;
+  return categoryModel.getCategory(id, (categoryDeleted) => {
+    categoryModel.deleteCategory(id, (results) => {
+      if (results.affectedRows > 0) {
+        return response(req, res, `Vehicle with id ${id} successfully deleted`, categoryDeleted[0]);
+      }
+      return response(req, res, `Failed to delete, category with id ${id} not found`, null, null, 500);
+    });
+  });
+};
+
+module.exports = {
+  getCategories,
+  getCategoriesData,
+  getCategory,
+  addCategory,
+  editCategory,
+  deleteCategory,
+};
