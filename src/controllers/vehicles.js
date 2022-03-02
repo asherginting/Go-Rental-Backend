@@ -23,25 +23,38 @@ const getVehicleCategory = (req, res) => {
         search, filter, limit, offset,
     };
 
-    vehicleModel.getVehicleCategory(data, (resultsFin) => {
-        if (resultsFin.length > 0) {
-            return vehicleModel.countVehicleCategory(data, (count) => {
-                const { total } = count[0];
-                const last = Math.ceil(total / limit);
-                const results = resultsFin;
-                const pageInfo = {
-                    prev: page > 1 ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page - 1}&limit=${limit}` : null,
-                    next: page < last ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page + 1}&limit=${limit}` : null,
-                    totalData: total,
-                    currentPage: page,
-                    lastPage: last,
-                };
+    vehicleModel.getVehicleCategory(data, (resultsFin) => vehicleModel.countVehicleCategory(data, (count) => {
+        const { total } = count[0];
+        const last = Math.ceil(total / limit);
+        const results = resultsFin;
+        const pageInfo = {
+            prev: page > 1 ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page - 1}&limit=${limit}` : null,
+            next: page < last ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page + 1}&limit=${limit}` : null,
+            totalData: total,
+            currentPage: page,
+            lastPage: last,
+        };
 
-                return response(req, res, `List vehicles by category ${filter}`, results, pageInfo);
-            });
-        }
-        return response(req, res, 'Page not found', null, null, 404);
-    });
+        return response(req, res, `List vehicles by category ${filter}`, results, pageInfo);
+    }));
+    // if (resultsFin.length > 0) {
+    //   return vehicleModel.countVehicleCategory(data, (count) => {
+    //     const { total } = count[0];
+    //     const last = Math.ceil(total / limit);
+    //     const results = resultsFin;
+    //     const pageInfo = {
+    //       prev: page > 1 ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page - 1}&limit=${limit}` : null,
+    //       next: page < last ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page + 1}&limit=${limit}` : null,
+    //       totalData: total,
+    //       currentPage: page,
+    //       lastPage: last,
+    //     };
+
+    //     return response(req, res, `List vehicles by category ${filter}`, results, pageInfo);
+    //   });
+    // }
+    // return response(req, res, 'Page not found', null, null, 404);
+    // );
 };
 
 const getVehicle = async (req, res) => {
