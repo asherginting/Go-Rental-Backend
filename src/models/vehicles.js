@@ -10,7 +10,7 @@ const countVehicle = (data, cb) => {
 };
 
 const getVehicles = (data, cb) => {
-    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, rent_count, status, createdAt, updatedAt
+    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt
   FROM vehicles WHERE brand LIKE '${data.search}%' 
   LIMIT ${data.limit} OFFSET ${data.offset}`, (err, res) => {
         if (err) throw err;
@@ -21,17 +21,17 @@ const getVehicles = (data, cb) => {
 const countVehicleCategory = (data, cb) => {
     db.query(`SELECT COUNT(*) as total FROM vehicles v
   LEFT JOIN categories c ON c.id_category=v.id_category
-  WHERE c.type LIKE '${data.category}%'`, (err, res) => {
+  WHERE v.location LIKE '${data.filter}%' AND (v.brand LIKE '${data.search}%' OR c.type LIKE '${data.search}%')`, (err, res) => {
         if (err) throw err;
         cb(res);
     });
 };
 
 const getVehicleCategory = (data, cb) => {
-    db.query(`SELECT v.id_vehicle, v.id_category, v.type, v.brand , CONCAT('${APP_URL}/', v.image) AS image, v.capacity, v.location, v.price, v.qty, v.rent_count, v.status, v.createdAt, v.updatedAt
+    db.query(`SELECT v.id_vehicle, v.id_category, v.type, v.brand , CONCAT('${APP_URL}/', v.image) AS image, v.capacity, v.location, v.price, v.qty, v.payment, v.rent_count, v.status, v.createdAt, v.updatedAt
   FROM vehicles v 
   LEFT JOIN categories c ON v.id_category = c.id_category 
-  WHERE c.type LIKE '${data.category}%'
+  WHERE v.location LIKE '${data.filter}%' AND (v.brand LIKE '${data.search}%' OR c.type LIKE '${data.search}%')
   LIMIT ${data.limit} OFFSET ${data.offset};
   `, (err, res) => {
         if (err) throw err;
@@ -40,7 +40,7 @@ const getVehicleCategory = (data, cb) => {
 };
 
 const getVehicle = (id, cb) => {
-    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, rent_count, status, createdAt, updatedAt
+    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt
   FROM vehicles WHERE id_vehicle=?`, [id], (err, res) => {
         if (err) throw err;
         cb(res);
@@ -48,7 +48,7 @@ const getVehicle = (id, cb) => {
 };
 
 const getVehicleAsync = (id) => new Promise((resolve, reject) => {
-    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, rent_count, status, createdAt, updatedAt
+    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt
   FROM vehicles WHERE id_vehicle=?`, [id], (err, res) => {
         if (err) reject(err);
         resolve(res);

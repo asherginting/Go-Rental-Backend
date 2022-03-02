@@ -9,6 +9,6 @@ user.post('/login', login);
 user.post('/verify', verify);
 user.post('/forgotPassword', forgotRequest);
 user.post('/register', addUser);
-user.post('/confrimRegistration', confirmRegistration);
+user.post('/verification', confirmRegistration);
 
 module.exports = user;
