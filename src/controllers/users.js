@@ -34,6 +34,9 @@ const addUser = (req, res) => {
         if (!check.checkPhone(phone_number)) {
             return response(req, res, 'Wrong phone number input', null, null, 400);
         }
+        if (!check.checkPassword(password)) {
+            return response(req, res, 'Password must be at least 6 characters must contain numeric lowercase and uppercase letter.', null, null, 400);
+        }
         const dataCheck = {
             username, email, phone_number,
         };
@@ -45,7 +48,7 @@ const addUser = (req, res) => {
             mail.sendMail({
                 from: APP_EMAIL,
                 to: email,
-                subject: 'Registration verification code | Rent Vehicles',
+                subject: 'Registration verification code | Vehicles Rent',
                 text: String(randomCode),
                 html: `<b>${randomCode}<b>`,
             });
@@ -90,8 +93,9 @@ const editAllDataUser = (req, res) => {
             if (check.checkPhone(phone_number)) {
                 if (check.checkEmail(email)) {
                     if (check.checkDate(birthdate)) {
+                        const resImage = image.replace(/\\/g, '/');
                         const data = {
-                            name, username, image, email, phone_number, address, birthdate,
+                            name, username, image, email: resImage, phone_number, address, birthdate,
                         };
                         const pastUser = await userModel.getUserById(id);
                         return userModel.editUser(data, id, (results) => {
@@ -122,28 +126,29 @@ const editUser = (req, res) => {
         if (user.length !== 1) {
             return response(req, res, 'User not available', null, null, 404);
         }
-
+        let image;
+        if (req.file) {
+            image = req.file.path.replace(/\\/g, '/');
+        }
         const {
-            name, username, email, phone_number, address, birthdate,
+            name, username, email, phone_number, address, birthdate, gender,
         } = req.body;
 
         let data = {
             name: name || user[0].name,
             username: user[0].username,
-            image: user[0].image,
+            image: image || user[0].image,
             email: user[0].email,
             phone_number: user[0].phone_number,
             address: address || user[0].address,
             birthdate: user[0].birthdate,
+            gender: gender || user[0].gender,
         };
-        console.log(user);
 
-        if (req.file) {
-            // console.log(req.file)
-            data.image = req.file.path;
-        }
+        // if (req.file) {
+        //   data.image = req.file.path.replace(/\\/g, '/');
+        // }
         if (username) {
-            console.log(username);
             const result = await userModel.checkUserAsync({ username });
             if (result.length > 0) {
                 return response(req, res, 'User name has been used', null, null, 400);
