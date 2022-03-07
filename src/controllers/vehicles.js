@@ -1,3 +1,7 @@
+/* eslint-disable consistent-return */
+/* eslint-disable max-len */
+/* eslint-disable prefer-const */
+/* eslint-disable camelcase */
 const vehicleModel = require('../models/vehicles');
 const helperGet = require('../helpers/get');
 const categoriesModel = require('../models/categories');
@@ -11,16 +15,18 @@ const getVehicles = (req, res) => {
 
 const getVehicleCategory = (req, res) => {
     let {
-        search, filter, page, limit,
+        search, location, minimum, maximum, page, limit,
     } = req.query;
     search = search || '';
-    filter = filter || '';
+    location = location || '';
     page = parseInt(page, 10) || 1;
     limit = parseInt(limit, 10) || 5;
+    minimum = Number(minimum) || 0;
+    maximum = Number(maximum) || 1000000000;
 
     const offset = (page - 1) * limit;
     const data = {
-        search, filter, limit, offset,
+        search, location, minimum, maximum, limit, offset,
     };
 
     vehicleModel.getVehicleCategory(data, (resultsFin) => vehicleModel.countVehicleCategory(data, (count) => {
@@ -28,14 +34,14 @@ const getVehicleCategory = (req, res) => {
         const last = Math.ceil(total / limit);
         const results = resultsFin;
         const pageInfo = {
-            prev: page > 1 ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page - 1}&limit=${limit}` : null,
-            next: page < last ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page + 1}&limit=${limit}` : null,
+            prev: page > 1 ? `http://localhost:5000/vehicles/category/?search=${search}&location=${location}&page=${page - 1}&limit=${limit}` : null,
+            next: page < last ? `http://localhost:5000/vehicles/category/?search=${search}&location=${location}&page=${page + 1}&limit=${limit}` : null,
             totalData: total,
             currentPage: page,
             lastPage: last,
         };
 
-        return response(req, res, `List vehicles by category ${filter}`, results, pageInfo);
+        return response(req, res, 'List vehicles', results, pageInfo);
     }));
     // if (resultsFin.length > 0) {
     //   return vehicleModel.countVehicleCategory(data, (count) => {
@@ -64,6 +70,14 @@ const getVehicle = async (req, res) => {
         return response(req, res, 'Detail Vehicle', results[0], null);
     }
     return response(req, res, `Vehicle not found with id ${id}`, null, null, 404);
+};
+
+const getNewVehicle = async (req, res) => {
+    const result = await vehicleModel.newVehicle();
+    if (result.length > 0) {
+        return response(req, res, 'New Vehicle', result, null);
+    }
+    return response(req, res, 'Unexpected error', null, null, 500);
 };
 
 const addVehicle = (req, res) => {
@@ -232,7 +246,7 @@ const deleteVehicle = (req, res) => {
             });
         });
     } else {
-        return response(req, res, 'Only admin can delte vehicle', null, null, 403);
+        return response(req, res, 'Only admin can delete vehicle', null, null, 403);
     }
 };
 
@@ -240,6 +254,7 @@ module.exports = {
     getVehicles,
     getVehicleCategory,
     getVehicle,
+    getNewVehicle,
     addVehicle,
     editAllVehicle,
     editVehicle,
