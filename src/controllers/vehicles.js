@@ -1,7 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable max-len */
-/* eslint-disable prefer-const */
-/* eslint-disable camelcase */
 const vehicleModel = require('../models/vehicles');
 const helperGet = require('../helpers/get');
 const categoriesModel = require('../models/categories');
