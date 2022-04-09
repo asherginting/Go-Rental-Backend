@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 28, 2022 at 08:25 AM
+-- Generation Time: Apr 09, 2022 at 07:11 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -43,10 +43,7 @@ INSERT INTO `categories` (`id_category`, `type`, `createdAt`, `updatedAt`) VALUE
 (2, 'Motorbike', '2022-02-02 13:28:28', '2022-02-02 07:28:07'),
 (3, 'Bike', '2022-02-02 13:28:28', '2022-02-02 07:28:07'),
 (4, 'E-bike', '2022-02-02 15:47:19', '2022-02-03 12:51:45'),
-(5, 'Pick Up', '2022-02-03 12:51:27', '2022-02-03 06:50:28'),
-(6, 'Truck', '2022-02-03 12:51:27', '2022-02-03 06:50:28'),
-(7, 'boat', '2022-02-04 10:59:50', '2022-02-04 11:08:13'),
-(8, 'jet', '2022-02-06 06:24:53', '2022-02-06 06:32:17');
+(5, 'Pick Up', '2022-02-03 12:51:27', '2022-02-03 06:50:28');
 
 -- --------------------------------------------------------
 
@@ -92,7 +89,13 @@ INSERT INTO `forgot_request` (`id_request`, `id_user`, `code`, `expired`, `creat
 (23, NULL, '7243', 'false', '2022-02-14 07:24:35', '2022-02-14 07:25:48'),
 (24, 68, '6885', 'false', '2022-02-14 12:13:44', '2022-02-14 12:14:12'),
 (25, 68, '3717', 'true', '2022-02-14 15:05:59', NULL),
-(26, 69, '2514', 'false', '2022-02-14 15:06:22', '2022-02-14 15:07:31');
+(26, 69, '2514', 'false', '2022-02-14 15:06:22', '2022-02-14 15:07:31'),
+(27, 68, '2028', 'true', '2022-04-03 21:47:45', NULL),
+(28, 68, '7176', 'true', '2022-04-03 21:48:07', NULL),
+(29, 68, '2151', 'true', '2022-04-03 22:32:09', NULL),
+(30, 102, '5491', 'false', '2022-04-04 06:47:45', '2022-04-04 06:49:17'),
+(31, 102, '8554', 'false', '2022-04-04 06:50:46', '2022-04-04 06:51:41'),
+(33, 104, '5678', 'false', '2022-04-04 13:27:14', '2022-04-04 13:28:06');
 
 -- --------------------------------------------------------
 
@@ -177,7 +180,7 @@ INSERT INTO `status` (`id_status`, `status`, `createdAt`, `updatedAt`) VALUES
 
 CREATE TABLE `users` (
   `id_user` int(11) NOT NULL,
-  `name` varchar(90) NOT NULL,
+  `name` varchar(90) DEFAULT NULL,
   `username` varchar(30) NOT NULL,
   `image` text DEFAULT NULL,
   `gender` enum('Male','Female') NOT NULL,
@@ -196,7 +199,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `name`, `username`, `image`, `gender`, `email`, `password`, `phone_number`, `address`, `birthdate`, `confirm`, `createdAt`, `updatedAt`) VALUES
-(1, 'Asher Ginting', 'asherginting', 'uploads/Profil-1644829358560-672786564.jpg', 'Male', 'asher@gmail.com', '', '08124564455', 'Jakarta, Indonesia', '2000-05-30', '', '2022-01-27 21:55:50', '2022-02-14 16:02:38'),
+(1, 'Asher Azriel Ginting', 'asherginting', 'uploads/Profil-1644829358560-672786564.jpg', 'Male', 'asher@gmail.com', '', '08124564455', 'Jakarta, Indonesia', '2000-05-30', '', '2022-01-27 21:55:50', '2022-03-06 16:44:16'),
 (4, 'Hotma Pangaribuan', 'hotma', NULL, 'Male', 'hotma@mail.com', '$2b$10$l4P/g6BJ.gGx/knnLQadoOEO22vTX.RJvZXbh1yVEudrLzY0BGmFW', '08657', 'Jln. Anggrek Jakarta', '2000-04-05', '', '2022-01-28 13:55:06', '2022-02-14 08:28:20'),
 (5, 'Joel Sihombing', 'joel', NULL, 'Male', 'john@mail.com', '$2b$10$kA9qzxad5odJUIPnnOSV/ujume./L8ksgtwZBL1H7vBO/wNwWUBJ2', '086574545', 'Bandung', '2000-04-05', '', '2022-01-28 14:09:52', '2022-02-14 08:28:20'),
 (7, 'Aprida Sumarni', 'aprida', NULL, 'Female', 'aprida@mail.com', '$2b$10$S1SQK2Iia8bKrhZXPLsXkOIn47g/hB6WVZhAD5UH2a1T2iHdLTWkC', '084624552', 'Kalimantan', '1997-03-08', '', '2022-01-30 18:53:26', '2022-02-14 08:28:20'),
@@ -211,13 +214,22 @@ INSERT INTO `users` (`id_user`, `name`, `username`, `image`, `gender`, `email`, 
 (36, 'Joko', 'joko', NULL, 'Male', 'joko@gmail.com', '', '08124555', 'Yogyakarta', '1995-02-28', '', '2022-02-06 11:55:45', '2022-02-14 08:32:16'),
 (38, 'Budi', 'budi', NULL, 'Male', 'budi@gmail.com', '1234', '08454542123', 'Bandung', '1999-02-03', '', '2022-02-10 12:52:40', '2022-02-14 08:32:59'),
 (40, 'Lukito', 'lukito', NULL, '', 'luktio@gmail.com', '$2b$10$vYJAZ9WJ/onMb.URJq72deVoDbvcw0kqx6QiDdLhgzeeo22Xf1H.u', '0845454124', 'Kalimantan', '1999-02-03', '', '2022-02-10 13:13:39', '2022-02-14 08:37:00'),
-(41, 'Admin', 'Admin', NULL, '', 'admin@gmail.com', '$2b$10$50YW4T1tR076WX5HYoqgZutdsau1oBMNtl.qNOOsdd4pU7B6OCAYC', '0813567548', 'Ngawi,  East Java', '1996-08-30', '', '2022-02-10 17:02:20', NULL),
+(41, 'Admin', 'Admin', NULL, '', 'admin@gmail.com', '$2b$10$50YW4T1tR076WX5HYoqgZutdsau1oBMNtl.qNOOsdd4pU7B6OCAYC', '0813567548', 'Jakarta', '1996-08-30', '', '2022-02-10 17:02:20', '2022-03-01 07:58:07'),
 (46, 'Roni', 'roni', NULL, 'Male', 'roni@gmail.com', '$2b$10$BlcQ/0Mv4nXeTftj6Jkq1u78EaBtro4UOL39WTcnjHDw/64aXpzjy', '0624625123', NULL, '0000-00-00', '', '2022-02-12 21:11:10', '2022-02-14 08:37:00'),
 (50, 'Yusuf', 'yusuf', NULL, 'Male', 'yusuf@mail.com', '$2b$10$.L3ux40wWyWUmfYxASLq0.E7VozM3d7UAqNpV926GE5j8wMCiprBm', '0862461234', NULL, '0000-00-00', '', '2022-02-12 21:33:42', '2022-02-14 08:37:00'),
 (51, 'Johan', 'johan', NULL, 'Male', 'johan@gmail.com', '$2b$10$X5F63l1ri6knzo9IYLgKcOKi.1VEIYsg9/YP1ha7bsvFvDUKBkthS', '0862462123', NULL, '0000-00-00', '', '2022-02-12 23:50:08', '2022-02-14 08:37:00'),
 (62, 'Toro', 'toro', NULL, 'Male', 'toro@gmail.com', '$2b$10$ZZDRKe.Aoz/jxWxf81.OYulctsL9H0HHTdXYD.5XBhn/LGzEMA61.', '08987654123', NULL, '0000-00-00', NULL, '2022-02-13 19:49:00', '2022-02-14 08:37:00'),
 (68, 'contoh', 'contoh', NULL, 'Male', 'asherginting3@gmail.com', '$2b$10$iblGpLKY0.owYhJWAufvdeAFdaDNn/gy6l7s.7WkzR/4R6t.zD/2.', '08125468785', NULL, NULL, NULL, '2022-02-14 12:12:04', '2022-02-14 12:14:12'),
-(69, 'azriel', 'azriel', NULL, 'Male', 'wifepi3219@goonby.com', '$2b$10$VGLSfU3mSl/LDhDtWRU9TedZf7zvuuGdHUo9NQcwT.CUIglahRr0a', '0812125456', NULL, NULL, NULL, '2022-02-14 15:01:48', '2022-02-14 15:07:31');
+(69, 'azriel', 'azriel', NULL, 'Male', 'wifepi3219@goonby.com', '$2b$10$VGLSfU3mSl/LDhDtWRU9TedZf7zvuuGdHUo9NQcwT.CUIglahRr0a', '0812125456', NULL, NULL, NULL, '2022-02-14 15:01:48', '2022-02-14 15:07:31'),
+(70, 'contoh2', 'contoh2', NULL, 'Male', 'vigef74445@xindax.com', '$2b$10$OvzwjTk3p7AruH7o5SikPOLeWDAo09rzojsBwVsxarWfT1LnTbOD6', '081245558912', NULL, NULL, '8588', '2022-03-08 20:46:18', NULL),
+(71, 'contoh3', 'contoh3', NULL, 'Male', 'lodahol281@zneep.com', '$2b$10$a13Rvat7ThzX7gYphCKERe58g6gaHCi/H.0ndcBBvs2Hkchi/ENhO', '082478568945', NULL, NULL, NULL, '2022-03-08 20:52:24', '2022-03-08 21:26:19'),
+(72, 'contoh4', 'contoh4', NULL, 'Male', 'takekor163@xindax.com', '$2b$10$95ueYhEsWPgyVdFRa0kTp.nSUbjfk2RSJntqYxDoMUhfA6TLOCAP2', '0832456879856', NULL, NULL, NULL, '2022-03-08 21:28:58', '2022-03-08 21:29:25'),
+(73, 'hawifeb', 'hawifeb', NULL, 'Male', 'hawifeb269@vsooc.com', '$2b$10$8xe7F4cEPrKp0PNvXOQeTe76KcxnJPSRZ66JfGHukYo5sVThfjI8G', '0812556324578', NULL, NULL, '7293', '2022-04-03 22:17:56', NULL),
+(74, NULL, 'bewejay', NULL, 'Male', 'bewejay520@vsooc.com', '$2b$10$B3VCOcM2k93IMU3JjXVGZONdesnTbwMFHSMpgGr3muRcHZgYY0Fv6', '081269848796', NULL, NULL, NULL, '2022-04-04 00:04:20', NULL),
+(75, NULL, 'bodox', NULL, 'Male', 'bodox62492@vsooc.com', '$2b$10$ZBRVPmYaq1Ql75el6.nauuz0UHkdSwU7bgQLVy/DzxmkhUnW5TE/.', '081369487648', NULL, NULL, NULL, '2022-04-04 00:08:24', NULL),
+(80, NULL, 'kiwefo', NULL, 'Male', 'kiwefo7573@vsooc.com', '$2b$10$t8595PVhgv7MxG8wSwL8NuYQZqKTFjl.3k9ttawMAivk0HPv3OpMC', '082368467896', NULL, NULL, NULL, '2022-04-04 00:29:12', NULL),
+(102, NULL, 'rifib', NULL, 'Male', 'rifib40366@xasems.com', '$2b$10$H90xwjJm87KBuQ7I7HNvR.cJf4UxVr57OJZF4BasfXtvVJ3/YZNM2', '082345647542', NULL, NULL, NULL, '2022-04-04 06:35:42', '2022-04-04 06:51:41'),
+(104, NULL, 'toximo', NULL, 'Male', 'toximo9037@yeafam.com', '$2b$10$FpOWmZax80Lz1bMTAnxyRO/RB7y2rIMFHr3VrmOIpm6M7YsSYjVjO', '081246589786', NULL, NULL, NULL, '2022-04-04 13:25:05', '2022-04-04 13:28:06');
 
 -- --------------------------------------------------------
 
@@ -235,6 +247,7 @@ CREATE TABLE `vehicles` (
   `location` varchar(50) NOT NULL,
   `price` int(11) NOT NULL,
   `qty` int(11) NOT NULL,
+  `payment` int(11) NOT NULL,
   `rent_count` int(11) NOT NULL DEFAULT 0,
   `status` enum('Available','Full Booked') NOT NULL DEFAULT 'Available',
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
@@ -245,21 +258,21 @@ CREATE TABLE `vehicles` (
 -- Dumping data for table `vehicles`
 --
 
-INSERT INTO `vehicles` (`id_vehicle`, `id_category`, `type`, `brand`, `image`, `capacity`, `location`, `price`, `qty`, `rent_count`, `status`, `createdAt`, `updatedAt`) VALUES
-(7, 1, 'Cars', 'Honda Brio', 'http://localhost:5000/uploads/brio-1645712962068-470130847.jpg', '5', 'Jakarta', 25000, 3, 2, 'Available', '2022-01-26 16:59:59', '2022-02-25 08:43:20'),
-(10, 1, 'Motorbike', 'Yamaha Jupiter', 'http://localhost:5000/uploads/yamaha-jupiter-1645749866762-391107987.png', '2', 'Surakarta', 25000, 3, 3, 'Available', '2022-01-27 10:39:59', '2022-02-25 08:44:23'),
-(12, 2, 'Motorbike', 'Honda Beat', 'http://localhost:5000/uploads/honda-beat-1645750345691-518477418.png', '2', 'Bandung', 550000, 3, 1, 'Available', '2022-01-27 13:06:26', '2022-02-25 08:45:05'),
-(13, 3, 'Bike', 'Polygon Siskiu', 'http://localhost:5000/uploads/polygon-1645750062505-138954776.png', '1', 'Bandung', 155000, 2, 2, 'Available', '2022-01-28 10:13:34', '2022-02-25 08:45:11'),
-(15, 3, 'Bike', 'Onthel', 'http://localhost:5000/uploads/onthel-1645753797944-74996477.png', '1', 'Yogyakarta', 155000, 3, 1, 'Available', '2022-01-28 10:23:05', '2022-02-25 08:50:39'),
-(17, 1, 'Cars', 'Kijang Innova', 'http://localhost:5000/uploads/kijang-innova-1645750630159-402657214.jpg', '7', 'Jakarta', 600000, 3, 1, 'Available', '2022-01-28 10:32:16', '2022-02-25 08:45:24'),
-(19, 1, 'Cars', 'Mazda CX 5', 'http://localhost:5000/uploads/mazda-1645749784773-246641813.png', '5', 'Yogyakarta', 555000, 2, 14, 'Available', '2022-01-30 17:34:14', '2022-02-25 08:46:34'),
-(23, 1, 'Cars', 'Toyota Avanza', 'http://localhost:5000/uploads/avanza-1645750240195-92270534.jpg', '7', 'Depok', 200000, 4, 2, 'Available', '2022-01-30 19:50:51', '2022-02-25 08:45:29'),
-(67, 2, 'Motorbike', 'Vespa Matic', 'http://localhost:5000/uploads/vespa-1645749957012-387819793.png', '2', 'Bandung', 210000, 3, 3, 'Available', '2022-02-01 21:07:20', '2022-02-25 08:45:33'),
-(69, 2, 'Motorbike', 'Vespa Matic', 'http://localhost:5000/uploads/vespa-1645750281569-258206184.png', '2', 'Yogyakarta', 200000, 2, 2, 'Available', '2022-02-02 05:58:24', '2022-02-25 08:45:39'),
-(74, 5, 'Pick Up', 'Mitsubishi Colt L300', 'http://localhost:5000/uploads/toyota-l300-1645750796633-890011416.jpg', '3', 'Yogyakarta', 90000, 2, 1, 'Available', '2022-02-06 18:04:02', '2022-02-25 08:46:41'),
-(102, 5, 'Pick Up', 'Suzuki Carry', 'http://localhost:5000/uploads/suzuki-carry-1645750921110-489392039.png', '3', 'Yogyakarta', 90000, 2, 0, 'Available', '2022-02-09 10:05:21', '2022-02-25 08:46:44'),
-(104, 5, 'Pick Up', 'Honda Brio', 'http://localhost:5000/uploads/suzuki-carry-1645750943764-384716271.png', '5', 'Ngawi', 150000, 1, 0, 'Available', '2022-02-10 20:11:21', '2022-02-25 08:46:50'),
-(105, 2, 'Motorbike', 'Honda Prima', '', '2', 'Ngawi', 150000, 1, 0, 'Available', '2022-02-10 22:10:40', '2022-02-14 13:52:24');
+INSERT INTO `vehicles` (`id_vehicle`, `id_category`, `type`, `brand`, `image`, `capacity`, `location`, `price`, `qty`, `payment`, `rent_count`, `status`, `createdAt`, `updatedAt`) VALUES
+(7, 1, 'Cars', 'Kijang Innova', NULL, '5', 'Jakarta', 25000, 3, 0, 2, 'Available', '2022-01-26 16:59:59', '2022-04-09 20:54:15'),
+(10, 1, 'Motorbike', 'Yamaha Jupiter', 'uploads/yamaha-jupiter-1645749866762-391107987.png', '2', 'Bali', 25000, 3, 0, 3, 'Available', '2022-01-27 10:39:59', '2022-03-01 05:22:38'),
+(12, 2, 'Motorbike', 'Honda Beat', 'uploads/honda-beat-1649500240469-181158949.jpg', '2', 'Bandung', 550000, 3, 0, 1, 'Available', '2022-01-27 13:06:26', '2022-04-09 17:30:40'),
+(13, 3, 'Bike', 'Polygon', 'uploads/polygon-1649500118966-730764537.jpg', '1', 'Bandung', 155000, 2, 0, 2, 'Available', '2022-01-28 10:13:34', '2022-04-09 17:28:38'),
+(15, 3, 'Bike', 'Onthel', 'uploads/onthel-1645753797944-74996477.png', '1', 'Yogyakarta', 155000, 3, 0, 1, 'Available', '2022-01-28 10:23:05', '2022-03-01 05:31:04'),
+(17, 1, 'Cars', 'Kijang Innova', 'uploads/kijang-innova-1649499956303-987373929.jpg', '7', 'Bandung', 600000, 3, 0, 1, 'Available', '2022-01-28 10:32:16', '2022-04-09 17:25:56'),
+(19, 1, 'Cars', 'Mazda ', 'uploads/mazda-1649499870306-476879383.png', '5', 'Yogyakarta', 555000, 2, 0, 14, 'Available', '2022-01-30 17:34:14', '2022-04-09 17:24:30'),
+(23, 1, 'Cars', 'Toyota Avanza', 'uploads/toyota-avanza-1649499765507-312636999.jpeg', '7', 'Jakarta', 200000, 4, 0, 2, 'Available', '2022-01-30 19:50:51', '2022-04-09 17:22:45'),
+(67, 2, 'Motorbike', 'Vespa Matic', 'uploads/vespa-1649499691052-120405368.jpg', '2', 'Bandung', 210000, 3, 0, 3, 'Available', '2022-02-01 21:07:20', '2022-04-09 17:21:31'),
+(69, 2, 'Motorbike', 'Vespa Matic', 'uploads/vespa-1649499642357-459593743.jpg', '2', 'Yogyakarta', 200000, 2, 0, 2, 'Available', '2022-02-02 05:58:24', '2022-04-09 17:20:42'),
+(74, 5, 'Pick Up', 'Mitsubishi  L300', 'uploads/toyota-l300-1645750796633-890011416.jpg', '3', 'Yogyakarta', 90000, 2, 0, 1, 'Available', '2022-02-06 18:04:02', '2022-03-01 07:37:14'),
+(102, 5, 'Pick Up', 'Suzuki Carry', 'uploads/suzuki-carry-1645750921110-489392039.png', '3', 'Yogyakarta', 90000, 2, 0, 0, 'Available', '2022-02-09 10:05:21', '2022-03-01 05:25:14'),
+(104, 1, 'Cars', 'Honda Brio', 'uploads/Honda-Brio-1649499538245-18145066.jpg', '5', 'Bali', 150000, 1, 0, 0, 'Available', '2022-02-10 20:11:21', '2022-04-09 17:26:59'),
+(106, 1, 'Cars', 'Xenia', 'uploads/xenia-1649495279033-807440163.jpg', '5', 'Bali', 300000, 2, 0, 2, 'Available', '2022-03-01 08:32:10', '2022-04-09 16:07:59');
 
 --
 -- Indexes for dumped tables
@@ -319,7 +332,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `forgot_request`
 --
 ALTER TABLE `forgot_request`
-  MODIFY `id_request` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_request` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `histories`
@@ -337,13 +350,13 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT for table `vehicles`
 --
 ALTER TABLE `vehicles`
-  MODIFY `id_vehicle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `id_vehicle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
 -- Constraints for dumped tables
