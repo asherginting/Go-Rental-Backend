@@ -1,7 +1,12 @@
 const categories = require('express').Router();
 
 const {
-    getCategories, getCategoriesData, getCategory, addCategory, editCategory, deleteCategory,
+    getCategories, 
+    getCategoriesData,
+    getCategory, 
+    addCategory, 
+    editCategory, 
+    deleteCategory,
 } = require('../controllers/categories');
 const { verifyUser } = require('../helpers/auth');
 
