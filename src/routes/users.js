@@ -1,7 +1,12 @@
 const users = require('express').Router();
 
 const {
-    getUsers, getUser, addUser, editAllDataUser, editUser, deleteUser,
+    getUsers, 
+    getUser, 
+    addUser, 
+    editAllDataUser, 
+    editUser, 
+    deleteUser,
 } = require('../controllers/users');
 const { verifyUser } = require('../helpers/auth');
 
