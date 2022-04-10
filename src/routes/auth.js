@@ -2,7 +2,7 @@ const user = require('express').Router();
 
 const {
     login, 
-    verify, 
+    // verify, 
     forgotRequest,
     sendCodeVerify, 
     confirmRegistration,
