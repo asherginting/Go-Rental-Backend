@@ -138,7 +138,7 @@ const sendCodeVerify = async (req, res) => {
     mail.sendMail({
         from: APP_EMAIL,
         to: email,
-        subject: 'Verification code | Vehicles Rent',
+        subject: 'Verification code | Go - Rental',
         text: String(randomCode),
         html: `<b>${randomCode}<b>`,
     });

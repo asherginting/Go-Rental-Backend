@@ -114,7 +114,7 @@ const addUser = (req, res) => {
                 mail.sendMail({
                     from: APP_EMAIL,
                     to: email,
-                    subject: 'Registration verification code | Vehicles Rent',
+                    subject: 'Registration verification code | Go - Rental',
                     text: String(randomCode),
                     html: `<b>${randomCode}<b>`,
                 });
@@ -158,7 +158,7 @@ const addUserComplete = (req, res) => {
             mail.sendMail({
                 from: APP_EMAIL,
                 to: email,
-                subject: 'Registration verification code | Vehicles Rent',
+                subject: 'Registration verification code | Go - Rental',
                 text: String(randomCode),
                 html: `<b>${randomCode}<b>`,
             });
