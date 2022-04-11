@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Apr 09, 2022 at 07:11 PM
--- Server version: 10.4.22-MariaDB
--- PHP Version: 8.1.1
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 11 Apr 2022 pada 13.24
+-- Versi server: 10.4.24-MariaDB
+-- Versi PHP: 7.4.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categories`
+-- Struktur dari tabel `categories`
 --
 
 CREATE TABLE `categories` (
@@ -35,7 +35,7 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `categories`
+-- Dumping data untuk tabel `categories`
 --
 
 INSERT INTO `categories` (`id_category`, `type`, `createdAt`, `updatedAt`) VALUES
@@ -48,7 +48,7 @@ INSERT INTO `categories` (`id_category`, `type`, `createdAt`, `updatedAt`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `forgot_request`
+-- Struktur dari tabel `forgot_request`
 --
 
 CREATE TABLE `forgot_request` (
@@ -61,7 +61,7 @@ CREATE TABLE `forgot_request` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `forgot_request`
+-- Dumping data untuk tabel `forgot_request`
 --
 
 INSERT INTO `forgot_request` (`id_request`, `id_user`, `code`, `expired`, `createdAt`, `updatedAt`) VALUES
@@ -95,12 +95,15 @@ INSERT INTO `forgot_request` (`id_request`, `id_user`, `code`, `expired`, `creat
 (29, 68, '2151', 'true', '2022-04-03 22:32:09', NULL),
 (30, 102, '5491', 'false', '2022-04-04 06:47:45', '2022-04-04 06:49:17'),
 (31, 102, '8554', 'false', '2022-04-04 06:50:46', '2022-04-04 06:51:41'),
-(33, 104, '5678', 'false', '2022-04-04 13:27:14', '2022-04-04 13:28:06');
+(33, 104, '5678', 'false', '2022-04-04 13:27:14', '2022-04-04 13:28:06'),
+(34, 106, '1673', 'true', '2022-04-11 06:34:33', NULL),
+(35, 106, '1205', 'true', '2022-04-11 06:36:57', NULL),
+(36, 106, '3977', 'false', '2022-04-11 06:39:49', '2022-04-11 06:40:36');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `histories`
+-- Struktur dari tabel `histories`
 --
 
 CREATE TABLE `histories` (
@@ -116,7 +119,7 @@ CREATE TABLE `histories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `histories`
+-- Dumping data untuk tabel `histories`
 --
 
 INSERT INTO `histories` (`id_history`, `id_user`, `id_vehicle`, `rent_start_date`, `rent_end_date`, `prepayment`, `status`, `createdAt`, `updatedAt`) VALUES
@@ -150,7 +153,7 @@ INSERT INTO `histories` (`id_history`, `id_user`, `id_vehicle`, `rent_start_date
 -- --------------------------------------------------------
 
 --
--- Table structure for table `status`
+-- Struktur dari tabel `status`
 --
 
 CREATE TABLE `status` (
@@ -161,7 +164,7 @@ CREATE TABLE `status` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `status`
+-- Dumping data untuk tabel `status`
 --
 
 INSERT INTO `status` (`id_status`, `status`, `createdAt`, `updatedAt`) VALUES
@@ -175,7 +178,7 @@ INSERT INTO `status` (`id_status`, `status`, `createdAt`, `updatedAt`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Struktur dari tabel `users`
 --
 
 CREATE TABLE `users` (
@@ -195,7 +198,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `users`
+-- Dumping data untuk tabel `users`
 --
 
 INSERT INTO `users` (`id_user`, `name`, `username`, `image`, `gender`, `email`, `password`, `phone_number`, `address`, `birthdate`, `confirm`, `createdAt`, `updatedAt`) VALUES
@@ -219,7 +222,7 @@ INSERT INTO `users` (`id_user`, `name`, `username`, `image`, `gender`, `email`, 
 (50, 'Yusuf', 'yusuf', NULL, 'Male', 'yusuf@mail.com', '$2b$10$.L3ux40wWyWUmfYxASLq0.E7VozM3d7UAqNpV926GE5j8wMCiprBm', '0862461234', NULL, '0000-00-00', '', '2022-02-12 21:33:42', '2022-02-14 08:37:00'),
 (51, 'Johan', 'johan', NULL, 'Male', 'johan@gmail.com', '$2b$10$X5F63l1ri6knzo9IYLgKcOKi.1VEIYsg9/YP1ha7bsvFvDUKBkthS', '0862462123', NULL, '0000-00-00', '', '2022-02-12 23:50:08', '2022-02-14 08:37:00'),
 (62, 'Toro', 'toro', NULL, 'Male', 'toro@gmail.com', '$2b$10$ZZDRKe.Aoz/jxWxf81.OYulctsL9H0HHTdXYD.5XBhn/LGzEMA61.', '08987654123', NULL, '0000-00-00', NULL, '2022-02-13 19:49:00', '2022-02-14 08:37:00'),
-(68, 'contoh', 'contoh', NULL, 'Male', 'asherginting3@gmail.com', '$2b$10$iblGpLKY0.owYhJWAufvdeAFdaDNn/gy6l7s.7WkzR/4R6t.zD/2.', '08125468785', NULL, NULL, NULL, '2022-02-14 12:12:04', '2022-02-14 12:14:12'),
+(68, 'contoh', 'contoh', 'uploads/rn_image_picker_lib_temp_9dcdb453-374a-4a46-9d11-11b6a542b8db-1649594473633-956762345.jpg', 'Male', 'asherginting3@gmail.com', '$2b$10$iblGpLKY0.owYhJWAufvdeAFdaDNn/gy6l7s.7WkzR/4R6t.zD/2.', '08125468785', NULL, NULL, NULL, '2022-02-14 12:12:04', '2022-04-10 19:41:13'),
 (69, 'azriel', 'azriel', NULL, 'Male', 'wifepi3219@goonby.com', '$2b$10$VGLSfU3mSl/LDhDtWRU9TedZf7zvuuGdHUo9NQcwT.CUIglahRr0a', '0812125456', NULL, NULL, NULL, '2022-02-14 15:01:48', '2022-02-14 15:07:31'),
 (70, 'contoh2', 'contoh2', NULL, 'Male', 'vigef74445@xindax.com', '$2b$10$OvzwjTk3p7AruH7o5SikPOLeWDAo09rzojsBwVsxarWfT1LnTbOD6', '081245558912', NULL, NULL, '8588', '2022-03-08 20:46:18', NULL),
 (71, 'contoh3', 'contoh3', NULL, 'Male', 'lodahol281@zneep.com', '$2b$10$a13Rvat7ThzX7gYphCKERe58g6gaHCi/H.0ndcBBvs2Hkchi/ENhO', '082478568945', NULL, NULL, NULL, '2022-03-08 20:52:24', '2022-03-08 21:26:19'),
@@ -229,12 +232,15 @@ INSERT INTO `users` (`id_user`, `name`, `username`, `image`, `gender`, `email`, 
 (75, NULL, 'bodox', NULL, 'Male', 'bodox62492@vsooc.com', '$2b$10$ZBRVPmYaq1Ql75el6.nauuz0UHkdSwU7bgQLVy/DzxmkhUnW5TE/.', '081369487648', NULL, NULL, NULL, '2022-04-04 00:08:24', NULL),
 (80, NULL, 'kiwefo', NULL, 'Male', 'kiwefo7573@vsooc.com', '$2b$10$t8595PVhgv7MxG8wSwL8NuYQZqKTFjl.3k9ttawMAivk0HPv3OpMC', '082368467896', NULL, NULL, NULL, '2022-04-04 00:29:12', NULL),
 (102, NULL, 'rifib', NULL, 'Male', 'rifib40366@xasems.com', '$2b$10$H90xwjJm87KBuQ7I7HNvR.cJf4UxVr57OJZF4BasfXtvVJ3/YZNM2', '082345647542', NULL, NULL, NULL, '2022-04-04 06:35:42', '2022-04-04 06:51:41'),
-(104, NULL, 'toximo', NULL, 'Male', 'toximo9037@yeafam.com', '$2b$10$FpOWmZax80Lz1bMTAnxyRO/RB7y2rIMFHr3VrmOIpm6M7YsSYjVjO', '081246589786', NULL, NULL, NULL, '2022-04-04 13:25:05', '2022-04-04 13:28:06');
+(104, NULL, 'toximo', NULL, 'Male', 'toximo9037@yeafam.com', '$2b$10$FpOWmZax80Lz1bMTAnxyRO/RB7y2rIMFHr3VrmOIpm6M7YsSYjVjO', '081246589786', NULL, NULL, NULL, '2022-04-04 13:25:05', '2022-04-04 13:28:06'),
+(105, NULL, 'racose', NULL, 'Male', 'racose8379@xasems.com', '$2b$10$A4hYfi3ug416I8jO9tIdOecg/MQW1j910VZUIiOT8iju87aZ2uCp2', '081265898764', NULL, NULL, NULL, '2022-04-10 19:50:58', '2022-04-10 19:54:38'),
+(106, 'Yediha', 'yediha', 'uploads/rn_image_picker_lib_temp_9a383ed5-4d0f-4e2a-85b2-fa73881e9c3a-1649634140142-827785195.png', 'Male', 'yediha6641@yeafam.com', '$2b$10$rvCeCiNsGhFokXlmx.CQweSlErOcBnp5mO.PJLpuufVRm.uW9nPvG', '081265489784', 'Jln. Iman Bonjol No.21 Jakarta Utara', '1998-04-11', NULL, '2022-04-11 06:16:44', '2022-04-11 06:42:20'),
+(107, NULL, 'xokam', NULL, 'Male', 'xokam85495@vsooc.com', '$2b$10$Dza65sIrJy4IVdztR/oNTOSvu8iRhZ0xX7sLV.5N4cI65QFSdKE4m', '081269874512', NULL, NULL, NULL, '2022-04-11 06:45:17', '2022-04-11 06:54:26');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vehicles`
+-- Struktur dari tabel `vehicles`
 --
 
 CREATE TABLE `vehicles` (
@@ -255,44 +261,45 @@ CREATE TABLE `vehicles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `vehicles`
+-- Dumping data untuk tabel `vehicles`
 --
 
 INSERT INTO `vehicles` (`id_vehicle`, `id_category`, `type`, `brand`, `image`, `capacity`, `location`, `price`, `qty`, `payment`, `rent_count`, `status`, `createdAt`, `updatedAt`) VALUES
-(7, 1, 'Cars', 'Kijang Innova', NULL, '5', 'Jakarta', 25000, 3, 0, 2, 'Available', '2022-01-26 16:59:59', '2022-04-09 20:54:15'),
-(10, 1, 'Motorbike', 'Yamaha Jupiter', 'uploads/yamaha-jupiter-1645749866762-391107987.png', '2', 'Bali', 25000, 3, 0, 3, 'Available', '2022-01-27 10:39:59', '2022-03-01 05:22:38'),
-(12, 2, 'Motorbike', 'Honda Beat', 'uploads/honda-beat-1649500240469-181158949.jpg', '2', 'Bandung', 550000, 3, 0, 1, 'Available', '2022-01-27 13:06:26', '2022-04-09 17:30:40'),
-(13, 3, 'Bike', 'Polygon', 'uploads/polygon-1649500118966-730764537.jpg', '1', 'Bandung', 155000, 2, 0, 2, 'Available', '2022-01-28 10:13:34', '2022-04-09 17:28:38'),
-(15, 3, 'Bike', 'Onthel', 'uploads/onthel-1645753797944-74996477.png', '1', 'Yogyakarta', 155000, 3, 0, 1, 'Available', '2022-01-28 10:23:05', '2022-03-01 05:31:04'),
-(17, 1, 'Cars', 'Kijang Innova', 'uploads/kijang-innova-1649499956303-987373929.jpg', '7', 'Bandung', 600000, 3, 0, 1, 'Available', '2022-01-28 10:32:16', '2022-04-09 17:25:56'),
-(19, 1, 'Cars', 'Mazda ', 'uploads/mazda-1649499870306-476879383.png', '5', 'Yogyakarta', 555000, 2, 0, 14, 'Available', '2022-01-30 17:34:14', '2022-04-09 17:24:30'),
-(23, 1, 'Cars', 'Toyota Avanza', 'uploads/toyota-avanza-1649499765507-312636999.jpeg', '7', 'Jakarta', 200000, 4, 0, 2, 'Available', '2022-01-30 19:50:51', '2022-04-09 17:22:45'),
-(67, 2, 'Motorbike', 'Vespa Matic', 'uploads/vespa-1649499691052-120405368.jpg', '2', 'Bandung', 210000, 3, 0, 3, 'Available', '2022-02-01 21:07:20', '2022-04-09 17:21:31'),
-(69, 2, 'Motorbike', 'Vespa Matic', 'uploads/vespa-1649499642357-459593743.jpg', '2', 'Yogyakarta', 200000, 2, 0, 2, 'Available', '2022-02-02 05:58:24', '2022-04-09 17:20:42'),
+(7, 1, 'Cars', 'Kijang Innova', NULL, '5', 'Jakarta', 425000, 3, 0, 2, 'Available', '2022-01-26 16:59:59', '2022-04-10 22:47:42'),
+(10, 2, 'Motorbike', 'Yamaha Jupiter', 'uploads/Yamaha-Jupiter-1649605221393-985570829.jpg', '2', 'Bali', 80000, 3, 0, 3, 'Available', '2022-01-27 10:39:59', '2022-04-10 23:18:21'),
+(12, 2, 'Motorbike', 'Honda Beat', 'uploads/Honda-Beat-1649606060447-108821208.jpg', '2', 'Bandung', 90000, 3, 0, 1, 'Available', '2022-01-27 13:06:26', '2022-04-10 22:54:20'),
+(13, 3, 'Bike', 'Polygon', 'uploads/Polygon-1649606086535-984993828.jpg', '1', 'Bandung', 70000, 2, 0, 2, 'Available', '2022-01-28 10:13:34', '2022-04-10 22:54:46'),
+(15, 3, 'Bike', 'Onthel', 'uploads/Onthel-1649606101828-810724039.jpg', '1', 'Yogyakarta', 50000, 3, 0, 1, 'Available', '2022-01-28 10:23:05', '2022-04-10 22:55:01'),
+(17, 1, 'Cars', 'Kijang Innova', 'uploads/Kijang-Innova-1649606131002-950757712.png', '7', 'Bandung', 425000, 3, 0, 1, 'Available', '2022-01-28 10:32:16', '2022-04-10 22:55:31'),
+(19, 1, 'Cars', 'Mazda ', 'uploads/Mazda-1649606146243-680990287.jpg', '5', 'Yogyakarta', 500000, 2, 0, 14, 'Available', '2022-01-30 17:34:14', '2022-04-10 22:55:46'),
+(23, 1, 'Cars', 'Toyota Avanza', 'uploads/Avanza-1649606162228-928384148.jpeg', '7', 'Jakarta', 300000, 4, 0, 2, 'Available', '2022-01-30 19:50:51', '2022-04-10 22:56:02'),
+(67, 2, 'Motorbike', 'Vespa Matic', 'uploads/Vespa-Matig-1649606177293-161039283.jpg', '2', 'Bandung', 110000, 3, 0, 3, 'Available', '2022-02-01 21:07:20', '2022-04-10 22:56:17'),
+(69, 2, 'Motorbike', 'Vespa Matic', 'uploads/Vespa-Matig-1649606186556-185652127.jpg', '2', 'Yogyakarta', 110000, 2, 0, 2, 'Available', '2022-02-02 05:58:24', '2022-04-10 22:56:26'),
 (74, 5, 'Pick Up', 'Mitsubishi  L300', 'uploads/toyota-l300-1645750796633-890011416.jpg', '3', 'Yogyakarta', 90000, 2, 0, 1, 'Available', '2022-02-06 18:04:02', '2022-03-01 07:37:14'),
 (102, 5, 'Pick Up', 'Suzuki Carry', 'uploads/suzuki-carry-1645750921110-489392039.png', '3', 'Yogyakarta', 90000, 2, 0, 0, 'Available', '2022-02-09 10:05:21', '2022-03-01 05:25:14'),
-(104, 1, 'Cars', 'Honda Brio', 'uploads/Honda-Brio-1649499538245-18145066.jpg', '5', 'Bali', 150000, 1, 0, 0, 'Available', '2022-02-10 20:11:21', '2022-04-09 17:26:59'),
-(106, 1, 'Cars', 'Xenia', 'uploads/xenia-1649495279033-807440163.jpg', '5', 'Bali', 300000, 2, 0, 2, 'Available', '2022-03-01 08:32:10', '2022-04-09 16:07:59');
+(104, 1, 'Cars', 'Honda Brio', 'uploads/Honda-Brio-1649606226725-193141367.jpg', '5', 'Bali', 250000, 1, 0, 0, 'Available', '2022-02-10 20:11:21', '2022-04-10 22:57:06'),
+(106, 1, 'Cars', 'Xenia', 'uploads/Xenia-1649606240394-856370660.jpg', '5', 'Bali', 300000, 2, 0, 2, 'Available', '2022-03-01 08:32:10', '2022-04-10 22:57:20'),
+(107, 1, 'Cars', 'Honda Brio New', 'uploads/rn_image_picker_lib_temp_5876c1de-3e59-4fd6-90bb-e2a5058e2d31-1649637673387-367695470.jpg', '1', 'Yogyakarta', 300000, 1, 0, 0, 'Available', '2022-04-11 07:41:13', NULL);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `categories`
+-- Indeks untuk tabel `categories`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id_category`);
 
 --
--- Indexes for table `forgot_request`
+-- Indeks untuk tabel `forgot_request`
 --
 ALTER TABLE `forgot_request`
   ADD PRIMARY KEY (`id_request`),
   ADD KEY `id_user` (`id_user`);
 
 --
--- Indexes for table `histories`
+-- Indeks untuk tabel `histories`
 --
 ALTER TABLE `histories`
   ADD PRIMARY KEY (`id_history`),
@@ -300,83 +307,83 @@ ALTER TABLE `histories`
   ADD KEY `id_vehicle` (`id_vehicle`);
 
 --
--- Indexes for table `status`
+-- Indeks untuk tabel `status`
 --
 ALTER TABLE `status`
   ADD PRIMARY KEY (`id_status`);
 
 --
--- Indexes for table `users`
+-- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- Indexes for table `vehicles`
+-- Indeks untuk tabel `vehicles`
 --
 ALTER TABLE `vehicles`
   ADD PRIMARY KEY (`id_vehicle`),
   ADD KEY `id_category` (`id_category`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `categories`
+-- AUTO_INCREMENT untuk tabel `categories`
 --
 ALTER TABLE `categories`
   MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
--- AUTO_INCREMENT for table `forgot_request`
+-- AUTO_INCREMENT untuk tabel `forgot_request`
 --
 ALTER TABLE `forgot_request`
-  MODIFY `id_request` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id_request` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
--- AUTO_INCREMENT for table `histories`
+-- AUTO_INCREMENT untuk tabel `histories`
 --
 ALTER TABLE `histories`
-  MODIFY `id_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
--- AUTO_INCREMENT for table `status`
+-- AUTO_INCREMENT untuk tabel `status`
 --
 ALTER TABLE `status`
   MODIFY `id_status` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
--- AUTO_INCREMENT for table `vehicles`
+-- AUTO_INCREMENT untuk tabel `vehicles`
 --
 ALTER TABLE `vehicles`
-  MODIFY `id_vehicle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `id_vehicle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `forgot_request`
+-- Ketidakleluasaan untuk tabel `forgot_request`
 --
 ALTER TABLE `forgot_request`
   ADD CONSTRAINT `forgot_request_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `histories`
+-- Ketidakleluasaan untuk tabel `histories`
 --
 ALTER TABLE `histories`
   ADD CONSTRAINT `histories_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `histories_ibfk_2` FOREIGN KEY (`id_vehicle`) REFERENCES `vehicles` (`id_vehicle`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `vehicles`
+-- Ketidakleluasaan untuk tabel `vehicles`
 --
 ALTER TABLE `vehicles`
   ADD CONSTRAINT `vehicles_ibfk_1` FOREIGN KEY (`id_category`) REFERENCES `categories` (`id_category`) ON DELETE SET NULL ON UPDATE CASCADE;
