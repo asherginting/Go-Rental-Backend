@@ -12,15 +12,25 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-    const typeImage = ['image/jpeg', 'image/png', 'image/gif'];
+    const imageFile = [
+        'image/jpeg', 
+        'image/png', 
+        'image/gif'
+    ];
 
-    if (!typeImage.includes(file.mimetype)) {
+    if (!imageFile.includes(file.mimetype)) {
         cb(new Error('Image type mismatch'), false);
     } else {
         cb(null, true);
     }
 };
 
-const upload = multer({ storage, fileFilter });
+const upload = multer({ 
+    storage: storage, 
+    fileFilter,
+    limits: {
+        fileSize: 2097152 // max file 2MB
+    }
+});
 
 module.exports = upload;
