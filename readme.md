@@ -28,6 +28,13 @@ npm install
 Runs the app default in the development mode.\
 Open [http://localhost:5000](http://localhost:5000) to view it in your browser.
 
+#### Auth
+|    METHOD    |               API               |                     REMARKS                     |
+| :----------: | :-----------------------------: | :---------------------------------------------: |
+|  ```POST```   | /auth/register | Register Account |
+|  ```POST```   |          /auth/verification          |              Verification after Registration              |
+|  ```POST```  |            /auth/login            |               Login Account               |
+| ```POST```  |          /auth/forgot         |            Forgot Password            |
 #### Vehicles Endpoint
 |    METHOD    |               API               |                     REMARKS                     |
 | :----------: | :-----------------------------: | :---------------------------------------------: |
