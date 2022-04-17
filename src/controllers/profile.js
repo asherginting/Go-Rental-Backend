@@ -1,8 +1,8 @@
 const userModel = require('../models/users');
 const response = require('../helpers/response');
 const upload = require('../helpers/upload').single('image');
-const check = require('../helpers/check');
-const deleteImg = require('../helpers/deleteImg');
+const validateForm = require('../helpers/validateForm');
+const fileHandler = require('../helpers/fileHandler');
 
 const getProfile = async (req, res) => {
     const { id } = req.user;
@@ -18,7 +18,6 @@ const updateProfile = async (req, res) => {
         if (err) {
             return response(req, res, err.message, null, null, 400);
         }
-        // eslint-disable-next-line no-unused-vars
         const { id } = req.user;
         const user = await userModel.getUserById(id);
         const data = {};
@@ -41,10 +40,9 @@ const updateProfile = async (req, res) => {
             data.username = username;
         }
         if (email) {
-            if (!check.checkEmail(email)) {
+            if (!validateForm.validateEmail(email)) {
                 return response(req, res, 'Wrong email input', null, null, 400);
             }
-            // const resEmail = email;
             const result = await userModel.checkUserAsync({ email });
             if (result.length > 0) {
                 return response(req, res, 'Email has been used', null, null, 400);
@@ -52,10 +50,9 @@ const updateProfile = async (req, res) => {
             data.email = email;
         }
         if (phone_number) {
-            if (!check.checkPhone(phone_number)) {
+            if (!validateForm.validatePhone(phone_number)) {
                 return response(req, res, 'Wrong phone number input', null, null, 400);
             }
-            // const phone = phone_number;
             const result = await userModel.checkUserAsync({ phone_number });
             if (result.length > 0) {
                 return response(req, res, 'phone number has been used', null, null, 400);
@@ -65,14 +62,13 @@ const updateProfile = async (req, res) => {
         return userModel.editUser(data, id, async (edited) => {
             if (edited.affectedRows > 0) {
                 if (req.file) {
-                    deleteImg.rm(user);
+                    fileHandler.rm(user);
                 }
                 const results = await userModel.getUserById(id);
                 return response(req, res, 'Data user', results[0]);
             }
             return response(req, res, 'Unexpected error', null, null, 500);
         });
-    // return response(req, res, 'ok', data);
     });
 };
 

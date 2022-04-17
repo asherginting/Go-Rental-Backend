@@ -12,6 +12,5 @@ app.use('/uploads', express.static('uploads'));
 const { PORT, APP_PORT } = process.env;
 
 app.listen(PORT || APP_PORT, () => {
-    // eslint-disable-next-line no-console
     console.log(`App running on port ${PORT || APP_PORT}`);
 });

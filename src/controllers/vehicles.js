@@ -3,7 +3,7 @@ const helperGet = require('../helpers/get');
 const categoriesModel = require('../models/categories');
 const upload = require('../helpers/upload').single('image');
 const response = require('../helpers/response');
-const deleteImg = require('../helpers/deleteImg');
+const fileHandler = require('../helpers/fileHandler');
 
 const getVehicles = (req, res) => {
     helperGet(req, res, vehicleModel.getVehicles, vehicleModel.countVehicle, 'vehicles');
@@ -45,24 +45,6 @@ const getVehicleCategory = (req, res) => {
 
         return response(req, res, 'List vehicles', results, pageInfo);
     }));
-    // if (resultsFin.length > 0) {
-    //   return vehicleModel.countVehicleCategory(data, (count) => {
-    //     const { total } = count[0];
-    //     const last = Math.ceil(total / limit);
-    //     const results = resultsFin;
-    //     const pageInfo = {
-    //       prev: page > 1 ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page - 1}&limit=${limit}` : null,
-    //       next: page < last ? `http://localhost:5000/vehicles/category/?search=${search}&filter=${filter}&page=${page + 1}&limit=${limit}` : null,
-    //       totalData: total,
-    //       currentPage: page,
-    //       lastPage: last,
-    //     };
-
-    //     return response(req, res, `List vehicles by category ${filter}`, results, pageInfo);
-    //   });
-    // }
-    // return response(req, res, 'Page not found', null, null, 404);
-    // );
 };
 
 const getVehicle = async (req, res) => {
@@ -161,7 +143,7 @@ const editAllVehicle = (req, res) => {
                             const dataBody = {
                                 id_category, type: typeCategory, brand, image: resImage, capacity, location, price, qty, rent_count, status,
                             };
-                            vehicleModel.getVehicle(id, (vehicleData) => deleteImg.rm(vehicleData));
+                            vehicleModel.getVehicle(id, (vehicleData) => fileHandler.rm(vehicleData));
                             return vehicleModel.editAllVehicle(dataBody, id, (results) => {
                                 if (results.affectedRows > 0) {
                                     return vehicleModel.getVehicle(id, (vehicle) => response(req, res, 'Edited Succesfully', vehicle[0], null));
@@ -243,7 +225,7 @@ const deleteVehicle = (req, res) => {
         vehicleModel.getVehicle(id, (vehicleDeleted) => {
             vehicleModel.deleteVehicle(id, (results) => {
                 if (results.affectedRows > 0) {
-                    deleteImg.rm(vehicleDeleted);
+                    fileHandler.rm(vehicleDeleted);
                     return response(req, res, `Vehicle with id ${id} successfully deleted`, vehicleDeleted[0], null);
                 }
                 return response(req, res, `Failed to delete vehicle with id ${id}`, null, null, 500);

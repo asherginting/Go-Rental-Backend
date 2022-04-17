@@ -1,4 +1,16 @@
-const checkPhone = (phone) => {
+const validateEmail = (mail) => {
+    let result = false;
+    const arrEmail = mail.split('');
+
+    if (/\D/.test(arrEmail[0])) {
+        if (arrEmail.includes('@') && arrEmail.includes('.')) {
+            result = true;
+        }
+    }
+    return result;
+};
+
+const validatePhone = (phone) => {
     let result = false;
     const res = [];
     const numSplit = phone.split('');
@@ -21,7 +33,7 @@ const checkPhone = (phone) => {
     return result;
 };
 
-const checkDate = (date) => {
+const validateDate = (date) => {
     let check = false;
     if (String(date).length === 10) {
         if (date[4] === '-' && date[7] === '-') {
@@ -47,19 +59,16 @@ const checkDate = (date) => {
     return check;
 };
 
-const checkEmail = (mail) => {
+const validatePassword = (pass) => {
     let result = false;
-    const arrEmail = mail.split('');
-
-    if (/\D/.test(arrEmail[0])) {
-        if (arrEmail.includes('@') && arrEmail.includes('.')) {
-            result = true;
-        }
+    if (/[A-Z]/.test(pass) && /[a-z]/.test(pass) && /[0-9]/.test(pass) && pass.length >= 6) {
+        result = true;
     }
+
     return result;
 };
 
-const checkStartEnd = (start, end) => {
+const validateRentOrder = (start, end) => {
     let result = false;
     const rentStart = String(start).split('-');
     const rentEnd = String(end).split('-');
@@ -69,19 +78,11 @@ const checkStartEnd = (start, end) => {
     return result;
 };
 
-const checkPassword = (pass) => {
-    let result = false;
-    if (/[A-Z]/.test(pass) && /[a-z]/.test(pass) && /[0-9]/.test(pass) && pass.length >= 6) {
-        result = true;
-    }
-
-    return result;
-};
-
 module.exports = {
-    checkPhone,
-    checkDate,
-    checkEmail,
-    checkStartEnd,
-    checkPassword,
+    validateEmail,
+    validatePhone,
+    validateDate,
+    validatePassword,
+    validateRentOrder,
+    
 };

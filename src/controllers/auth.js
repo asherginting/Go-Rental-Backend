@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 const response = require('../helpers/response');
 const userModel = require('../models/users');
 const forgotModel = require('../models/forgotRequest');
-const mail = require('../helpers/codeMail');
-const check = require('../helpers/check');
+const mail = require('../helpers/mail');
+const validateForm = require('../helpers/validateForm');
 
 const { APP_SECRET, APP_EMAIL } = process.env;
 
@@ -12,10 +12,6 @@ const login = async (req, res) => {
     const { username, password } = req.body;
     const result = await userModel.getUserByUserName(username);
     if (result.length > 0) {
-    // Validation if verify false cant login
-    // if (result[0].confirm) {
-    //   return response(req, res, 'Please confirm your registration', null, null, 400);
-    // }
         const hash = result[0].password;
         const validatePwd = await bcrypt.compare(password, hash);
         if (validatePwd) {
@@ -34,25 +30,7 @@ const login = async (req, res) => {
     return response(req, res, 'Wrong username', null, null, 403);
 };
 
-const verify = (req, res) => {
-    const auth = req.headers.authorization;
-    if (auth.startsWith('Bearer')) {
-        const token = auth.split(' ')[1];
-        if (token) {
-            try {
-                if (jwt.verify(token, APP_SECRET)) {
-                    return response(req, res, 'User verified');
-                }
-                return response(req, res, 'User not verified', null, null, 403);
-            } catch (err) {
-                return response(req, res, 'User not verified', null, null, 403);
-            }
-        }
-        return response(req, res, 'Token must be provided', null, null, 403);
-    }
-};
-
-const forgotRequest = async (req, res) => {
+const forgotPass = async (req, res) => {
     const {
         email, code, password, confirmPassword,
     } = req.body;
@@ -88,7 +66,7 @@ const forgotRequest = async (req, res) => {
                 const user = await userModel.getUserById(idUser);
                 if (user[0].email === email) {
                     if (password) {
-                        if (!check.checkPassword(password)) {
+                        if (!validateForm.validatePassword(password)) {
                             return response(req, res, 'password must be at least 6 characters must contain numeric lowercase and uppercase letter.', null, null, 400);
                         }
                         if (password === confirmPassword) {
@@ -114,45 +92,7 @@ const forgotRequest = async (req, res) => {
     return response(req, res, 'You have to provide confirmation data', null, null, 400);
 };
 
-const sendCodeVerify = async (req, res) => {
-    const { email } = req.body;
-    if (!check.checkEmail(email)) {
-        return response(req, res, 'Wrong email input', null, null, 400);
-    }
-    const emailResult = await userModel.getUserByUserName(email);
-    const id = JSON.stringify(emailResult[0].id_user);
-    const checkConfirm = JSON.stringify(emailResult[0].confirm);
-    if (emailResult.length === 0) {
-        return response(req, res, 'Your email is not registered', null, null, 400);
-    }
-    // if (checkConfirm === 'null') {
-    //   console.log('ok')
-    // }
-    // console.log(checkConfirm);
-    // return response(req, res, 'Your account has been verified');
-    if (checkConfirm === 'null') {
-        console.log(checkConfirm);
-        return response(req, res, 'Your account has been verified');
-    }
-    const randomCode = Math.round(Math.random() * (9999 - 1000) + 1000);
-    mail.sendMail({
-        from: APP_EMAIL,
-        to: email,
-        subject: 'Verification code | Go - Rental',
-        text: String(randomCode),
-        html: `<b>${randomCode}<b>`,
-    });
-    const data = { confirm: randomCode };
-    return userModel.editUser(data, id, async (edited) => {
-        if (edited.affectedRows > 0) {
-            // const results = await userModel.getUserById(id);
-            return response(req, res, `Verification code has been sent to ${email}`);
-        }
-        return response(req, res, 'Unexpected error', null, null, 500);
-    });
-};
-
-const confirmRegistration = async (req, res) => {
+const verificationRegister = async (req, res) => {
     const {
         username, password, code,
     } = req.body;
@@ -180,8 +120,6 @@ const confirmRegistration = async (req, res) => {
 
 module.exports = {
     login,
-    verify,
-    forgotRequest,
-    sendCodeVerify,
-    confirmRegistration,
+    forgotPass,
+    verificationRegister,
 };

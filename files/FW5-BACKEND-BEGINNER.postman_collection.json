@@ -1,15 +1,331 @@
 {
 	"info": {
-		"_postman_id": "051b99ff-4d5d-4adf-b7a2-f5daa7d47f43",
-		"name": "FW5-BACKEND-INTERMEDIATE",
+		"_postman_id": "3289c998-d26c-496b-9195-774241874f39",
+		"name": "FW5-BACKEND-BEGINNER",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "HISTORY",
+			"name": "Auth",
 			"item": [
 				{
-					"name": "LIST HISTORIES",
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "lafih",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "lafih",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "lafih45059@carsik.com",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "081267894321",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "@Contoh123_",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm Regis",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "lafih",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "7882",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "@Contoh123_",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/verification",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"verification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "1234",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Pass",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "wifepi3219@goonby.com",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "2514",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345",
+									"type": "text"
+								},
+								{
+									"key": "confirmPassword",
+									"value": "12345",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/forgotPassword",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"forgotPassword"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "List Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/categories/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"categories",
+								""
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "motor",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1000",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Category By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/categories/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Category",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "type",
+									"value": "minibus",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/categories",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Category",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "type",
+									"value": "jet",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/categories/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "16"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/categories/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "21"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "History",
+			"item": [
+				{
+					"name": "List Histories",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -32,7 +348,7 @@
 							"query": [
 								{
 									"key": "search",
-									"value": "acvg",
+									"value": "asher",
 									"disabled": true
 								},
 								{
@@ -44,6 +360,11 @@
 									"key": "limit",
 									"value": "a",
 									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "batam",
+									"disabled": true
 								}
 							]
 						}
@@ -51,7 +372,7 @@
 					"response": []
 				},
 				{
-					"name": "GET HISTORY BY ID",
+					"name": "History By ID",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -75,7 +396,7 @@
 					"response": []
 				},
 				{
-					"name": "ADD HISTORY",
+					"name": "Add History",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -122,7 +443,66 @@
 					"response": []
 				},
 				{
-					"name": "EDIT HISTORY",
+					"name": "Edit All History",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id_user",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "id_vehicle",
+									"value": "7",
+									"type": "text"
+								},
+								{
+									"key": "rent_start_date",
+									"value": "2022-02-02",
+									"type": "text"
+								},
+								{
+									"key": "rent_end_date",
+									"value": "2022-02-04",
+									"type": "text"
+								},
+								{
+									"key": "prepayment",
+									"value": "900000",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/histories/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"histories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "14"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit History",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -184,66 +564,7 @@
 					"response": []
 				},
 				{
-					"name": "EDIT ALL HISTORY",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "id_user",
-									"value": "5",
-									"type": "text"
-								},
-								{
-									"key": "id_vehicle",
-									"value": "7",
-									"type": "text"
-								},
-								{
-									"key": "rent_start_date",
-									"value": "2022-02-02",
-									"type": "text"
-								},
-								{
-									"key": "rent_end_date",
-									"value": "2022-02-04",
-									"type": "text"
-								},
-								{
-									"key": "prepayment",
-									"value": "900000",
-									"type": "text"
-								},
-								{
-									"key": "status",
-									"value": "1",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseURL}}/histories/:id",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"histories",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "14"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DELETE HISTORY",
+					"name": "Delete History",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -269,10 +590,347 @@
 			]
 		},
 		{
-			"name": "VEHICLES",
+			"name": "Popular",
 			"item": [
 				{
-					"name": "LIST VEHICLES",
+					"name": "List Popular",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/popular/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"popular",
+								""
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "cars",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1000",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/profile",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "List Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								""
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "contoh",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "contoh",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "contoh",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "contoh@gmail.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "phone_number",
+									"value": "08124567894",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "1234",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit All User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Asher Ginting",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "asherginting",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/home/asherginting/Downloads/Profil.jpg"
+								},
+								{
+									"key": "email",
+									"value": "asher@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "08124564455",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "Jakarta, Indonesia",
+									"type": "text"
+								},
+								{
+									"key": "birthdate",
+									"value": "2000-05-30",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Asher Ginting",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "asherginting",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/home/asherginting/Downloads/Profil.jpg"
+								},
+								{
+									"key": "email",
+									"value": "asher@gmail.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "phone_number",
+									"value": "08124564455",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "address",
+									"value": "Jakarta, Indonesia",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "birthdate",
+									"value": "2000-05-30",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "31"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "66"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vehicles",
+			"item": [
+				{
+					"name": "List Vehicles",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -288,7 +946,7 @@
 							"query": [
 								{
 									"key": "search",
-									"value": "hon",
+									"value": "mazda",
 									"disabled": true
 								},
 								{
@@ -300,6 +958,11 @@
 									"key": "limit",
 									"value": "100",
 									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "bandung",
+									"disabled": true
 								}
 							]
 						}
@@ -307,7 +970,7 @@
 					"response": []
 				},
 				{
-					"name": "GET VEHICLE BY id",
+					"name": "Vehicle By ID",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -323,7 +986,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "7"
+									"value": "10"
 								}
 							]
 						}
@@ -331,7 +994,7 @@
 					"response": []
 				},
 				{
-					"name": "ADD VEHICLE",
+					"name": "Add Vehicle",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -340,37 +1003,37 @@
 							"formdata": [
 								{
 									"key": "id_category",
-									"value": "2",
+									"value": "1",
 									"type": "text"
 								},
 								{
 									"key": "brand",
-									"value": "Honda Prima",
+									"value": "Xenia",
 									"type": "text"
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/C:/Users/saput/Downloads/honda-prima.jpg"
+									"src": "/home/asherginting/Downloads/xenia.jpg"
 								},
 								{
 									"key": "capacity",
-									"value": "2",
+									"value": "5",
 									"type": "text"
 								},
 								{
 									"key": "location",
-									"value": "Ngawi",
+									"value": "Bali",
 									"type": "text"
 								},
 								{
 									"key": "price",
-									"value": "150000",
+									"value": "300000",
 									"type": "text"
 								},
 								{
 									"key": "qty",
-									"value": "1",
+									"value": "2",
 									"type": "text"
 								},
 								{
@@ -394,7 +1057,7 @@
 					"response": []
 				},
 				{
-					"name": "EDIT ALL VEHICLE",
+					"name": "Edit All Vehicle",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -469,7 +1132,7 @@
 					"response": []
 				},
 				{
-					"name": "EDIT VEHICLE",
+					"name": "Edit Vehicle",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -515,7 +1178,7 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/home/asherginting/Downloads/suzuki-carry.png"
+									"src": "/C:/Users/ASUS/Downloads/Image/Xenia.jpg"
 								}
 							]
 						},
@@ -531,7 +1194,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "104"
+									"value": "106"
 								}
 							]
 						}
@@ -539,7 +1202,7 @@
 					"response": []
 				},
 				{
-					"name": "DELETE VEHICLE",
+					"name": "Delete Vehicle",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -557,660 +1220,6 @@
 									"key": "id",
 									"value": "103"
 								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "POPULAR",
-			"item": [
-				{
-					"name": "GET POPULAR",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/popular/",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"popular",
-								""
-							],
-							"query": [
-								{
-									"key": "search",
-									"value": "cars",
-									"disabled": true
-								},
-								{
-									"key": "page",
-									"value": "4",
-									"disabled": true
-								},
-								{
-									"key": "limit",
-									"value": "1000",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "PROFILE",
-			"item": [
-				{
-					"name": "GET PROFILE",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/profile/:id",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"profile",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "CATEGORIES",
-			"item": [
-				{
-					"name": "LIST CATEGORIES",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/categories/?limit=1000",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"categories",
-								""
-							],
-							"query": [
-								{
-									"key": "search",
-									"value": "motor",
-									"disabled": true
-								},
-								{
-									"key": "page",
-									"value": "3",
-									"disabled": true
-								},
-								{
-									"key": "limit",
-									"value": "1000"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CATEGORY BY ID",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/categories/:id",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"categories",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "19"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "ADD CATEGORY",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "type",
-									"value": "minibus",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseURL}}/categories",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"categories"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "EDIT CATEGORY",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "type",
-									"value": "jet",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseURL}}/categories/:id",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"categories",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "16"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DELETE CATEGORY",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/categories/:id",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"categories",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "21"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "USERS",
-			"item": [
-				{
-					"name": "LiST OF USERS",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/users/",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								""
-							],
-							"query": [
-								{
-									"key": "search",
-									"value": "contoh",
-									"disabled": true
-								},
-								{
-									"key": "page",
-									"value": "2",
-									"disabled": true
-								},
-								{
-									"key": "limit",
-									"value": "100",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "ID USER",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/users/:id",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CREATE USER",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "name",
-									"value": "contoh",
-									"type": "text"
-								},
-								{
-									"key": "username",
-									"value": "contoh",
-									"type": "text"
-								},
-								{
-									"key": "email",
-									"value": "contoh@gmail.com",
-									"type": "text"
-								},
-								{
-									"key": "phone_number",
-									"value": "08124567894",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "1234",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseURL}}/users/registry",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								"registry"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "EDIT ALL USER",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "Asher Ginting",
-									"type": "text"
-								},
-								{
-									"key": "username",
-									"value": "asherginting",
-									"type": "text"
-								},
-								{
-									"key": "image",
-									"type": "file",
-									"src": "/home/asherginting/Downloads/Profil.jpg"
-								},
-								{
-									"key": "email",
-									"value": "asher@gmail.com",
-									"type": "text"
-								},
-								{
-									"key": "phone_number",
-									"value": "08124564455",
-									"type": "text"
-								},
-								{
-									"key": "address",
-									"value": "Jakarta, Indonesia",
-									"type": "text"
-								},
-								{
-									"key": "birthdate",
-									"value": "2000-05-30",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseURL}}/users/:id",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "EDIT USER",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "Asher Ginting",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "username",
-									"value": "asherginting",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "image",
-									"type": "file",
-									"src": "/home/asherginting/Downloads/Profil.jpg"
-								},
-								{
-									"key": "email",
-									"value": "asher@gmail.com",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "phone_number",
-									"value": "08124564455",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "address",
-									"value": "Jakarta, Indonesia",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "birthdate",
-									"value": "2000-05-30",
-									"type": "text",
-									"disabled": true
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseURL}}/users/:id",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "31"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "DELETE USER",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/users/:id",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "66"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "AUTH",
-			"item": [
-				{
-					"name": "REGISTER",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "name",
-									"value": "azriel",
-									"type": "text"
-								},
-								{
-									"key": "username",
-									"value": "azriel",
-									"type": "text"
-								},
-								{
-									"key": "email",
-									"value": "wifepi3219@goonby.com",
-									"type": "text"
-								},
-								{
-									"key": "phone_number",
-									"value": "0812125456",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "1234",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseURL}}/auth/register",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"auth",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CONFIRM REGISTRATION",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "username",
-									"value": "azriel",
-									"type": "text"
-								},
-								{
-									"key": "code",
-									"value": "1863",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "1234",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseURL}}/auth/confrimRegistration",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"auth",
-								"confrimRegistration"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "LOGIN",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "username",
-									"value": "admin",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "1234",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseURL}}/auth/login",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"auth",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "FORGOT PASSWORD",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "email",
-									"value": "wifepi3219@goonby.com",
-									"type": "text"
-								},
-								{
-									"key": "code",
-									"value": "2514",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "12345",
-									"type": "text"
-								},
-								{
-									"key": "confirmPassword",
-									"value": "12345",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseURL}}/auth/forgotPassword",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"auth",
-								"forgotPassword"
 							]
 						}
 					},

@@ -1,15 +1,6 @@
 const vehicles = require('express').Router();
 
-const {
-    getVehicles,
-    getVehicleCategory,
-    getVehicle,
-    getNewVehicle,
-    addVehicle,
-    editAllVehicle,
-    editVehicle,
-    deleteVehicle,
-} = require('../controllers/vehicles');
+const { getVehicles, getVehicleCategory, getVehicle, getNewVehicle, addVehicle, editAllVehicle, editVehicle, deleteVehicle } = require('../controllers/vehicles');
 const { verifyUser } = require('../helpers/auth');
 
 vehicles.get('/', getVehicles);

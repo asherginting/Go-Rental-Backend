@@ -3,9 +3,9 @@ const userModel = require('../models/users');
 const helperGet = require('../helpers/get');
 const response = require('../helpers/response');
 const upload = require('../helpers/upload').single('image');
-const deleteImg = require('../helpers/deleteImg');
-const check = require('../helpers/check');
-const mail = require('../helpers/codeMail');
+const fileHandler = require('../helpers/fileHandler');
+const validateForm = require('../helpers/validateForm');
+const mail = require('../helpers/mail');
 
 const { APP_EMAIL } = process.env;
 
@@ -23,64 +23,15 @@ const getUser = (req, res) => {
     });
 };
 
-// WITHOUT PHONENUMBER
-
-// const addUser = (req, res) => {
-//   const {
-//     name, username, email, password,
-//   } = req.body;
-//   if (name && username && email && password) {
-//     if (!check.checkEmail(email)) {
-//       return response(req, res, 'Wrong email input', null, null, 400);
-//     }
-//     // if (!check.checkPhone(phone_number)) {
-//     //   return response(req, res, 'Wrong phone number input', null, null, 400);
-//     // }
-//     if (!check.checkPassword(password)) {
-//       return response(req, res, 'Password must be at least 6 characters must contain numeric lowercase and uppercase letter.', null, null, 400);
-//     }
-//     const dataCheck = {
-//       username, email,
-//     };
-//     return userModel.checkUser(dataCheck, async (user) => {
-//       if (user.length > 0) {
-//         return response(req, res, 'User name or email has been registered', null, null, 400);
-//       }
-//       const randomCode = Math.round(Math.random() * (9999 - 1000) + 1000);
-//       mail.sendMail({
-//         from: APP_EMAIL,
-//         to: email,
-//         subject: 'Registration verification code | Vehicles Rent',
-//         text: String(randomCode),
-//         html: `<b>${randomCode}<b>`,
-//       });
-//       const salt = await bcrypt.genSalt(10);
-//       const hash = await bcrypt.hash(password, salt);
-//       const data = {
-//         name, username, email, password: hash, confirm: randomCode,
-//       };
-//       return userModel.addUser(data, (rslt) => {
-//         if (rslt.affectedRows === 0) {
-//           return response(req, res, 'Unexpected error', null, null, 500);
-//         }
-//         userModel.newUser(rslt.insertId, (results) => response(req, res, `Verification code has been sent to ${email}`, results[0]));
-//       });
-//     });
-//   }
-//   return response(req, res, 'Failed to create user, data must be filled', null, null, 400);
-// };
-
-// WITHOUT NAME
-
 const addUser = (req, res) => {
     const {
         username, email, password, phone_number, name,
     } = req.body;
     if (username && email && password) {
-        if (!check.checkEmail(email)) {
+        if (!validateForm.validateEmail(email)) {
             return response(req, res, 'Wrong email input', null, null, 400);
         }
-        if (!check.checkPassword(password)) {
+        if (!validateForm.validatePassword(password)) {
             return response(req, res, 'Password must be at least 6 characters must contain numeric lowercase and uppercase letter.', null, null, 400);
         }
         const dataCheck = {
@@ -90,21 +41,14 @@ const addUser = (req, res) => {
             if (user.length > 0) {
                 return response(req, res, 'User name or phone or email has been registered', null, null, 400);
             }
-            // const randomCode = Math.round(Math.random() * (9999 - 1000) + 1000);
-            // mail.sendMail({
-            //   from: APP_EMAIL,
-            //   to: email,
-            //   subject: 'Registration verification code | Vehicles Rent',
-            //   text: String(randomCode),
-            //   html: `<b>${randomCode}<b>`,
-            // });
+            
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt);
             let data = {
                 username, email, password: hash, phone_number, confirm: false,
             };
             if (phone_number) {
-                if (!check.checkPhone(phone_number)) {
+                if (!validateForm.validatePhone(phone_number)) {
                     return response(req, res, 'Wrong phone number input', null, null, 400);
                 }
                 data = { ...data, phone_number };
@@ -120,53 +64,6 @@ const addUser = (req, res) => {
                 });
                 data = { ...data, name, confirm: randomCode };
             }
-            return userModel.addUser(data, (rslt) => {
-                if (rslt.affectedRows === 0) {
-                    return response(req, res, 'Unexpected error', null, null, 500);
-                }
-                userModel.newUser(rslt.insertId, (results) => response(req, res, `Verification code has been sent to ${email}`, results[0]));
-            });
-        });
-    }
-    return response(req, res, 'Failed to create user, data must be filled', null, null, 400);
-};
-
-// COMPLETE ADDUSER
-
-const addUserComplete = (req, res) => {
-    const {
-        name, username, email, password, phone_number,
-    } = req.body;
-    if (name && username && email && password && phone_number) {
-        if (!check.checkEmail(email)) {
-            return response(req, res, 'Wrong email input', null, null, 400);
-        }
-        if (!check.checkPhone(phone_number)) {
-            return response(req, res, 'Wrong phone number input', null, null, 400);
-        }
-        if (!check.checkPassword(password)) {
-            return response(req, res, 'Password must be at least 6 characters must contain numeric lowercase and uppercase letter.', null, null, 400);
-        }
-        const dataCheck = {
-            username, email, phone_number,
-        };
-        return userModel.checkUser(dataCheck, async (user) => {
-            if (user.length > 0) {
-                return response(req, res, 'User name or phone or email has been registered', null, null, 400);
-            }
-            const randomCode = Math.round(Math.random() * (9999 - 1000) + 1000);
-            mail.sendMail({
-                from: APP_EMAIL,
-                to: email,
-                subject: 'Registration verification code | Go - Rental',
-                text: String(randomCode),
-                html: `<b>${randomCode}<b>`,
-            });
-            const salt = await bcrypt.genSalt(10);
-            const hash = await bcrypt.hash(password, salt);
-            const data = {
-                name, username, email, password: hash, phone_number, confirm: randomCode,
-            };
             return userModel.addUser(data, (rslt) => {
                 if (rslt.affectedRows === 0) {
                     return response(req, res, 'Unexpected error', null, null, 500);
@@ -200,9 +97,9 @@ const editAllDataUser = (req, res) => {
         }
 
         if (name && username && image && email && phone_number && address && birthdate) {
-            if (check.checkPhone(phone_number)) {
-                if (check.checkEmail(email)) {
-                    if (check.checkDate(birthdate)) {
+            if (validateForm.validatePhone(phone_number)) {
+                if (validateForm.validateEmail(email)) {
+                    if (validateForm.validateDate(birthdate)) {
                         const resImage = image.replace(/\\/g, '/');
                         const data = {
                             name, username, image, email: resImage, phone_number, address, birthdate,
@@ -210,7 +107,7 @@ const editAllDataUser = (req, res) => {
                         const pastUser = await userModel.getUserById(id);
                         return userModel.editUser(data, id, (results) => {
                             if (results.affectedRows > 0) {
-                                deleteImg.rm(pastUser);
+                                fileHandler.rm(pastUser);
                                 return userModel.getUser(id, (rslt) => response(req, res, 'Successfully updated user', rslt[0]));
                             }
                             return response(req, res, 'Unexpected error', null, null, 500);
@@ -231,7 +128,6 @@ const editUser = (req, res) => {
         if (err) {
             return response(req, res, err.message, null, null, 400);
         }
-        // const { id } = req.params;
         const { id } = req.user;
         const user = await userModel.getUserById(id);
         if (user.length !== 1) {
@@ -256,9 +152,6 @@ const editUser = (req, res) => {
             gender: gender || user[0].gender,
         };
 
-        // if (req.file) {
-        //   data.image = req.file.path.replace(/\\/g, '/');
-        // }
         if (username) {
             const result = await userModel.checkUserAsync({ username });
             if (result.length > 0) {
@@ -267,7 +160,7 @@ const editUser = (req, res) => {
             data.username = username;
         }
         if (email) {
-            if (!check.checkEmail(email)) {
+            if (!validateForm.validateEmail(email)) {
                 return response(req, res, 'Wrong email input', null, null, 400);
             }
             const result = await userModel.checkUserAsync({ email });
@@ -277,7 +170,7 @@ const editUser = (req, res) => {
             data.email = email;
         }
         if (phone_number) {
-            if (!check.checkPhone(phone_number)) {
+            if (!validateForm.validatePhone(phone_number)) {
                 return response(req, res, 'Wrong phone number input', null, null, 400);
             }
             const result = await userModel.checkUserAsync({ phone_number });
@@ -287,7 +180,7 @@ const editUser = (req, res) => {
             data.phone_number = phone_number;
         }
         if (birthdate) {
-            if (!check.checkDate(birthdate)) {
+            if (!validateForm.validateDate(birthdate)) {
                 return response(req, res, 'Wrong birthdate input. Format birthdate YYYY-MM-DD', null, null, 400);
             }
             data.phone_number = phone_number;
@@ -295,15 +188,13 @@ const editUser = (req, res) => {
         return userModel.editUser(data, id, async (edited) => {
             if (edited.affectedRows > 0) {
                 if (req.file) {
-                    deleteImg.rm(user);
+                    fileHandler.rm(user);
                 }
                 const results = await userModel.getUserById(id);
                 return response(req, res, 'Data user', results);
             }
             return response(req, res, 'Unexpected error', null, null, 500);
         });
-    // console.log(id);
-    // res.json('test');
     });
 };
 
@@ -323,7 +214,6 @@ module.exports = {
     getUsers,
     getUser,
     addUser,
-    addUserComplete,
     editAllDataUser,
     editUser,
     deleteUser,

@@ -6,10 +6,6 @@ const getCategories = (req, res) => {
     getHelper(req, res, categoryModel.getCategories, categoryModel.countCategory, 'categories');
 };
 
-const getCategoriesData = (req, res) => {
-    getHelper(req, res, categoryModel.getCategoriesData, categoryModel.countCategoryData, 'categories');
-};
-
 const getCategory = (req, res) => {
     const { id } = req.params;
     categoryModel.getCategory(id, (results) => {
@@ -83,7 +79,6 @@ const deleteCategory = (req, res) => {
 
 module.exports = {
     getCategories,
-    getCategoriesData,
     getCategory,
     addCategory,
     editCategory,

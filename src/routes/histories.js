@@ -1,14 +1,6 @@
 const history = require('express').Router();
 
-const {
-    getHistories, 
-    getHistoriesByFilter, 
-    getHistory,
-    addHistory, 
-    editAllHistory, 
-    editHistory, 
-    deleteHistory,
-} = require('../controllers/histories');
+const { getHistories, getHistoriesByFilter, getHistory, addHistory, editAllHistory, editHistory, deleteHistory } = require('../controllers/histories');
 const { verifyUser } = require('../helpers/auth');
 
 history.get('/', getHistories);
