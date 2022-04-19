@@ -22,7 +22,6 @@ const login = async (req, res) => {
                 data.role = username;
             }
             const token = jwt.sign(data, APP_SECRET);
-            console.log('login has been successful', data.role);
             return response(req, res, 'Login success', { token });
         }
         return response(req, res, 'Wrong password', null, null, 403);
