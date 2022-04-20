@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 11 Apr 2022 pada 13.24
+-- Waktu pembuatan: 20 Apr 2022 pada 11.19
 -- Versi server: 10.4.24-MariaDB
 -- Versi PHP: 7.4.28
 
@@ -41,9 +41,7 @@ CREATE TABLE `categories` (
 INSERT INTO `categories` (`id_category`, `type`, `createdAt`, `updatedAt`) VALUES
 (1, 'Cars', '2022-02-02 13:28:02', '2022-02-02 07:27:52'),
 (2, 'Motorbike', '2022-02-02 13:28:28', '2022-02-02 07:28:07'),
-(3, 'Bike', '2022-02-02 13:28:28', '2022-02-02 07:28:07'),
-(4, 'E-bike', '2022-02-02 15:47:19', '2022-02-03 12:51:45'),
-(5, 'Pick Up', '2022-02-03 12:51:27', '2022-02-03 06:50:28');
+(3, 'Bike', '2022-02-02 13:28:28', '2022-02-02 07:28:07');
 
 -- --------------------------------------------------------
 
@@ -140,7 +138,7 @@ INSERT INTO `histories` (`id_history`, `id_user`, `id_vehicle`, `rent_start_date
 (30, 33, 10, '2022-02-02', '2022-02-28', 500000, 'not been returned', '2022-02-04 17:49:01', NULL),
 (33, 1, 10, '2022-02-02', '2022-02-28', 500000, 'not been returned', '2022-02-06 07:34:11', NULL),
 (34, 34, 69, '2022-02-02', '2022-02-05', 500000, 'not been returned', '2022-02-06 08:00:50', NULL),
-(36, 1, 74, '2022-02-07', '2022-02-28', 100000, 'not been returned', '2022-02-07 12:28:31', NULL),
+(36, 1, NULL, '2022-02-07', '2022-02-28', 100000, 'not been returned', '2022-02-07 12:28:31', NULL),
 (37, 29, 19, '2022-02-07', '2022-02-28', 100000, 'not been returned', '2022-02-07 12:29:24', NULL),
 (38, 1, 19, '2022-02-07', '2022-02-28', 100000, 'not been returned', '2022-02-07 12:37:30', NULL),
 (39, 1, 19, '2022-02-02', '2022-02-28', 100000, 'not been returned', '2022-02-07 15:05:01', NULL),
@@ -275,8 +273,6 @@ INSERT INTO `vehicles` (`id_vehicle`, `id_category`, `type`, `brand`, `image`, `
 (23, 1, 'Cars', 'Toyota Avanza', 'uploads/Avanza-1649606162228-928384148.jpeg', '7', 'Jakarta', 300000, 4, 0, 2, 'Available', '2022-01-30 19:50:51', '2022-04-10 22:56:02'),
 (67, 2, 'Motorbike', 'Vespa Matic', 'uploads/Vespa-Matig-1649606177293-161039283.jpg', '2', 'Bandung', 110000, 3, 0, 3, 'Available', '2022-02-01 21:07:20', '2022-04-10 22:56:17'),
 (69, 2, 'Motorbike', 'Vespa Matic', 'uploads/Vespa-Matig-1649606186556-185652127.jpg', '2', 'Yogyakarta', 110000, 2, 0, 2, 'Available', '2022-02-02 05:58:24', '2022-04-10 22:56:26'),
-(74, 5, 'Pick Up', 'Mitsubishi  L300', 'uploads/toyota-l300-1645750796633-890011416.jpg', '3', 'Yogyakarta', 90000, 2, 0, 1, 'Available', '2022-02-06 18:04:02', '2022-03-01 07:37:14'),
-(102, 5, 'Pick Up', 'Suzuki Carry', 'uploads/suzuki-carry-1645750921110-489392039.png', '3', 'Yogyakarta', 90000, 2, 0, 0, 'Available', '2022-02-09 10:05:21', '2022-03-01 05:25:14'),
 (104, 1, 'Cars', 'Honda Brio', 'uploads/Honda-Brio-1649606226725-193141367.jpg', '5', 'Bali', 250000, 1, 0, 0, 'Available', '2022-02-10 20:11:21', '2022-04-10 22:57:06'),
 (106, 1, 'Cars', 'Xenia', 'uploads/Xenia-1649606240394-856370660.jpg', '5', 'Bali', 300000, 2, 0, 2, 'Available', '2022-03-01 08:32:10', '2022-04-10 22:57:20'),
 (107, 1, 'Cars', 'Honda Brio New', 'uploads/rn_image_picker_lib_temp_5876c1de-3e59-4fd6-90bb-e2a5058e2d31-1649637673387-367695470.jpg', '1', 'Yogyakarta', 300000, 1, 0, 0, 'Available', '2022-04-11 07:41:13', NULL);
