@@ -14,7 +14,7 @@ Go - Rental is plan and book your perfect trip with expert advice, travel tips f
 
 1. Clone this repo
 ```
-git clone https://github.com/asherginting/fw5-backend-beginner.git
+git clone https://github.com/asherginting/Go-Rental-Backend.git
 ```
 
 2. Install module
