@@ -1,13 +1,16 @@
-<p align="center">
-  <a href="" rel="noopener">
- <a href="https://imgbb.com/"><img src="https://i.ibb.co/8P4m5hB/Icon-Go-Rental.png" alt="Icon-Go-Rental" border="0"></a>
-</p>
+<a href="https://aimeos.org/">
+    <img src="https://i.ibb.co/8P4m5hB/Icon-Go-Rental.png" alt="Aimeos logo" title="Aimeos" align="right" />
+</a>
 
----
+# Go - Rental Backend
 
-## 🧐 About
-This is the repository fw5-backend-beginner
-## Instalation
+Go - Rental is plan and book your perfect trip with expert advice, travel tips for vehicle information from us
+
+
+
+[![Postman](https://user-images.githubusercontent.com/39787908/164381909-d91da867-38b5-4f2b-aaad-b7002ff709ba.jpg)](#)
+
+## Installation
 
 1. Clone this repo
 ```
@@ -19,9 +22,13 @@ git clone https://github.com/asherginting/fw5-backend-beginner.git
 npm install
 ```
 
-3. Import Database <b> vehicle_rent.sql 
+3. Make your database <b> vehicle_rent.sql
 
-4. Done, ```npm run dev``` to run the project
+[![Postman](https://user-images.githubusercontent.com/39787908/164382316-ed2d6769-b669-49b7-b1d6-122034d35709.jpg)](#)
+[![Postman](https://user-images.githubusercontent.com/39787908/164382710-e8d65a86-2f8a-49ff-b28a-f73be747b69d.jpg)](#)
+[![Postman](https://user-images.githubusercontent.com/39787908/164382837-f0945591-bad9-4a6d-9013-e5dfb6e6cde0.jpg)](#)
+
+4. Done, ```npm run start``` or ```npm run dev``` to run the project
 
 <br>
 
