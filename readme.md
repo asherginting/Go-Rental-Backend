@@ -104,7 +104,7 @@ Open [http://localhost:5000](http://localhost:5000) to view it in your browser.
 - [Nodemailer](https://www.npmjs.com/package/nodemailer)
 ## 💻 Frontend & Responsive Web
 
-Repo Frontend : https://github.com/asherginting/Go-Rental-Web
+Repo Frontend : https://github.com/asherginting/Go-Rental-Frontend
 <br>
 Repo Responsive Web : https://github.com/asherginting/Go-Rental-Responsive
 
