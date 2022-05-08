@@ -11,7 +11,7 @@ route.use('/categories', require('./categories'));
 route.get('/', (req, res) => {
     return res.json({
         success: true,
-        message: 'Backend is Running Well'
+        message: 'GoRental Backend is Running!'
     });
 });
 
