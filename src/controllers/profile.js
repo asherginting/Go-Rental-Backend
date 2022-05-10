@@ -15,6 +15,7 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     upload(req, res, async (err) => {
+        const { ENVIRONMENT } = process.env;
         if (err) {
             return response(req, res, err.message, null, null, 400);
         }
@@ -61,8 +62,10 @@ const updateProfile = async (req, res) => {
         }
         return userModel.editUser(data, id, async (edited) => {
             if (edited.affectedRows > 0) {
-                if (req.file) {
-                    fileHandler.rm(user);
+                if (ENVIRONMENT !== 'production') {
+                    if (req.file) {
+                        fileHandler.rm(user);
+                    }
                 }
                 const results = await userModel.getUserById(id);
                 return response(req, res, 'Data user', results[0]);
