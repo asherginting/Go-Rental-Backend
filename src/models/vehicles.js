@@ -1,5 +1,5 @@
 const db = require('../helpers/db');
-const { APP_URL } = process.env;
+const APP_URL = require('../helpers/envHandler');
 const vehicles = require('../helpers/tableHandler').vehiclesTable;
 const categories = require('../helpers/tableHandler').categoriesTable;
 
@@ -11,7 +11,7 @@ const countVehicle = (data, cb) => {
 };
 
 const getVehicles = (data, cb) => {
-    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt FROM ${vehicles} WHERE brand LIKE '${data.search}%' LIMIT ${data.limit} OFFSET ${data.offset}`, (err, res) => {
+    db.query(`SELECT id_vehicle, id_category, type, brand, image AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt FROM ${vehicles} WHERE brand LIKE '${data.search}%' LIMIT ${data.limit} OFFSET ${data.offset}`, (err, res) => {
         if (err) throw err;
         cb(res);
     });
@@ -39,21 +39,21 @@ const getVehicleCategory = (data, cb) => {
     if (data.sort === 'latest') {
         sort = 'ORDER BY v.id_vehicle DESC';
     }
-    db.query(`SELECT v.id_vehicle, v.id_category, v.type, v.brand , CONCAT('${APP_URL}/', v.image) AS image, v.capacity, v.location, v.price, v.qty, v.payment, v.rent_count, v.status, v.createdAt, v.updatedAt FROM ${vehicles} v LEFT JOIN ${categories} c ON v.id_category = c.id_category WHERE v.location LIKE '${data.location}%' AND (v.brand LIKE '${data.search}%' OR c.type LIKE '${data.search}%') AND (v.price >= ${data.minimum} AND v.price <= ${data.maximum}) AND payment >= ${data.prepayment} ${sort} LIMIT ${data.limit} OFFSET ${data.offset};`, (err, res) => {
+    db.query(`SELECT v.id_vehicle, v.id_category, v.type, v.brand , v.image AS image, v.capacity, v.location, v.price, v.qty, v.payment, v.rent_count, v.status, v.createdAt, v.updatedAt FROM ${vehicles} v LEFT JOIN ${categories} c ON v.id_category = c.id_category WHERE v.location LIKE '${data.location}%' AND (v.brand LIKE '${data.search}%' OR c.type LIKE '${data.search}%') AND (v.price >= ${data.minimum} AND v.price <= ${data.maximum}) AND payment >= ${data.prepayment} ${sort} LIMIT ${data.limit} OFFSET ${data.offset};`, (err, res) => {
         if (err) throw err;
         cb(res);
     });
 };
 
 const getVehicle = (id, cb) => {
-    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt FROM ${vehicles} WHERE id_vehicle=?`, [id], (err, res) => {
+    db.query(`SELECT id_vehicle, id_category, type, brand , image AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt FROM ${vehicles} WHERE id_vehicle=?`, [id], (err, res) => {
         if (err) throw err;
         cb(res);
     });
 };
 
 const getVehicleAsync = (id) => new Promise((resolve, reject) => {
-    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt FROM ${vehicles} WHERE id_vehicle=?`, [id], (err, res) => {
+    db.query(`SELECT id_vehicle, id_category, type, brand , image AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt FROM ${vehicles} WHERE id_vehicle=?`, [id], (err, res) => {
         if (err) reject(err);
         resolve(res);
     });
@@ -67,7 +67,7 @@ const checkVehicle = (data, cb) => {
 };
 
 const newVehicle = () => new Promise((resolve, reject) => {
-    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}/', image) AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt FROM ${vehicles} ORDER BY id_vehicle DESC LIMIT 2`, (err, res) => {
+    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}', image) AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt FROM ${vehicles} ORDER BY id_vehicle DESC LIMIT 2`, (err, res) => {
         if (err) reject(err);
         resolve(res);
     });

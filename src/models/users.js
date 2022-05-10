@@ -1,5 +1,5 @@
 const db = require('../helpers/db');
-const { APP_URL } = process.env;
+const APP_URL = require('../helpers/envHandler');
 const users = require('../helpers/tableHandler').usersTable;
 
 const countUsers = (data, cb) => {
@@ -10,35 +10,35 @@ const countUsers = (data, cb) => {
 };
 
 const getUsers = (data, cb) => {
-    db.query(`SELECT id_user, name, username, CONCAT('${APP_URL}/', image) AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt FROM ${users} WHERE name LIKE '${data.search}%' LIMIT ${data.limit} OFFSET ${data.offset}`, (err, res) => {
+    db.query(`SELECT id_user, name, username, image AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt FROM ${users} WHERE name LIKE '${data.search}%' LIMIT ${data.limit} OFFSET ${data.offset}`, (err, res) => {
         if (err) throw err;
         cb(res);
     });
 };
 
 const getUser = (id, cb) => {
-    db.query(`SELECT id_user, name, username, CONCAT('${APP_URL}/', image) AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt FROM ${users} WHERE id_user=?`, [id], (err, res) => {
+    db.query(`SELECT id_user, name, username, image AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt FROM ${users} WHERE id_user=?`, [id], (err, res) => {
         if (err) throw err;
         cb(res);
     });
 };
 
 const getUserById = (id) => new Promise((resolve, reject) => {
-    db.query(`SELECT id_user, name, username, CONCAT('${APP_URL}/', image) AS image, gender, email, phone_number, address, birthdate, confirm, createdAt, updatedAt FROM ${users} WHERE id_user = ?`, [id], (err, res) => {
+    db.query(`SELECT id_user, name, username, image AS image, gender, email, phone_number, address, birthdate, confirm, createdAt, updatedAt FROM ${users} WHERE id_user = ?`, [id], (err, res) => {
         if (err) reject(err);
         resolve(res);
     });
 });
 
 const checkUser = (data, cb) => {
-    db.query(`SELECT id_user, name, username, CONCAT('${APP_URL}/', image) AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt FROM ${users} WHERE username='${data.username}' OR email='${data.email}' OR phone_number='${data.phone_number}'`, (err, res) => {
+    db.query(`SELECT id_user, name, username, image AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt FROM ${users} WHERE username='${data.username}' OR email='${data.email}' OR phone_number='${data.phone_number}'`, (err, res) => {
         if (err) throw err;
         cb(res);
     });
 };
 
 const checkUserAsync = (data) => new Promise((resolve, reject) => {
-    db.query(`SELECT id_user, name, username, CONCAT('${APP_URL}/', image) AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt FROM ${users} WHERE username='${data.username}' OR email='${data.email}' OR phone_number='${data.phone_number}'`, (err, res) => {
+    db.query(`SELECT id_user, name, username, CONCAT('${APP_URL}', image) AS image, gender, email, phone_number, address, birthdate, createdAt, updatedAt FROM ${users} WHERE username='${data.username}' OR email='${data.email}' OR phone_number='${data.phone_number}'`, (err, res) => {
         if (err) reject(err);
         resolve(res);
     });
