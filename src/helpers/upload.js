@@ -4,7 +4,10 @@ const multer = require('multer');
 const fs = require('fs');
 
 const {
-    CLOUD_NAME, CLOUD_API_KEY, CLOUD_API_SECRET, ENVIRONMENT,
+    CLOUD_NAME, 
+    CLOUD_API_KEY, 
+    CLOUD_API_SECRET, 
+    ENVIRONMENT,
 } = process.env;
 
 let storage = null;
