@@ -1,5 +1,7 @@
 const camelCase = require('camelcase-keys');
 
+const { APP_URL } = process.env;
+
 const get = (request, response, model, countModel, table, username) => {
     let { search, page, limit } = request.query;
 
@@ -42,8 +44,8 @@ const get = (request, response, model, countModel, table, username) => {
             message: `List ${table}`,
             results,
             pageInfo: {
-                prev: page > 1 ? `http://localhost:5000/${table}?search=${search}&page=${page - 1}&limit=${limit}` : null,
-                next: page < last ? `http://localhost:5000/${table}?search=${search}&page=${page + 1}&limit=${limit}` : null,
+                prev: page > 1 ? `${APP_URL}/${table}?search=${search}&page=${page - 1}&limit=${limit}` : null,
+                next: page < last ? `${APP_URL}/${table}?search=${search}&page=${page + 1}&limit=${limit}` : null,
                 totalData: total,
                 currentPage: page,
                 lastPage: last,

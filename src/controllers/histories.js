@@ -7,6 +7,8 @@ const helperGet = require('../helpers/get');
 const response = require('../helpers/response');
 const validateForm = require('../helpers/validateForm');
 
+const { APP_URL } = process.env;
+
 const getHistories = (req, res) => {
     helperGet(req, res, historyModel.getHistories, historyModel.countHistory, 'histories');
 };
@@ -32,8 +34,8 @@ const getHistoriesByFilter = async (req, res) => {
         const last = Math.ceil(total / limit);
         const resFin = camelCase(result);
         const pageInfo = {
-            prev: page > 1 ? `http://localhost:5000/categories?type=${type}&location=${location}&createdAt=${createdAt}&sort=${sort}&page=${page - 1}&limit=${limit}` : null,
-            next: page < last ? `http://localhost:5000/vehicles/category/?category=&page=${page + 1}&limit=${limit}` : null,
+            prev: page > 1 ? `${APP_URL}/categories?type=${type}&location=${location}&createdAt=${createdAt}&sort=${sort}&page=${page - 1}&limit=${limit}` : null,
+            next: page < last ? `${APP_URL}/vehicles/category/?category=&page=${page + 1}&limit=${limit}` : null,
             totalData: total,
             currentPage: page,
             lastPage: last,

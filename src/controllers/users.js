@@ -128,6 +128,7 @@ const editUser = (req, res) => {
         if (err) {
             return response(req, res, err.message, null, null, 400);
         }
+        
         const { id } = req.user;
         const user = await userModel.getUserById(id);
         if (user.length !== 1) {
@@ -151,7 +152,6 @@ const editUser = (req, res) => {
             birthdate: birthdate || user[0].birthdate,
             gender: gender || user[0].gender,
         };
-
         if (username) {
             const result = await userModel.checkUserAsync({ username });
             if (result.length > 0) {
