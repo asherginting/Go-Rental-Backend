@@ -1,5 +1,5 @@
 const db = require('../helpers/db');
-const APP_URL = require('../helpers/envHandler');
+// const APP_URL = require('../helpers/envHandler');
 const vehicles = require('../helpers/tableHandler').vehiclesTable;
 const categories = require('../helpers/tableHandler').categoriesTable;
 
@@ -67,7 +67,7 @@ const checkVehicle = (data, cb) => {
 };
 
 const newVehicle = () => new Promise((resolve, reject) => {
-    db.query(`SELECT id_vehicle, id_category, type, brand , CONCAT('${APP_URL}', image) AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt FROM ${vehicles} ORDER BY id_vehicle DESC LIMIT 2`, (err, res) => {
+    db.query(`SELECT id_vehicle, id_category, type, brand , image AS image, capacity, location, price, qty, payment, rent_count, status, createdAt, updatedAt FROM ${vehicles} ORDER BY id_vehicle DESC LIMIT 2`, (err, res) => {
         if (err) reject(err);
         resolve(res);
     });
