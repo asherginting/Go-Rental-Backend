@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "3289c998-d26c-496b-9195-774241874f39",
-		"name": "FW5-BACKEND-BEGINNER",
+		"name": "Go - Rental Backend",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -158,13 +158,13 @@
 							]
 						},
 						"url": {
-							"raw": "{{baseURL}}/auth/forgotPassword",
+							"raw": "{{baseURL}}/auth/forgot",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"auth",
-								"forgotPassword"
+								"forgot"
 							]
 						}
 					},
@@ -360,11 +360,6 @@
 									"key": "limit",
 									"value": "a",
 									"disabled": true
-								},
-								{
-									"key": "location",
-									"value": "batam",
-									"disabled": true
 								}
 							]
 						}
@@ -388,7 +383,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "14"
+									"value": "51"
 								}
 							]
 						}
@@ -637,6 +632,78 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/profile",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "gender",
+									"value": "",
+									"description": "Male or Female",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "phoneNumber",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "address",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "birthdate",
+									"value": "",
+									"description": "YYYY-MM-DD",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
 						"url": {
 							"raw": "{{baseURL}}/profile",
 							"host": [
@@ -935,6 +1002,41 @@
 						"method": "GET",
 						"header": [],
 						"url": {
+							"raw": "{{baseURL}}/vehicles/new",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"vehicles",
+								"new"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "mazda",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List New Vehicles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
 							"raw": "{{baseURL}}/vehicles/",
 							"host": [
 								"{{baseURL}}"
@@ -957,11 +1059,6 @@
 								{
 									"key": "limit",
 									"value": "100",
-									"disabled": true
-								},
-								{
-									"key": "location",
-									"value": "bandung",
 									"disabled": true
 								}
 							]
@@ -987,6 +1084,61 @@
 								{
 									"key": "id",
 									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search By Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/vehicles/category",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"vehicles",
+								"category"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "honda",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "bandung",
+									"disabled": true
+								},
+								{
+									"key": "minimum",
+									"value": "50000",
+									"disabled": true
+								},
+								{
+									"key": "maximum",
+									"value": "300000",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "",
+									"disabled": true
 								}
 							]
 						}
@@ -1178,7 +1330,7 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/C:/Users/ASUS/Downloads/Image/Xenia.jpg"
+									"src": "/home/asherginting/Downloads/kijang-innova.jpg"
 								}
 							]
 						},
@@ -1194,7 +1346,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "106"
+									"value": "7"
 								}
 							]
 						}
