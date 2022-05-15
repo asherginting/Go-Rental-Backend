@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 12, 2022 at 02:12 AM
+-- Generation Time: May 15, 2022 at 06:38 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -121,7 +121,7 @@ CREATE TABLE `histories` (
   `id_vehicle` int(11) DEFAULT NULL,
   `rent_start_date` date NOT NULL,
   `rent_end_date` date NOT NULL,
-  `prepayment` int(11) NOT NULL,
+  `prepayment` int(11) DEFAULT NULL,
   `status` enum('has been returned','not been returned') DEFAULT NULL,
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime DEFAULT NULL ON UPDATE current_timestamp()
@@ -157,7 +157,10 @@ INSERT INTO `histories` (`id_history`, `id_user`, `id_vehicle`, `rent_start_date
 (48, 1, 19, '2022-02-02', '2022-02-04', 100000, 'not been returned', '2022-02-08 10:22:31', NULL),
 (49, 1, 19, '2022-02-02', '2022-02-04', 100000, 'not been returned', '2022-02-08 10:22:40', NULL),
 (50, 1, 19, '2022-02-02', '2022-02-03', 100000, 'not been returned', '2022-02-10 21:51:37', NULL),
-(51, 1, 10, '2022-02-05', '2022-02-09', 100000, 'not been returned', '2022-02-13 12:14:20', NULL);
+(51, 1, 10, '2022-02-05', '2022-02-09', 100000, 'not been returned', '2022-02-13 12:14:20', NULL),
+(61, 68, 106, '2022-05-15', '2022-05-16', NULL, 'not been returned', '2022-05-15 22:39:34', NULL),
+(62, 68, 12, '2022-05-15', '2022-05-16', NULL, 'not been returned', '2022-05-15 22:40:42', NULL),
+(63, 68, 19, '2022-05-15', '2022-05-16', NULL, 'not been returned', '2022-05-15 22:40:58', NULL);
 
 -- --------------------------------------------------------
 
@@ -276,18 +279,18 @@ CREATE TABLE `vehicles` (
 --
 
 INSERT INTO `vehicles` (`id_vehicle`, `id_category`, `type`, `brand`, `image`, `capacity`, `location`, `price`, `qty`, `payment`, `rent_count`, `status`, `createdAt`, `updatedAt`) VALUES
-(7, 1, 'Cars', 'Kijang Innova', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652186383/go-rental/uploads/kijang-innova-1652186382248.jpg', '5', 'Jakarta', 425000, 3, 0, 2, 'Available', '2022-01-26 16:59:59', '2022-05-10 19:39:44'),
+(7, 1, 'Cars', 'Kijang Innova', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652186383/go-rental/uploads/kijang-innova-1652186382248.jpg', '5', 'Jakarta', 425000, 3, 0, 2, 'Available', '2022-01-26 16:59:59', '2022-05-15 22:35:35'),
 (10, 2, 'Motorbike', 'Yamaha Jupiter', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313498/go-rental/uploads/yamaha-jupiter-1652313496528.jpg', '2', 'Bali', 80000, 3, 0, 3, 'Available', '2022-01-27 10:39:59', '2022-05-12 06:58:18'),
-(12, 2, 'Motorbike', 'Honda Beat', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313663/go-rental/uploads/honda-beat-1652313662916.jpg', '2', 'Bandung', 90000, 3, 0, 1, 'Available', '2022-01-27 13:06:26', '2022-05-12 07:01:04'),
+(12, 2, 'Motorbike', 'Honda Beat', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313663/go-rental/uploads/honda-beat-1652313662916.jpg', '2', 'Bandung', 90000, 3, 0, 2, 'Available', '2022-01-27 13:06:26', '2022-05-15 22:40:42'),
 (13, 3, 'Bike', 'Polygon', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313626/go-rental/uploads/polygon-1652313624327.jpg', '1', 'Bandung', 70000, 2, 0, 2, 'Available', '2022-01-28 10:13:34', '2022-05-12 07:00:26'),
 (15, 3, 'Bike', 'Onthel', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652175749/go-rental/uploads/onthel-1652175746690.jpg', '1', 'Yogyakarta', 50000, 3, 0, 1, 'Available', '2022-01-28 10:23:05', '2022-05-10 16:42:30'),
 (17, 1, 'Cars', 'Kijang Innova', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652175794/go-rental/uploads/kijang-innova-1652175790221.jpg', '7', 'Bandung', 425000, 3, 0, 1, 'Available', '2022-01-28 10:32:16', '2022-05-10 16:43:15'),
-(19, 1, 'Cars', 'Mazda ', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313555/go-rental/uploads/mazda-1652313553637.jpg', '5', 'Yogyakarta', 500000, 2, 0, 14, 'Available', '2022-01-30 17:34:14', '2022-05-12 06:59:15'),
+(19, 1, 'Cars', 'Mazda ', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313555/go-rental/uploads/mazda-1652313553637.jpg', '5', 'Yogyakarta', 500000, 2, 0, 15, 'Available', '2022-01-30 17:34:14', '2022-05-15 23:00:00'),
 (23, 1, 'Cars', 'Toyota Avanza', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313702/go-rental/uploads/toyota-avanza-1652313700491.jpg', '7', 'Jakarta', 300000, 4, 0, 2, 'Available', '2022-01-30 19:50:51', '2022-05-12 07:01:42'),
-(67, 2, 'Motorbike', 'Vespa Matic', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652175956/go-rental/uploads/vespa-matig-1652175952889.jpg', '2', 'Bandung', 110000, 3, 0, 3, 'Available', '2022-02-01 21:07:20', '2022-05-10 16:45:57'),
+(67, 2, 'Motorbike', 'Vespa Matic', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652175956/go-rental/uploads/vespa-matig-1652175952889.jpg', '2', 'Bandung', 110000, 3, 0, 3, 'Available', '2022-02-01 21:07:20', '2022-05-15 22:36:16'),
 (69, 2, 'Motorbike', 'Vespa Matic', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652175992/go-rental/uploads/vespa-matig-1652175984740.jpg', '2', 'Yogyakarta', 110000, 2, 0, 2, 'Available', '2022-02-02 05:58:24', '2022-05-10 16:46:33'),
 (104, 1, 'Cars', 'Honda Brio', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313784/go-rental/uploads/Honda-Brio-1652313783046.jpg', '5', 'Bali', 250000, 1, 0, 0, 'Available', '2022-02-10 20:11:21', '2022-05-12 07:03:05'),
-(106, 1, 'Cars', 'Xenia', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313736/go-rental/uploads/xenia-1652313734780.jpg', '5', 'Bali', 300000, 2, 0, 2, 'Available', '2022-03-01 08:32:10', '2022-05-12 07:02:16'),
+(106, 1, 'Cars', 'Xenia', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313736/go-rental/uploads/xenia-1652313734780.jpg', '5', 'Bali', 300000, 2, 0, 3, 'Available', '2022-03-01 08:32:10', '2022-05-15 22:39:34'),
 (107, 1, 'Cars', 'Honda Brio New', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313793/go-rental/uploads/Honda-Brio-1652313792384.jpg', '1', 'Yogyakarta', 300000, 1, 0, 0, 'Available', '2022-04-11 07:41:13', '2022-05-12 07:03:14');
 
 --
@@ -354,7 +357,7 @@ ALTER TABLE `forgot_request`
 -- AUTO_INCREMENT for table `histories`
 --
 ALTER TABLE `histories`
-  MODIFY `id_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `status`
