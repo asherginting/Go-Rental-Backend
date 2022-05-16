@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 15, 2022 at 06:38 PM
+-- Generation Time: May 16, 2022 at 02:11 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -229,7 +229,7 @@ INSERT INTO `users` (`id_user`, `name`, `username`, `image`, `gender`, `email`, 
 (36, 'Joko', 'joko', NULL, 'Male', 'joko@gmail.com', '', '08124555', 'Yogyakarta', '1995-02-28', '', '2022-02-06 11:55:45', '2022-02-14 08:32:16'),
 (38, 'Budi', 'budi', NULL, 'Male', 'budi@gmail.com', '1234', '08454542123', 'Bandung', '1999-02-03', '', '2022-02-10 12:52:40', '2022-02-14 08:32:59'),
 (40, 'Lukito', 'lukito', NULL, '', 'luktio@gmail.com', '$2b$10$vYJAZ9WJ/onMb.URJq72deVoDbvcw0kqx6QiDdLhgzeeo22Xf1H.u', '0845454124', 'Kalimantan', '1999-02-03', '', '2022-02-10 13:13:39', '2022-02-14 08:37:00'),
-(41, 'Admin', 'Admin', NULL, '', 'admin@gmail.com', '$2b$10$50YW4T1tR076WX5HYoqgZutdsau1oBMNtl.qNOOsdd4pU7B6OCAYC', '0813567548', 'Jakarta', '1996-08-30', '', '2022-02-10 17:02:20', '2022-03-01 07:58:07'),
+(41, 'Admin', 'Admin', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652693224/go-rental/uploads/bg-admin-1652693223037.jpg', '', 'admin@gmail.com', '$2b$10$50YW4T1tR076WX5HYoqgZutdsau1oBMNtl.qNOOsdd4pU7B6OCAYC', '0813567548', 'Jakarta', '1996-08-30', '', '2022-02-10 17:02:20', '2022-05-16 16:27:05'),
 (46, 'Roni', 'roni', NULL, 'Male', 'roni@gmail.com', '$2b$10$BlcQ/0Mv4nXeTftj6Jkq1u78EaBtro4UOL39WTcnjHDw/64aXpzjy', '0624625123', NULL, '0000-00-00', '', '2022-02-12 21:11:10', '2022-02-14 08:37:00'),
 (50, 'Yusuf', 'yusuf', NULL, 'Male', 'yusuf@mail.com', '$2b$10$.L3ux40wWyWUmfYxASLq0.E7VozM3d7UAqNpV926GE5j8wMCiprBm', '0862461234', NULL, '0000-00-00', '', '2022-02-12 21:33:42', '2022-02-14 08:37:00'),
 (51, 'Johan', 'johan', NULL, 'Male', 'johan@gmail.com', '$2b$10$X5F63l1ri6knzo9IYLgKcOKi.1VEIYsg9/YP1ha7bsvFvDUKBkthS', '0862462123', NULL, '0000-00-00', '', '2022-02-12 23:50:08', '2022-02-14 08:37:00'),
@@ -267,7 +267,7 @@ CREATE TABLE `vehicles` (
   `location` varchar(50) NOT NULL,
   `price` int(11) NOT NULL,
   `qty` int(11) NOT NULL,
-  `payment` int(11) NOT NULL,
+  `payment` int(11) DEFAULT NULL,
   `rent_count` int(11) NOT NULL DEFAULT 0,
   `status` enum('Available','Full Booked') NOT NULL DEFAULT 'Available',
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
@@ -291,7 +291,8 @@ INSERT INTO `vehicles` (`id_vehicle`, `id_category`, `type`, `brand`, `image`, `
 (69, 2, 'Motorbike', 'Vespa Matic', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652175992/go-rental/uploads/vespa-matig-1652175984740.jpg', '2', 'Yogyakarta', 110000, 2, 0, 2, 'Available', '2022-02-02 05:58:24', '2022-05-10 16:46:33'),
 (104, 1, 'Cars', 'Honda Brio', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313784/go-rental/uploads/Honda-Brio-1652313783046.jpg', '5', 'Bali', 250000, 1, 0, 0, 'Available', '2022-02-10 20:11:21', '2022-05-12 07:03:05'),
 (106, 1, 'Cars', 'Xenia', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313736/go-rental/uploads/xenia-1652313734780.jpg', '5', 'Bali', 300000, 2, 0, 3, 'Available', '2022-03-01 08:32:10', '2022-05-15 22:39:34'),
-(107, 1, 'Cars', 'Honda Brio New', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313793/go-rental/uploads/Honda-Brio-1652313792384.jpg', '1', 'Yogyakarta', 300000, 1, 0, 0, 'Available', '2022-04-11 07:41:13', '2022-05-12 07:03:14');
+(107, 1, 'Cars', 'Honda Brio New', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652313793/go-rental/uploads/Honda-Brio-1652313792384.jpg', '1', 'Yogyakarta', 300000, 1, 0, 0, 'Available', '2022-04-11 07:41:13', '2022-05-12 07:03:14'),
+(108, 2, 'Motorbike', 'Satria Fu 150', 'https://res.cloudinary.com/fazztrackfw5/image/upload/v1652702834/go-rental/uploads/satriafu-new-1652702833268.jpg', '2', 'Batam', 80000, 5, NULL, 0, 'Available', '2022-05-16 19:07:15', NULL);
 
 --
 -- Indexes for dumped tables
@@ -375,7 +376,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `vehicles`
 --
 ALTER TABLE `vehicles`
-  MODIFY `id_vehicle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+  MODIFY `id_vehicle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- Constraints for dumped tables
